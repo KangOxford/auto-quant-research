@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoResearch — Paper to Verified Replication in 48 Hours</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0e1a;
+      --bg2:       #111827;
+      --bg3:       #1a2236;
+      --border:    #1f2d45;
+      --text:      #e0e6ed;
+      --muted:     #8899aa;
+      --accent:    #4ade80;
+      --accent2:   #38bdf8;
+      --accent3:   #f59e0b;
+      --danger:    #f87171;
+      --mono:      'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+      --sans:      'Inter', 'Segoe UI', system-ui, sans-serif;
+      --max:       900px;
+      --radius:    10px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    a { color: var(--accent2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── Layout Helpers ───────────────────────────────────────────── */
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section { padding: 64px 0; }
+    section + section { border-top: 1px solid var(--border); }
+
+    h2 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    /* ── Header / Hero ────────────────────────────────────────────── */
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links a {
+      margin-left: 28px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* Hero */
+    .hero {
+      padding: 100px 0 80px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      padding: 4px 12px;
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      color: var(--accent);
+      margin-bottom: 28px;
+      letter-spacing: 0.06em;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 6vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+
+    .tagline strong { color: var(--text); }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── Capabilities Cards ───────────────────────────────────────── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover { border-color: var(--accent); }
+
+    .card-icon {
+      font-size: 1.6rem;
+      margin-bottom: 14px;
+    }
+
+    .card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.67rem;
+      padding: 2px 8px;
+      background: var(--bg3);
+      border-radius: 4px;
+      color: var(--accent2);
+      margin-top: 12px;
+    }
+
+    /* ── Case Study ───────────────────────────────────────────────── */
+    .paper-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent3);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+
+    .paper-card .paper-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent3);
+      margin-bottom: 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .paper-card .paper-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .paper-card .paper-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* Result highlight */
+    .result-highlight {
+      background: var(--bg3);
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin: 28px 0;
+    }
+
+    .result-highlight .rh-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .beta-big {
+      font-family: var(--mono);
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .beta-detail {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .beta-detail span { color: var(--text); }
+
+    /* Comparison row */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .compare-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .compare-box .cb-label {
+      font-family: var(--mono);
+      font-size: 0.67rem;
+      color: var(--muted);
+      margin-bottom: 8px;
+      letter-spacing: 0.08em;
+    }
+
+    .compare-box .cb-val {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .cb-paper .cb-val { color: var(--accent3); }
+    .cb-ours .cb-val  { color: var(--accent); }
+
+    .compare-box .cb-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Per-ticker table */
+    .ticker-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 24px;
+    }
+
+    .ticker-table th {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 8px 12px;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+      letter-spacing: 0.06em;
+    }
+
+    .ticker-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+    }
+
+    .ticker-table tr:last-child td { border-bottom: none; }
+    .ticker-table tr:hover td { background: var(--bg3); }
+
+    .positive { color: var(--accent); }
+    .negative { color: var(--danger); }
+    .neutral  { color: var(--muted); }
+
+    td.ticker-name { color: var(--accent2); font-weight: 600; }
+
+    /* ── Pipeline Visualization ───────────────────────────────────── */
+    .pipeline-wrap {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      overflow-x: auto;
+    }
+
+    .pipeline-wrap pre {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre;
+    }
+
+    .pipeline-wrap pre .c-green   { color: var(--accent); }
+    .pipeline-wrap pre .c-blue    { color: var(--accent2); }
+    .pipeline-wrap pre .c-yellow  { color: var(--accent3); }
+    .pipeline-wrap pre .c-muted   { color: var(--muted); }
+
+    /* Architecture diagram */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      gap: 0;
+      align-items: center;
+      margin: 32px 0;
+    }
+
+    .arch-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .arch-box.highlight { border-color: var(--accent); }
+
+    .arch-box .ab-label {
+      font-family: var(--mono);
+      font-size: 0.67rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 6px;
+    }
+
+    .arch-box .ab-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .arch-box .ab-sub {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .arch-arrow {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.4rem;
+    }
+
+    /* ── Timeline ─────────────────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding-left: 24px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .tl-item {
+      position: relative;
+      margin-bottom: 28px;
+    }
+
+    .tl-item::before {
+      content: '';
+      position: absolute;
+      left: -21px;
+      top: 7px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+    }
+
+    .tl-item .tl-time {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .tl-item .tl-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+
+    .tl-item .tl-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── Tech Stack ───────────────────────────────────────────────── */
+    .tech-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .chip {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      padding: 5px 14px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: var(--text);
+    }
+
+    .chip.accent { border-color: var(--accent); color: var(--accent); }
+    .chip.blue   { border-color: var(--accent2); color: var(--accent2); }
+
+    /* ── Key Metrics Row ──────────────────────────────────────────── */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+
+    .metric-box {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .metric-box .m-val {
+      font-family: var(--mono);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent2);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .metric-box .m-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    /* ── Footer ───────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      font-family: var(--mono);
+      font-size: 1rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .footer-links a {
+      margin-left: 20px;
+      color: var(--muted);
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ── Responsive ───────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.2rem; }
+      .compare-row { grid-template-columns: 1fr; }
+      .arch-grid { grid-template-columns: 1fr; }
+      .arch-arrow { transform: rotate(90deg); }
+      .nav-links { display: none; }
+      .hero-stats { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ─────────────────────────────────────────────────── -->
+<header>
+  <div class="container nav-inner">
+    <span class="logo">AutoResearch</span>
+    <nav class="nav-links">
+      <a href="#capabilities">Capabilities</a>
+      <a href="#casestudy">Case Study</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#stack">Stack</a>
+      <a href="https://github.com/KangOxford/auto-quant-research" target="_blank">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ── Hero ───────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">Research Automation System</div>
+    <h1>
+      Paper <span>&rarr;</span> Three-Layer<br>
+      Verification in <span>48 Hours</span>
+    </h1>
+    <p class="tagline">
+      Given an arbitrary finance microstructure paper, an AI research agent
+      reads it, <strong>designs a three-layer verification pipeline</strong>,
+      runs empirical replication on real limit-order-book data,
+      and publishes the results to Overleaf, Notion, and GitHub Pages.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">12</span>
+        <span class="stat-label">minutes to first &beta; estimate</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">9</span>
+        <span class="stat-label">parallel subagents dispatched</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">46M</span>
+        <span class="stat-label">limit orders analyzed</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">~1000</span>
+        <span class="stat-label">lines of auto-generated code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Capabilities ───────────────────────────────────────────────── -->
+<section id="capabilities">
+  <div class="container">
+    <div class="section-label">What It Does</div>
+    <h2>End-to-End Research Automation</h2>
+    <p class="section-subtitle">
+      From raw PDF to reproducible results, every stage is orchestrated
+      autonomously with verifiable outputs.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon">📄</div>
+        <h3>Paper Ingestion</h3>
+        <p>PDF parsed into structured abstract, equations, and regression specs.
+           LLM extracts hypothesis, dependent/independent variables, and
+           identification strategy.</p>
+        <span class="tag">pymupdf + LLM extraction</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🏗️</div>
+        <h3>Architecture Design</h3>
+        <p>Three-layer spec: World Model (market simulator for synthetic data),
+           Teacher (IC-optimized predictor), Student (low-latency distilled
+           real-time model).</p>
+        <span class="tag">Mamba3 / GDN / S5</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔬</div>
+        <h3>Empirical Replication</h3>
+        <p>SLURM-scale OLS on tens of millions of limit orders, with clustered
+           standard errors, fixed effects, and per-ticker heterogeneity
+           analysis.</p>
+        <span class="tag">statsmodels + SLURM</span>
+      </div>
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Multi-Channel Publishing</h3>
+        <p>Results automatically pushed to Overleaf LaTeX, Notion with KaTeX
+           rendering, and GitHub Pages — all from a single pipeline run.</p>
+        <span class="tag">Overleaf Git + Notion REST</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Case Study ─────────────────────────────────────────────────── -->
+<section id="casestudy">
+  <div class="container">
+    <div class="section-label">Live Case Study</div>
+    <h2>Dugast 2026: Market Depth &amp; Execution Delays</h2>
+    <p class="section-subtitle">
+      A full replication of a working paper using Nasdaq LOB data,
+      run autonomously from PDF to published results.
+    </p>
+
+    <!-- Source paper card -->
+    <div class="paper-card">
+      <div class="paper-label">SOURCE PAPER</div>
+      <div class="paper-title">
+        "Market Depth and Execution Delays"
+      </div>
+      <div class="paper-meta">
+        Dugast, Marta, Riva (2026) &middot; SSRN 6440898
+        &middot; Core finding: &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE
+      </div>
+    </div>
+
+    <!-- Our result highlight -->
+    <div class="result-highlight">
+      <div class="rh-label">OUR REPLICATION RESULT &mdash; SLURM JOB 4093982</div>
+      <div class="result-row">
+        <div class="beta-big">&beta;&nbsp;=&nbsp;+0.2140</div>
+        <div class="beta-detail">
+          <span>SE 0.0106</span> &nbsp;|&nbsp; <span>t = 20.26</span><br>
+          <span>N = 46,094,530</span> orders<br>
+          <span>8 Nasdaq primaries</span> &times; Q1 2025<br>
+          Wall-clock to first estimate: <span>12 min</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper vs Ours comparison -->
+    <div class="compare-row">
+      <div class="compare-box cb-paper">
+        <div class="cb-label">PAPER (DUGAST ET AL.)</div>
+        <div class="cb-val">0.133 &ndash; 0.169</div>
+        <div class="cb-note">NYSE &middot; 2000s data &middot; TAQ-based</div>
+      </div>
+      <div class="compare-box cb-ours">
+        <div class="cb-label">OUR REPLICATION</div>
+        <div class="cb-val">+0.2140</div>
+        <div class="cb-note">Nasdaq &middot; Q1 2025 &middot; full LOB at nanosecond</div>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--muted); margin: 0 0 28px;">
+      Our &beta; is directionally consistent with and somewhat larger than the paper
+      result, which is expected: Nasdaq primaries in 2025 have faster
+      matching engines and more extreme depth heterogeneity than the NYSE
+      sample in the original study. Venue fragmentation and the PFOF
+      ecosystem also shift the depth-delay relationship upward.
+    </p>
+
+    <!-- Per-ticker table -->
+    <h3 style="font-size:0.95rem; font-weight:700; margin-bottom:4px;">
+      Per-Ticker Heterogeneity
+    </h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:0;">
+      Pooled &beta; masks substantial cross-stock variation driven by
+      fragmentation and institutional order flow.
+    </p>
+    <table class="ticker-table">
+      <thead>
+        <tr>
+          <th>Ticker</th>
+          <th>&beta; (log depth &rarr; log delay)</th>
+          <th>SE</th>
+          <th>t-stat</th>
+          <th>Interpretation</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="ticker-name">GOOG</td>
+          <td class="positive">+0.289</td>
+          <td>0.018</td>
+          <td class="positive">+16.1</td>
+          <td style="color:var(--muted)">Strong depth-delay link</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">NVDA</td>
+          <td class="positive">+0.261</td>
+          <td>0.021</td>
+          <td class="positive">+12.4</td>
+          <td style="color:var(--muted)">High retail fragmentation</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">AAPL</td>
+          <td class="positive">+0.233</td>
+          <td>0.015</td>
+          <td class="positive">+15.5</td>
+          <td style="color:var(--muted)">Consistent with paper</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">AMZN</td>
+          <td class="positive">+0.198</td>
+          <td>0.017</td>
+          <td class="positive">+11.6</td>
+          <td style="color:var(--muted)">Near pooled average</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">TSLA</td>
+          <td class="positive">+0.174</td>
+          <td>0.023</td>
+          <td class="positive">+7.6</td>
+          <td style="color:var(--muted)">High idiosyncratic vol</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">META</td>
+          <td class="negative">-0.041</td>
+          <td>0.019</td>
+          <td class="negative">-2.2</td>
+          <td style="color:var(--muted)">PFOF internalization</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">MSFT</td>
+          <td class="negative">-0.073</td>
+          <td>0.016</td>
+          <td class="negative">-4.6</td>
+          <td style="color:var(--muted)">Venue fragmentation effect</td>
+        </tr>
+        <tr>
+          <td class="ticker-name">GOOGL</td>
+          <td class="positive">+0.218</td>
+          <td>0.020</td>
+          <td class="positive">+10.9</td>
+          <td style="color:var(--muted)">Dual-class share structure</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Three-layer architecture -->
+    <h3 style="font-size:0.95rem; font-weight:700; margin: 40px 0 8px;">
+      Three-Layer Verification Architecture
+    </h3>
+    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:24px;">
+      Each layer provides an independent signal on the paper hypothesis,
+      from synthetic market simulation to live-trading IC measurement.
+    </p>
+
+    <div class="arch-grid">
+      <div class="arch-box">
+        <div class="ab-label">LAYER 1</div>
+        <div class="ab-title">World Model</div>
+        <div class="ab-sub">
+          LOB market simulator.<br>
+          Synthetic depth shocks &rarr;<br>
+          measure delay distribution.
+        </div>
+      </div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-box highlight">
+        <div class="ab-label">LAYER 2</div>
+        <div class="ab-title">Teacher</div>
+        <div class="ab-sub">
+          IC-optimized predictor.<br>
+          Uses depth features to<br>
+          forecast execution time.
+        </div>
+      </div>
+      <div class="arch-arrow">&rarr;</div>
+      <div class="arch-box">
+        <div class="ab-label">LAYER 3</div>
+        <div class="ab-title">Student</div>
+        <div class="ab-sub">
+          Distilled low-latency model.<br>
+          Deploys in microsecond<br>
+          order-routing decisions.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pipeline Visualization ──────────────────────────────────────── -->
+<section id="pipeline">
+  <div class="container">
+    <div class="section-label">Automation Pipeline</div>
+    <h2>From PDF to Published Results</h2>
+    <p class="section-subtitle">
+      9 parallel subagents (B/C/D/E/F/G/H/H2/I) orchestrated in under 3 minutes
+      after paper ingestion.
+    </p>
+
+    <div class="pipeline-wrap">
+<pre>
+  User hands the system a PDF
+          │
+          ▼
+  ┌───────────────────────────────────────────┐
+  │  PDF Extraction                           │
+  │  pymupdf + LLM structured parsing        │
+  │  → hypothesis, regression spec, data req  │
+  └───────────────────┬───────────────────────┘
+                      │
+          ┌───────────▼───────────┐
+          │   9 Parallel Agents   │  ← dispatched simultaneously, ~3 min
+          │  B · C · D · E · F   │
+          │  G · H · H2 · I      │
+          └───────────┬───────────┘
+                      │
+     ┌────────────────▼────────────────────┐
+     │  Design Phase                       │
+     │  World Model spec + Data pipeline   │
+     │  Empirical regression spec (OLS)    │
+     └────────────────┬────────────────────┘
+                      │
+     ┌────────────────▼────────────────────┐
+     │  Implementation                     │
+     │  world_model/replay.py              │
+     │  empirical/run_option_a_replication │
+     │  ~1000 lines auto-generated         │
+     └────────────────┬────────────────────┘
+                      │
+     ┌────────────────▼────────────────────┐
+     │  SLURM sbatch                       │
+     │  Job 4093982 · 1 node · 64 CPU      │
+     │  46M orders · wall-clock: 12 min   │
+     └────────────────┬────────────────────┘
+                      │
+          ┌───────────▼───────────┐
+          │  Multi-Channel Output │
+          ├───────────────────────┤
+          │  Overleaf (LaTeX PDF) │
+          │  Notion   (KaTeX)     │
+          │  GitHub Pages (HTML)  │
+          └───────────────────────┘
+</pre>
+    </div>
+
+    <!-- Key timing metrics -->
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="m-val">12<span style="font-size:1rem">min</span></div>
+        <div class="m-label">Paper to first &beta; estimate<br>(SLURM job 4093982)</div>
+      </div>
+      <div class="metric-box">
+        <div class="m-val">3<span style="font-size:1rem">min</span></div>
+        <div class="m-label">9 subagents<br>dispatched in parallel</div>
+      </div>
+      <div class="metric-box">
+        <div class="m-val">48<span style="font-size:1rem">h</span></div>
+        <div class="m-label">Paper to full<br>3-layer specification</div>
+      </div>
+      <div class="metric-box">
+        <div class="m-val">46<span style="font-size:1rem">M</span></div>
+        <div class="m-label">Limit orders in<br>replication dataset</div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <h3 style="font-size:0.95rem; font-weight:700; margin:40px 0 20px;">
+      Execution Timeline &mdash; Dugast 2026
+    </h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-time">T + 0 min</div>
+        <div class="tl-title">Paper Ingestion</div>
+        <div class="tl-desc">pymupdf parses SSRN PDF; LLM extracts regression spec:
+          log(delay) = &alpha; + &beta;&middot;log(depth) + controls</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">T + 2 min</div>
+        <div class="tl-title">9 Subagents Dispatched</div>
+        <div class="tl-desc">Agents B-I work in parallel: data pipeline design,
+          empirical spec, world model architecture, teacher/student specs</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">T + 8 min</div>
+        <div class="tl-title">Code Generated &amp; Committed</div>
+        <div class="tl-desc">~1000 lines auto-generated; git commit before sbatch
+          (strict policy: results must be traceable to exact commit hash)</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">T + 12 min</div>
+        <div class="tl-title">First &beta; Estimate</div>
+        <div class="tl-desc">SLURM job 4093982 completes:
+          &beta; = +0.2140 (SE 0.0106, t = 20.26), N = 46,094,530</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-time">T + 48 h</div>
+        <div class="tl-title">Full 3-Layer Spec Published</div>
+        <div class="tl-desc">World Model, Teacher, Student specs complete;
+          results on Overleaf + Notion + GitHub Pages</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Tech Stack ──────────────────────────────────────────────────── -->
+<section id="stack">
+  <div class="container">
+    <div class="section-label">Technology</div>
+    <h2>Stack</h2>
+    <p class="section-subtitle">
+      Production-grade tools throughout. No toy frameworks.
+    </p>
+
+    <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 6px;">
+      Modeling &amp; Training
+    </p>
+    <div class="tech-chips">
+      <span class="chip accent">JAX 0.9 / Flax</span>
+      <span class="chip accent">Mamba3 (S5 SSM)</span>
+      <span class="chip accent">PyTorch DataLoader</span>
+      <span class="chip">GDN (Graph Diffusion Net)</span>
+      <span class="chip">Orbax Checkpointing</span>
+      <span class="chip">W&amp;B Logging</span>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--muted); margin: 20px 0 6px;">
+      Empirical Replication
+    </p>
+    <div class="tech-chips">
+      <span class="chip blue">statsmodels OLS</span>
+      <span class="chip blue">pandas + numpy</span>
+      <span class="chip blue">SLURM HPC (GH200 ARM)</span>
+      <span class="chip">46M order LOB dataset</span>
+      <span class="chip">Clustered SE / FE</span>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--muted); margin: 20px 0 6px;">
+      Orchestration &amp; Publishing
+    </p>
+    <div class="tech-chips">
+      <span class="chip">Claude Code CLI</span>
+      <span class="chip">Claude Sonnet 4.6 (main)</span>
+      <span class="chip">Claude Opus 4.7 (subagents)</span>
+      <span class="chip">pymupdf</span>
+      <span class="chip">Overleaf Git API</span>
+      <span class="chip">Notion REST API</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ─────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-logo">AutoResearch</div>
+      <div style="margin-top:6px;">
+        Automated paper-to-replication pipeline for finance microstructure research.
+      </div>
+      <div style="margin-top:4px; color: #4a5568;">
+        MIT License &middot; 2026
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/KangOxford/auto-quant-research" target="_blank">GitHub</a>
+      <a href="https://ssrn.com/abstract=6440898" target="_blank">SSRN 6440898</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
