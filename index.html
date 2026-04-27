@@ -991,6 +991,63 @@
   </div>
 </section>
 
+<!-- ── Task Catalog ───────────────────────────────────────────────── -->
+<section id="tasks">
+  <div class="container">
+    <h2 style="margin-bottom: 16px;">📚 Task Catalog</h2>
+    <p style="color: var(--muted); margin-bottom: 24px;">
+      Five tasks are currently scaffolded. Each links to its GitHub-rendered
+      markdown spec containing data paths, reproduction protocol, and
+      <em>Best Model So Far</em> (the canonical checkpoint to reproduce).
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
+
+      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/RESOURCES.md"
+         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
+        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent2);">📦 facts</div>
+        <div style="font-weight: 600; margin: 6px 0 4px;">RESOURCES.md</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">Simulator code + checkpoint catalog + data references shared by all tasks.</div>
+      </a>
+
+      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3.md"
+         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
+        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent);">🤖 model</div>
+        <div style="font-weight: 600; margin: 6px 0 4px;">mamba3 — SOTA model card</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">78M Mamba3 SISO. Single ckpt: pw8u0edj@step 46050. IC@g=2000=0.102. Commit pinned.</div>
+      </a>
+
+      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/lillo_farmer_2004.md"
+         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
+        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
+        <div style="font-weight: 600; margin: 6px 0 4px;">Lillo &amp; Farmer (2004)</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">Trade-sign long memory, Hurst H ≈ 0.7. Smoke 5 days GOOG 2022 → DFA H=0.6889 ✓.</div>
+      </a>
+
+      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/toth_2011_sqrt_impact.md"
+         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
+        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
+        <div style="font-weight: 600; margin: 6px 0 4px;">Tóth et al. (2011)</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">Anomalous price impact, exponent δ ≈ 0.5. Critical liquidity / latent order book.</div>
+      </a>
+
+      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/cont_stoikov_talreja_2009.md"
+         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
+        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
+        <div style="font-weight: 600; margin: 6px 0 4px;">Cont, Stoikov &amp; Talreja (2009)</div>
+        <div style="color: var(--muted); font-size: 0.85rem;">LOB birth-death queue dynamics. Power-law limit arrivals, linear cancel rate.</div>
+      </a>
+
+    </div>
+
+    <p style="color: var(--muted); margin-top: 22px; font-size: 0.85rem;">
+      Each <strong>Best Model So Far</strong> table pins a specific LOBS5 commit
+      (<code>3f6d32a6</code>) so reproductions anchor to the exact code state, not branch HEAD.
+      See <a href="https://github.com/KangOxford/auto-quant-research/blob/main/scripts/hurst_lillo_farmer.py" style="color: var(--accent2);">scripts/hurst_lillo_farmer.py</a> for the first classical estimator (DFA-based Hurst).
+    </p>
+  </div>
+</section>
+
 <!-- ── Footer ─────────────────────────────────────────────────────── -->
 <footer>
   <div class="container footer-inner">
