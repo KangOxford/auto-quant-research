@@ -1,0 +1,40 @@
+#!/bin/bash
+#SBATCH --job-name=hurst-lillo-farmer-goog2022
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --time=02:00:00
+#SBATCH --partition=workq
+#SBATCH --output=logs/hurst_%j.out
+#SBATCH --error=logs/hurst_%j.err
+
+set -euo pipefail
+
+source /projects/s5e/quant/miniforge3/etc/profile.d/conda.sh
+conda activate base
+
+cd /lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/tasks/auto_research/scripts
+
+mkdir -p logs
+
+TICKER="${TICKER:-GOOG}"
+YEAR="${YEAR:-2022}"
+MAX_DAYS="${MAX_DAYS:-}"   # leave empty = full year
+
+RESULTS_DIR="/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/tasks/auto_research/results/hurst_${TICKER}_${YEAR}_${SLURM_JOB_ID:-local}"
+mkdir -p "$RESULTS_DIR"
+
+ARGS=(--ticker "$TICKER" --year "$YEAR" --results_dir "$RESULTS_DIR")
+if [ -n "$MAX_DAYS" ]; then
+    ARGS+=(--max_days "$MAX_DAYS")
+fi
+
+echo "=== Hurst exponent (Lillo & Farmer 2004) replication ==="
+echo "ticker=$TICKER year=$YEAR results=$RESULTS_DIR"
+echo "Started: $(date)"
+
+python3 hurst_lillo_farmer.py "${ARGS[@]}"
+
+echo "Finished: $(date)"
+echo "Results in: $RESULTS_DIR"
+ls -la "$RESULTS_DIR"
