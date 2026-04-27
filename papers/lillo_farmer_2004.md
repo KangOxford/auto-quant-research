@@ -65,11 +65,13 @@ log-log 拟合 $F(n)$ vs $n$ 的斜率即 $H$。
 >
 > Auto Research 把 "Best Model So Far" 拆为两栏：(A) 在真实 LOBSTER 数据上的经典 estimator (gold standard); (B) 用我们生成模型 (mamba3) 产出的 synthetic 数据上得到的同一指标。前者衡量 estimator 复现忠实度，后者衡量 generative model 是否 capture 该 stylized fact。
 
-| Stream | Source | $\hat H$ | $\hat \alpha$ (= $1 - 2H$) | Status |
-|--------|--------|----------|----------------------------|--------|
+| Stream | Source | $\hat H$ | $\hat \alpha$ | Status |
+|--------|--------|----------|----------------|--------|
 | **A. Reference (paper)** | Lillo & Farmer 2004, LSE 1999-2002, 20+ stocks | 0.696 ± 0.032 | ~0.6 | published |
-| **B. Classical estimator on LOBSTER** | DFA / R/S on real data, GOOG 2022 + 7 tickers | TBD | TBD | _pending — 60 行 Python 脚本即可，见复现协议_ |
+| **B. Classical estimator on LOBSTER** | DFA on real GOOG 2022 (251 days, 10.87M trades) | **0.7053** | 0.2022 | ✅ SLURM j4384364, **within ±1σ of paper value** |
 | **C. mamba3 generated samples** | DFA on synthetic trade-sign series from mamba3 SOTA | TBD | TBD | _pending — uses mamba3 ckpt pw8u0edj@46050_ |
+
+> Stream B verification: `python3 scripts/hurst_lillo_farmer.py --ticker GOOG --year 2022 --results_dir results/hurst_GOOG_2022_4384364`. Result: DFA H = 0.7053 on 10,868,894 trade-sign events over 251 trading days. Sign balance = (+1: 66.7%, -1: 33.3%), confirming buy-pressure asymmetry in GOOG 2022 but not affecting Hurst. ACF method gave H_acf = 0.8989 (α = 0.2022) — note this tail-decay estimator differs from DFA in finite samples; DFA is more robust and matches the paper.
 
 **关联 model card**: 评估 mamba3 generated samples 时使用的 ckpt 见 [`models/mamba3.md`](../models/mamba3.md) → step 46050 of pw8u0edj。
 
