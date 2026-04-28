@@ -662,18 +662,8 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         <strong>Why the Human-in-the-Loop contract is load-bearing rather than decorative</strong>: every insight returns to the question of where the human's judgement is irreplaceable and where the agent's tireless execution is most valuable.
       </p>
 
-      <!-- 7 insights as collapsibles, default closed -->
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">① Scaffold construction is part of the task, not abstracted away</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          <strong>Source paraphrase</strong>: "We keep looking for a hard problem since models are too capable. But constructing the evals seems too challenging. If that's so, we should turn the task of constructing the evals into part of the problem. Make the human-AI scaffold design part of the task." And: "I think we were thinking too granularly. The task shouldn't be 'speed up this codebase'. It should just be 'solve the 3-body problem', and it comes to the human-AI system to figure out how to do so. The high-level goal is the task, and the smaller steps are part of the point of the study."
-        </p>
-        <p>
-          <strong>Implication for Auto Quant Research</strong>: do not give the system the instruction "run an OLS regression of log-delay on log-depth on the Dugast 2026 specification". Give it "replicate the empirical claim of Dugast, Marta, Riva (2026)" and let the Execution Layer pick the regression family, the controls, the standard-error correction, and the robustness checks. The act of decomposing the paper into a runnable spec is itself part of the work being measured. This is why the Automation Pipeline diagram shows "Paper Ingestion" as the first stage, not "Regression Spec" as the first stage; the spec is what the agent produces from the paper, not what the human dictates to the agent. <strong>HITL angle</strong>: the human's job is not to dictate the spec, it is to <em>review</em> the spec the agent inferred and approve or amend it.
-        </p>
-      </div>
-
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">② The Darwin-Gödel pattern with humans in the loop</button>
+      <!-- 3 insights as collapsibles, default closed (kept ②④⑥ from original 7, renumbered ①②③) -->
+      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">① The Darwin-Gödel pattern with humans in the loop</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
           <strong>Source paraphrase</strong>: "It's like Sakana's <a href="https://sakana.ai/dgm/">Darwin-Gödel Machine</a> but with humans in the loop." (The DGM is an AI that improves itself by rewriting its own code.)
@@ -683,53 +673,23 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         </p>
       </div>
 
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">③ The AI Grant Funding model</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          <strong>Source paraphrase</strong>: "Mimic the actual scientific research ecosystem: an 'AI Grant Funding' model. Multiple LLMs write research proposals, including detailing task division and human-AI collaboration plans. Human experts act as reviewers allocating compute and funding. We can iterate this: LLMs report progress, humans evaluate, and dynamically cut resources for unpromising paths."
-        </p>
-        <p>
-          <strong>Implication for Auto Quant Research</strong>: this is essentially the Decision Layer's job description, articulated more sharply than the rest of this page does. The user is not approving a single output; the user is acting as a <em>review committee</em> allocating GPU-hours, attention, and human review time across competing replications. A Notion sub-page per replication is the proposal; the user's signoff or edit is the funding decision; the eventual Overleaf push is the published paper that justifies the next round of funding. This framing also makes it natural to kill replications mid-flight when their progress reports look weak, the analog of a grant being cut. A practical addition: each replication, when it pushes raw results to Notion, should include a one-paragraph self-assessment of whether the result is worth the next stage of human review time, so the Decision Layer can triage at the page level rather than by reading every output equally. <strong>HITL angle</strong>: the human is a research-program portfolio manager, not a per-task QA reviewer.
-        </p>
-      </div>
-
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">④ The split between LLM strengths and human strengths</button>
+      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">② The split between LLM strengths and human strengths</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
           <strong>Source paraphrase</strong>: "From experience with frontier models: the LLM's greatest value lies in broad information retrieval, proposing diverse solutions, and engineering and coding. However, they can be gullible (e.g., blindly trusting stories in low-quality papers). The human's unique advantage is solving 'the arbitrarily complex evaluation' problem: judging quality and correctness, and using tailored natural language to steer the LLMs back on track."
         </p>
         <p>
-          <strong>Implication for Auto Quant Research</strong>: this is the cleanest articulation of why the Decision Layer cannot be replaced by a smarter LLM. LLMs are good at <em>generation</em> (retrieval, breadth, code) and bad at <em>open-ended evaluation</em> (when there is no clean checkable answer). Replication of a finance microstructure paper is precisely a domain where evaluation is open-ended: was the agent's interpretation of the paper's claim faithful? Did the chosen ticker subset bias the result? Is the directional consistency with the paper's number a real validation or an artifact of the modern dataset? Each of these requires the human's "arbitrarily complex evaluation" capability. The Wiki section above is a direct response: the Wiki exists so that the human can actually do that evaluation, by having a comprehensible reading surface for what the agent did. <strong>HITL angle</strong>: the contract is symmetric, the human commits to evaluating, the agent commits to producing reading-friendly output.
+          <strong>Implication for Auto Quant Research</strong>: this is the cleanest articulation of why the Decision Layer cannot be replaced by a smarter LLM. LLMs are good at <em>generation</em> (retrieval, breadth, code) and bad at <em>open-ended evaluation</em> (when there is no clean checkable answer). Replication of a quantitative microstructure paper is precisely a domain where evaluation is open-ended: was the agent's interpretation of the paper's claim faithful? Did the chosen ticker subset bias the result? Is the directional consistency with the paper's number a real validation or an artifact of the modern dataset? Each of these requires the human's "arbitrarily complex evaluation" capability. The Wiki section above is a direct response: the Wiki exists so that the human can actually do that evaluation, by having a comprehensible reading surface for what the agent did. <strong>HITL angle</strong>: the contract is symmetric, the human commits to evaluating, the agent commits to producing reading-friendly output.
         </p>
       </div>
 
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">⑤ Coevolutionary scaffolds and meta-game design</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          <strong>Source paraphrase</strong>: "Basically we'll design the meta-game: a coevolutionary system that gives tokens and GPU access to teams that compete for prize money. So it's Kaggle-like but the caveat is that a lot of the core logic will be built by the teams themselves. The human-AI team will be allowed to change its own scaffold as appropriate."
-        </p>
-        <p>
-          <strong>Implication for Auto Quant Research</strong>: today there is one Auto Quant Research scaffold. Tomorrow, in the limit, there could be multiple competing scaffolds, each replicating the same paper and producing slightly different replications, with the Decision Layer choosing among them. This is structurally identical to the Kaggle-with-self-built-logic idea, applied to scientific replication instead of leaderboard tasks. Even if Auto Quant Research never literally hosts a competition, the design discipline is useful: every component of the scaffold should be modular enough that a competing version of it could be plugged in. The skills folder is already on this trajectory; CLAUDE.md is harder, since it currently encodes one user's preferences. <strong>HITL angle</strong>: when multiple scaffolds compete, the human's role is the judge between scaffolds, not the operator inside one scaffold.
-        </p>
-      </div>
-
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">⑥ Proxy benchmarks: orchestrator-as-scaffold-designer</button>
+      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">③ Proxy benchmarks: orchestrator-as-scaffold-designer</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
           <strong>Source paraphrase</strong>: "I am thinking of proxy-settings for human-in-the-loop benchmarking: scaffolding a set of different LLMs with very diverse properties together. Some could have human-like properties (very general but artificially slow). Then we'd evaluate how capable an orchestrator agent is at figuring out which agent is good for what and how to optimally scaffold them for a given task."
         </p>
         <p>
           <strong>Implication for Auto Quant Research</strong>: the current Pipeline diagram shows N parallel subagents, all of which are large language models. A more rigorous version would use heterogeneous agents: a fast-but-shallow agent for code generation, a slower-but-careful agent for spec extraction from the paper, a very slow but accurate agent (the human or a slow proxy) for the Decision Layer signoff. The orchestrator's job is then to route work to the right agent given task properties. This is a generalization of "fan-out to identical agents" into "fan-out to typed agents". Auto Quant Research could pilot this with two tiers (one model for routine work, another for sensitive design decisions, and the human for final signoff) and measure whether routing accuracy improves. <strong>HITL angle</strong>: the human is one node in a typed agent graph, not a separate species. The orchestrator decides when to call the human versus when to call a different agent.
-        </p>
-      </div>
-
-      <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">⑦ Cross-domain transfer of the next-state-prediction simulator</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          <strong>Source paraphrase</strong>: "AI for fusion uses simulators TORAX and DESC (MHD: magneto-hydro-dynamics; compressible, viscous, magnetized fluid). People also do next-state prediction to provide a simulator for testing control policies, which may be quite similar to the quant next-state prediction problem."
-        </p>
-        <p>
-          <strong>Implication for Auto Quant Research</strong>: the World Model is a learned next-state predictor for limit-order-book event streams. The same machinery, conditional autoregressive density estimation, transfers to plasma state evolution in fusion control, weather, robotics dynamics, and beyond. Keep the World Model interface clean enough that a different domain's simulator could be slotted in without changing the surrounding Pipeline. This pushes against any temptation to bake LOB-specific assumptions into the World Model API. A second-order implication: if the World Model can be retargeted, then Auto Quant Research can also be retargeted to another domain by swapping the paper-replication templates. The pipeline is finance-microstructure-shaped today, but the shape is mostly cosmetic; the deeper architecture is "paper plus simulator equals replication," and that pattern is much broader than finance. <strong>HITL angle</strong>: the human's domain expertise is what locks the pipeline to a particular field; the rest of the system is domain-portable.
         </p>
       </div>
 
