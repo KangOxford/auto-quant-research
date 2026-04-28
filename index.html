@@ -271,28 +271,49 @@
         Auto Quant Research is a <strong>two-layer system</strong> for finance microstructure replication. The labor that does <em>not</em> need human judgement is fully automated and runs while the user sleeps. The decisions that do need human judgement are surfaced as a small, structured set of choices, never a wall of raw output. We call these the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong>; together they make up the Human-in-the-Loop contract.
       </p>
 
-      <!-- Two-layer cards -->
-      <div class="example-grid" style="margin-top: 18px;">
-        <div class="example-card">
+      <!-- Two-layer cards: clickable, mutually-exclusive expansion -->
+      <p style="font-size: 13.5px; color: #777; margin: 14px 0 4px;">
+        <em>Click either card below to expand its details.</em>
+      </p>
+      <div class="layer-cards-grid">
+        <button id="exec-card-btn" class="layer-card-btn exec-card" data-target="exec-panel" type="button">
           <h4 style="color: #1f3a5f;">🌙 Execution Layer &mdash; <em>Auto Research in Sleep</em></h4>
           <p>
-            Human-out-of-the-loop. The agent parses the paper PDF, dispatches a fan-out of parallel subagents to design the data pipeline, world model, and empirical regression spec, generates the replication code, commits to Git for full traceability, submits a SLURM batch job, monitors the job to completion, and pushes raw results to Notion. All of this happens autonomously while the user is offline.
+            Human-out-of-the-loop. The agent parses the paper PDF, dispatches parallel subagents, generates code, commits to Git, submits a SLURM batch job, and pushes raw results to Notion. All of this happens autonomously while the user is offline.
           </p>
-          <p style="margin-top: 10px; color: #555;"><strong>Bound by</strong>: data correctness, infrastructure plumbing, code generation. Not by judgement.</p>
-          <div style="margin-top: 14px; padding: 10px 12px; background: #eef2f8; border-left: 3px solid #1f3a5f; border-radius: 4px;">
-            <p style="font-size: 12.5px; line-height: 1.55em; margin: 0; color: #2a3a5a;">
-              <strong>📂 Execution logic published</strong>: the entire scaffold that drives this layer (the global <code>CLAUDE.md</code>, all <code>settings.json</code> + <code>settings.local.json</code>, 42 reusable skills, 21 hooks, agents, and slash commands) is mirrored at <a href="https://github.com/KangOxford/auto-quant-research/tree/main/execution-layer" style="color:#1f3a5f; font-weight:600;">github.com/KangOxford/auto-quant-research/execution-layer/</a>. This is the operational brain of <em>Auto Research in Sleep</em>: the rules, skills, hooks, and event handlers that let the agent run without a human watching.
-            </p>
-          </div>
-        </div>
-        <div class="example-card">
-          <h4 style="color: #ee8033;">🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
+          <p style="color: #555;"><strong>Bound by</strong>: data correctness, infrastructure plumbing, code generation. Not by judgement.</p>
+          <span class="click-hint">▼ Click to see Pipeline + scaffold detail</span>
+        </button>
+        <button id="dec-card-btn" class="layer-card-btn dec-card" data-target="dec-panel" type="button">
+          <h4 style="color: #1f3a5f;">🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
           <p>
             Surfaces only the choices that change the direction or goal of the replication: which paper claims to test in depth, which ticker subsets matter, which robustness checks to add, which counter-narrative to highlight. The user reviews the auto-generated draft on Notion and edits or approves what they care most about proving.
           </p>
-          <p style="margin-top: 10px; color: #555;"><strong>Bound by</strong>: scientific judgement, narrative framing, what the user wants to claim.</p>
-        </div>
+          <p style="color: #555;"><strong>Bound by</strong>: scientific judgement, narrative framing, what the user wants to claim.</p>
+          <span class="click-hint">▼ Click to see End-to-End Flow + Wiki</span>
+        </button>
       </div>
+
+      <!-- ========== EXECUTION LAYER PANEL (full-width, hidden by default) ========== -->
+      <div id="exec-panel" class="layer-panel exec-panel">
+        <h3>🌙 Execution Layer &mdash; Auto Research in Sleep</h3>
+        <p style="font-size: 14px; line-height: 1.7em;">
+          After a paper is ingested, the Execution Layer dispatches a fan-out of <strong>N parallel subagents</strong> (the count is task-dependent: simple regression replications use a handful; structural model identification uses more). Each subagent owns one slice of the design or implementation work, the data pipeline, the World Model interface, the empirical regression spec, the figure code. The orchestrator merges their outputs, commits the result to Git for full traceability, and sbatches the analysis to the HPC cluster.
+        </p>
+
+        <div style="margin: 18px 0;">
+          <img src="imgs/automation_pipeline.png" alt="Auto Quant Research — Automation Pipeline (general)" style="width: 100%; max-width: 900px; border: 1px solid #d0d0d0; border-radius: 6px;">
+          <p style="text-align: center; color: #777; font-size: 13px; margin-top: 8px; font-style: italic;">
+            Figure 1. Five-stage automation pipeline: Paper Ingestion &rarr; N Parallel Subagents (fan-out) &rarr; Code Generation &rarr; SLURM sbatch on HPC &rarr; Multi-Channel Publish (Overleaf, Notion, GitHub Pages). Captions are intentionally generic; this is a system designed to handle any finance microstructure paper, not a single task.
+          </p>
+        </div>
+
+        <!-- Execution scaffold link (moved here from inside the card per HTML spec: anchors cannot live inside buttons) -->
+        <div style="margin: 18px 0; padding: 12px 16px; background: #eef2f8; border-left: 3px solid #1f3a5f; border-radius: 4px;">
+          <p style="font-size: 13px; line-height: 1.6em; margin: 0; color: #2a3a5a;">
+            <strong>📂 Execution logic published.</strong> The entire scaffold that drives this layer (the global <code>CLAUDE.md</code>, all <code>settings.json</code> + <code>settings.local.json</code>, 42 reusable skills, 21 hooks, agents, and slash commands) is mirrored at <a href="https://github.com/KangOxford/auto-quant-research/tree/main/execution-layer" style="color:#1f3a5f; font-weight:600;">github.com/KangOxford/auto-quant-research/execution-layer/</a>. The full scaffold walk-through (folder structure, common principles, contribution guide) is in the collapsible below.
+          </p>
+        </div>
 
       <!-- Execution Layer detail (collapsible) -->
       <div style="margin: 14px 0 0;">
@@ -408,7 +429,13 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         </div>
       </div>
 
-      <!-- Final processing flow — 4 colored step boxes -->
+      </div><!-- /exec-panel -->
+
+      <!-- ========== DECISION LAYER PANEL (full-width, hidden by default) ========== -->
+      <div id="dec-panel" class="layer-panel dec-panel">
+        <h3>🤝 Decision Layer &mdash; Human in the Loop</h3>
+
+      <!-- Final processing flow -->
       <h3 style="margin-top: 30px;">End-to-End Flow</h3>
 
       <!-- Two-layer architecture: Notion (a/b/c, same layer) → Overleaf (d, downstream) -->
@@ -560,6 +587,8 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
           </div>
         </div>
       </div>
+
+      </div><!-- /dec-panel -->
 
       <p style="margin-top: 24px;">
         The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3.
@@ -775,13 +804,6 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         </p>
       </div>
 
-      <!-- ========== AUTOMATION PIPELINE (figure moved to top of 'What Is' section above) ========== -->
-      <h2>Automation Pipeline (in detail)</h2>
-      <p>
-        Referring back to Figure 1 above: after a paper is ingested, the Execution Layer dispatches a fan-out of <strong>N parallel subagents</strong> (the count is task-dependent: simple regression replications use a handful; structural model identification uses more). Each subagent owns one slice of the design or implementation work, the data pipeline, the World Model interface, the empirical regression spec, the figure code, and so on. The orchestrator merges their outputs, commits the result to Git for full traceability, and sbatches the analysis to the HPC cluster.
-      </p>
-
-
       <!-- ========== STACK ========== -->
       <h2>Technology Stack</h2>
       <p>Production-grade tools throughout. No toy frameworks.</p>
@@ -852,13 +874,41 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
   </div>
 </div>
 
-<!-- Collapsible behavior -->
+<!-- Collapsible + layer-card toggle behavior -->
 <script>
+  // 1. Inline collapsibles (Examples, Open Questions, Wiki deep-dive, Execution scaffold)
   document.querySelectorAll('.collapsible').forEach(function(btn) {
     btn.addEventListener('click', function() {
       this.classList.toggle('active');
       var content = this.nextElementSibling;
       content.classList.toggle('show');
+    });
+  });
+
+  // 2. Layer cards (Execution / Decision) — mutually exclusive expansion.
+  //    Click a card => its panel opens (full-width, below); the other panel closes.
+  //    Click the same card again => its panel closes.
+  document.querySelectorAll('.layer-card-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var targetId = this.dataset.target;
+      var target   = document.getElementById(targetId);
+      if (!target) return;
+      var wasOpen  = target.classList.contains('show');
+
+      document.querySelectorAll('.layer-panel').forEach(function(p) {
+        p.classList.remove('show');
+      });
+      document.querySelectorAll('.layer-card-btn').forEach(function(b) {
+        b.classList.remove('active');
+      });
+
+      if (!wasOpen) {
+        target.classList.add('show');
+        this.classList.add('active');
+        setTimeout(function() {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 250);
+      }
     });
   });
 </script>
