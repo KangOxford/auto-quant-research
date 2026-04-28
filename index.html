@@ -193,6 +193,88 @@
       font-size: 13px;
       color: #666;
     }
+
+    /* ===== Two-Layer Cards (clickable, mutually exclusive) ===== */
+    .layer-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 18px 0 0;
+      transition: grid-template-columns 0.3s ease;
+    }
+    @media (max-width: 700px) {
+      .layer-cards-grid { grid-template-columns: 1fr; }
+    }
+    /* Active grid: only the active card visible, full-width */
+    .layer-cards-grid.exec-active { grid-template-columns: 1fr; }
+    .layer-cards-grid.dec-active  { grid-template-columns: 1fr; }
+    .layer-cards-grid.exec-active .dec-card { display: none; }
+    .layer-cards-grid.dec-active  .exec-card { display: none; }
+
+    /* Card chrome */
+    .layer-card-btn {
+      cursor: pointer;
+      border: 1.5px solid #d0d0d0;
+      border-radius: 10px;
+      padding: 18px 22px;
+      background: #fafafa;
+      transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+      text-align: left;
+      width: 100%;
+      font-family: inherit;
+    }
+    .layer-card-btn p { font-size: 13.5px; line-height: 1.55em; margin: 6px 0 0; }
+    .layer-card-btn h4 { margin: 0; font-size: 15px; }
+    .layer-card-btn .click-hint {
+      display: block;
+      margin-top: 12px;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Execution: cool blue identity */
+    .layer-card-btn.exec-card { border-color: #c7dcef; background: #f5f9ff; }
+    .layer-card-btn.exec-card:hover { border-color: #1f3a5f; background: #eaf4ff; }
+    .layer-card-btn.exec-card.active {
+      border-color: #1f3a5f;
+      background: #eaf4ff;
+      box-shadow: 0 2px 10px rgba(31, 58, 95, 0.18);
+    }
+    .layer-card-btn.exec-card h4,
+    .layer-card-btn.exec-card .click-hint { color: #1f3a5f; }
+
+    /* Decision: warm coral identity (clear contrast vs Execution blue) */
+    .layer-card-btn.dec-card { border-color: #f4cdc9; background: #fef6f4; }
+    .layer-card-btn.dec-card:hover { border-color: #c4544f; background: #fce4e0; }
+    .layer-card-btn.dec-card.active {
+      border-color: #c4544f;
+      background: #fce4e0;
+      box-shadow: 0 2px 10px rgba(196, 84, 79, 0.20);
+    }
+    .layer-card-btn.dec-card h4,
+    .layer-card-btn.dec-card .click-hint { color: #a13832; }
+
+    /* Full-width expansion panels */
+    .layer-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out, padding 0.3s ease-out, margin-top 0.3s ease-out, border-color 0.3s;
+      margin-top: 0;
+      padding: 0 24px;
+      border: 0 solid transparent;
+      border-radius: 12px;
+    }
+    .layer-panel.show {
+      max-height: 16000px;
+      padding: 24px 28px;
+      margin-top: 14px;
+      border-width: 1.5px;
+    }
+    .exec-panel.show { background: #f5f9ff; border-color: #c7dcef; }
+    .dec-panel.show  { background: #fef6f4; border-color: #f4cdc9; }
+    .layer-panel h3 { margin-top: 0; font-size: 18px; }
+    .exec-panel h3 { color: #1f3a5f; }
+    .dec-panel h3, .dec-panel h2.nested-h2 { color: #a13832; }
   </style>
 </head>
 
@@ -285,7 +367,7 @@
           <span class="click-hint">▼ Click to see Pipeline + scaffold detail</span>
         </button>
         <button id="dec-card-btn" class="layer-card-btn dec-card" data-target="dec-panel" type="button">
-          <h4 style="color: #1f3a5f;">🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
+          <h4>🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
           <p>
             Surfaces only the choices that change the direction or goal of the replication: which paper claims to test in depth, which ticker subsets matter, which robustness checks to add, which counter-narrative to highlight. The user reviews the auto-generated draft on Notion and edits or approves what they care most about proving.
           </p>
@@ -588,14 +670,12 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         </div>
       </div>
 
-      </div><!-- /dec-panel -->
-
       <p style="margin-top: 24px;">
         The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3.
       </p>
 
-      <!-- ========== CONTEXT: CO-SCIENTIST RESEARCH DIRECTION ========== -->
-      <h2 id="context">Context: A Co-Scientist for Finance Microstructure</h2>
+      <!-- ========== CONTEXT: CO-SCIENTIST RESEARCH DIRECTION (moved INSIDE dec-panel) ========== -->
+      <h3 id="context" style="margin-top: 28px;">Context: A Co-Scientist for Finance Microstructure</h3>
       <p>
         Auto Quant Research is a domain-specific instance of a broader research direction in AI-for-science: the design of <strong>co-scientist agents</strong>. The "co-" matters. The system is not designed to replace the researcher; it is designed to operate as a junior colleague who can run experiments tirelessly while the senior researcher steers and signs off. The Decision Layer / Execution Layer split is precisely the contract that makes that partnership work: the human is the principal investigator, the agent is the postdoc that never sleeps, and both are bound by an explicit interface.
       </p>
@@ -680,6 +760,8 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <p style="margin-top: 18px; font-size: 13px; color: #777;">
         These insights came from open discussion; not all are operationalized yet in Auto Quant Research. They are recorded so that, when a design question comes up ("should we add agent typing?", "should the system kill its own replications?", "should we bake in domain assumptions?"), there is an explicit reference to revisit. The same content with attribution and source notes is also archived in <a href="https://github.com/KangOxford/auto-quant-research/blob/main/execution-layer/INSIGHTS_FROM_OPENPHIL.md"><code>execution-layer/INSIGHTS_FROM_OPENPHIL.md</code></a> for context.
       </p>
+
+      </div><!-- /dec-panel -->
 
       <!-- ========== EXAMPLES (the heart of the page) ========== -->
       <h2 id="examples">Examples</h2>
@@ -886,25 +968,34 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
   });
 
   // 2. Layer cards (Execution / Decision) — mutually exclusive expansion.
-  //    Click a card => its panel opens (full-width, below); the other panel closes.
-  //    Click the same card again => its panel closes.
+  //    Click a card => that card stays (full-width via grid state),
+  //    the OTHER card hides, and that card's panel opens below.
+  //    Click the same card again => everything collapses back to side-by-side.
   document.querySelectorAll('.layer-card-btn').forEach(function(btn) {
     btn.addEventListener('click', function() {
       var targetId = this.dataset.target;
       var target   = document.getElementById(targetId);
-      if (!target) return;
+      var grid     = document.querySelector('.layer-cards-grid');
+      if (!target || !grid) return;
       var wasOpen  = target.classList.contains('show');
 
+      // Reset all
       document.querySelectorAll('.layer-panel').forEach(function(p) {
         p.classList.remove('show');
       });
       document.querySelectorAll('.layer-card-btn').forEach(function(b) {
         b.classList.remove('active');
       });
+      grid.classList.remove('exec-active', 'dec-active');
 
+      // Open the clicked one (unless it was already open → toggle off)
       if (!wasOpen) {
         target.classList.add('show');
         this.classList.add('active');
+        // Mark grid so the other card hides + this card goes full-width
+        if (this.classList.contains('exec-card')) grid.classList.add('exec-active');
+        if (this.classList.contains('dec-card'))  grid.classList.add('dec-active');
+        // Smooth-scroll panel into view
         setTimeout(function() {
           target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 250);
