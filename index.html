@@ -341,38 +341,40 @@
       <div style="margin: 22px 0 0;">
         <button class="collapsible" style="background-color: #eaf4ff; color: #1f3a5f; border-color: #c7dcef; font-weight: 600;">📚 How the Wiki Works (Notion-based) — click to expand</button>
         <div class="contentx" style="border-color: #c7dcef;">
-          <h3 style="margin-top: 12px; color: #1f3a5f;">Wiki = Notion + One Sub-page per Answer</h3>
+          <h4 style="margin-top: 12px; color: #1f3a5f; font-size: 15px;">Mechanism</h4>
 
           <p style="font-size: 14px; line-height: 1.7em;">
-            The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. Notion was chosen because it offers (i) free-form rich pages with KaTeX equations and inline images, (ii) sub-page hierarchy that maps cleanly onto a knowledge graph, and (iii) public REST API for programmatic write access. The Wiki is structured one-concept-per-page with cross-links between pages, following the <a href="https://github.com/karpathy" style="color:#1f3a5f;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026.
+            Every time the Decision Layer signs off on a specific answer (a robustness check, a stylized-fact estimate, a counterfactual rollout result), that answer is auto-pushed as a new <strong>sub-page</strong> under the parent Wiki page on Notion. The sub-page captures the original question, the supporting evidence, and the references back to the Notion revision and the code-repository commit that produced it. Over time, the Wiki accumulates one sub-page per substantive conclusion, cross-linked into a continually expanding knowledge graph.
+          </p>
+
+          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Why a Wiki, not a chat log: the Wiki is a comprehension scaffold, not a storage tool</h4>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            Every replicated paper introduces <strong>new domain knowledge</strong>: a stylized fact, a regression specification, a counterfactual scenario, a market microstructure assumption. For the user to make sensible Decision Layer judgements, deciding which research direction to back, which robustness checks are necessary, which conclusions are worth promoting to the Overleaf draft, they have to <em>fully understand</em> what the Execution Layer found.
           </p>
 
           <p style="font-size: 14px; line-height: 1.7em;">
-            <strong>Mechanism</strong>: every time the Decision Layer signs off on a specific answer (a robustness check, a stylized-fact estimate, a counterfactual rollout result), that answer is auto-pushed as a new <strong>sub-page</strong> under the parent Wiki page on Notion. The sub-page captures the question, the evidence, and the references back to the Notion revision and the Git commit that produced it. Over time, the Wiki accumulates one sub-page per substantive answer, cross-linked into a growing knowledge graph.
-          </p>
-
-          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Why a Wiki, and not a chat log: the Wiki is a comprehension scaffold, not a storage trick</h4>
-
-          <p style="font-size: 14px; line-height: 1.7em;">
-            Every replicated paper introduces <strong>new domain knowledge</strong>: a stylized fact, a regression specification, a counterfactual scenario, a market microstructure assumption. None of this knowledge enters the user's head automatically. If the user is going to make good decisions in the Decision Layer, deciding which angle to back, which robustness check to insist on, which result to push to Overleaf, the user has to <em>actually understand</em> what the Execution Layer found.
+            That is the core purpose of building a Wiki. The Wiki integrates each replication's findings into a structured, readable page, paired with cross-links to related concepts, so the user can read through, understand the content, and follow the logic of the conclusions. It is a <em>reading and learning surface</em>, not merely an information container. A chat log only records what was said; the Wiki precipitates the actionable understanding worth keeping.
           </p>
 
           <p style="font-size: 14px; line-height: 1.7em;">
-            That is what the Wiki is for. The Wiki turns each replication's findings into a structured page that a human can <em>read and learn from</em>, with cross-links to the related concepts that make the finding interpretable. It is a reading surface, not just a storage surface. A chat log is a record of what was said; a Wiki is a record of what was understood.
+            <strong>This is the core principle of Human-in-the-Loop collaboration: if the human cannot understand the result, the human cannot make an effective decision on it.</strong> Approval without deep understanding is just a formal stamp, with no real authority behind it.
           </p>
 
+          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Wiki = Notion + one sub-page per answer</h4>
+
           <p style="font-size: 14px; line-height: 1.7em;">
-            <strong>This is the heart of the Human-in-the-Loop contract.</strong> If the human cannot understand the result, the human cannot decide on the result. Without comprehension there is no real signoff, just rubber-stamping. The Decision Layer's authority depends on the user actually grasping what the agent did, why it did it that way, and what the result implies. The Wiki is the artifact that makes that possible at scale, paper after paper, across an accumulating body of new knowledge.
+            The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. Notion was chosen because it offers (i) free-form rich pages with KaTeX equations and inline images, (ii) a sub-page hierarchy that maps cleanly onto a knowledge graph, and (iii) a public REST API for programmatic write access. The Wiki is structured one concept per page with cross-links between pages, following the <a href="https://github.com/karpathy" style="color:#1f3a5f;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026.
           </p>
 
           <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Downstream consumption</h4>
 
           <p style="font-size: 14px; line-height: 1.7em;">
-            Because the Wiki is plain markdown under the hood, it can be exported and fed into other tools without re-derivation. A practical example: export a set of sub-pages and upload to <a href="https://notebooklm.google.com" style="color:#1f3a5f;">NotebookLM</a> to generate a 10–20 minute "Audio Overview" podcast for offline listening, or to query the Wiki in source-grounded chat. The Wiki produces the asset; downstream tools consume it.
+            Because the Wiki is plain markdown under the hood, content can be exported and fed into third-party tools directly. A practical example: export a set of sub-pages and upload them to <a href="https://notebooklm.google.com" style="color:#1f3a5f;">NotebookLM</a> to generate a 10&ndash;20 minute "Audio Overview" podcast that supports offline listening, or to query the Wiki in source-grounded chat.
           </p>
 
           <p style="font-size: 13px; color: #777; margin-top: 18px; font-style: italic;">
-            Internal hooks: each Edit/Write to a registered Wiki markdown file triggers a <code>PostToolUse</code> Claude Code hook that archives the previous Notion revision and writes the new revision. Zero LLM tokens are consumed per sync — the hook is a shell script that calls the Notion REST API directly.
+            Internal hooks: any Edit or Write on a registered Wiki markdown file automatically triggers Claude Code's PostToolUse hook, which archives the previous Notion revision and writes the new one. The sync consumes no LLM compute &mdash; the hook is a shell script that calls the Notion REST API directly.
           </p>
         </div>
       </div>
