@@ -257,13 +257,41 @@
         <div class="col-sm-3"><div class="stat-tile"><div class="num">~1k</div><div class="lbl">lines auto-generated</div></div></div>
       </div>
 
-      <!-- ========== WHAT IS AUTORESEARCH ========== -->
-      <h2>What Is AutoResearch?</h2>
+      <!-- ========== WHAT IS AUTO QUANT RESEARCH ========== -->
+      <h2>What Is Auto Quant Research?</h2>
       <p>
-        AutoResearch is a system for <strong>fully autonomous research replication</strong> in finance microstructure. The user hands the agent a paper, in PDF, SSRN URL, or arXiv link, and walks away. Within minutes, the agent has parsed the paper into a structured regression specification, dispatched parallel subagents to design the data pipeline, world model, and empirical replication code, generated approximately one thousand lines of code, committed to Git for traceability, and submitted a SLURM batch job that runs the analysis on tens of millions of real limit-order-book events. By the time the user returns, the agent has pushed results to Overleaf as LaTeX, to Notion with KaTeX-rendered equations, and to a GitHub Pages site, all reproducible from the exact commit hash.
+        Auto Quant Research is a <strong>two-layer system</strong> for finance microstructure replication. The labor that does <em>not</em> need human judgement is fully automated and runs while the user sleeps. The decisions that do need human judgement are surfaced as a small, structured set of choices, never a wall of raw output. We call these the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong>; together they make up the Human-in-the-Loop contract.
       </p>
-      <p>
-        The system is built on <strong>Claude Code</strong>, with Claude Sonnet 4.6 acting as the orchestrator and Claude Opus 4.7 spawning specialized subagents for each design and implementation task. The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3; the empirical layer uses statsmodels OLS with clustered standard errors, fixed effects, and per-ticker heterogeneity analysis.
+
+      <!-- Two-layer cards -->
+      <div class="example-grid" style="margin-top: 18px;">
+        <div class="example-card">
+          <h4 style="color: #1f3a5f;">🌙 Execution Layer &mdash; <em>Auto Research in Sleep</em></h4>
+          <p>
+            Human-out-of-the-loop. The agent parses the paper PDF, dispatches nine parallel subagents to design the data pipeline, world model, and empirical regression spec, generates approximately one thousand lines of code, commits to Git for full traceability, submits a SLURM batch job, monitors the job to completion, and pushes raw results to Notion. All of this happens autonomously while the user is offline.
+          </p>
+          <p style="margin-top: 10px; color: #555;"><strong>Bound by</strong>: data correctness, infrastructure plumbing, code generation. Not by judgement.</p>
+        </div>
+        <div class="example-card">
+          <h4 style="color: #ee8033;">🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
+          <p>
+            Surfaces only the choices that change the direction or goal of the replication: which paper claims to test in depth, which ticker subsets matter, which robustness checks to add, which counter-narrative to highlight. The user reviews the auto-generated draft on Notion and edits or approves what they care most about proving.
+          </p>
+          <p style="margin-top: 10px; color: #555;"><strong>Bound by</strong>: scientific judgement, narrative framing, what the user wants to claim.</p>
+        </div>
+      </div>
+
+      <!-- Final processing flow -->
+      <h3 style="margin-top: 30px;">End-to-End Flow</h3>
+      <ol style="line-height: 1.9em; font-size: 15px;">
+        <li><strong>(a) Push raw results to Notion.</strong> The Execution Layer auto-publishes regression tables, plots, and reproduction code to a fresh Notion page tied to the paper.</li>
+        <li><strong>(b) Decision Layer review.</strong> The user opens the Notion page, picks the angle that best supports what they want to prove, edits the framing, and flags any robustness checks that are missing.</li>
+        <li><strong>(c) Build the Wiki on Notion.</strong> Approved findings are linked into a growing Notion Wiki, cross-referenced by paper, ticker, and stylized fact, so future work inherits an accumulating knowledge base.</li>
+        <li><strong>(d) Push to Overleaf after user review.</strong> Only after the user signs off do the polished tables, figures, and prose flow to the Overleaf LaTeX repo for paper-grade output, with each section tagged to the exact Git commit and Notion revision that produced it.</li>
+      </ol>
+
+      <p style="margin-top: 20px;">
+        The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3.
       </p>
 
       <!-- ========== EXAMPLES (the heart of the page) ========== -->
