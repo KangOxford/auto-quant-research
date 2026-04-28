@@ -294,6 +294,120 @@
         </div>
       </div>
 
+      <!-- Execution Layer detail (collapsible) -->
+      <div style="margin: 14px 0 0;">
+        <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">📂 Execution Layer — Full scaffold detail (click to expand)</button>
+        <div class="contentx" style="border-color: #c5d3e8;">
+
+          <p style="margin-top: 12px; font-size: 14px; line-height: 1.7em;">
+            The Execution Layer is implemented as a deliberately structured Claude Code configuration. The folder mirror is published at <a href="https://github.com/KangOxford/auto-quant-research/tree/main/execution-layer" style="color:#1f3a5f; font-weight:600;">github.com/KangOxford/auto-quant-research/execution-layer</a>; this section walks through what is in it and the operational rules that make it cohere.
+          </p>
+
+          <h3 style="margin-top: 22px; color: #1f3a5f;">Folder Structure</h3>
+
+          <table class="data-table" style="font-size: 13px;">
+            <thead><tr><th style="width: 28%;">Path</th><th style="width: 18%;">Count</th><th>Role</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><code>CLAUDE.md</code></td>
+                <td>62 KB</td>
+                <td>Global instructions inherited by every Claude Code session: design principles, hard rules, communication conventions, lessons-learned.</td>
+              </tr>
+              <tr>
+                <td><code>settings.json</code> + <code>settings.local.json</code></td>
+                <td>14 KB</td>
+                <td>Permissions allow-list, environment variables, hook wiring, status-line command, MCP server configuration.</td>
+              </tr>
+              <tr>
+                <td><code>skills/</code></td>
+                <td>42 skills</td>
+                <td>Reusable, on-demand procedures. Each has its own folder with a SKILL.md describing when to invoke and how to execute. Examples: <code>submit-job</code>, <code>find-wandb</code>, <code>checkstate</code>, <code>notion-push-via-rest</code>, <code>codex-image2</code>.</td>
+              </tr>
+              <tr>
+                <td><code>hooks/</code></td>
+                <td>21 scripts</td>
+                <td>Event-driven shell + Python handlers. PostToolUse hooks for auto-sync to Notion; Stop hooks for prompt translation; auto-approve hooks for editing the agent's own configuration.</td>
+              </tr>
+              <tr>
+                <td><code>agents/</code></td>
+                <td>1 file</td>
+                <td>Subagent definitions (named, specialized agents that the orchestrator can dispatch).</td>
+              </tr>
+              <tr>
+                <td><code>commands/</code></td>
+                <td>1 file</td>
+                <td>Slash-command definitions (e.g., <code>/brainstorming</code>).</td>
+              </tr>
+              <tr>
+                <td><code>statusline-command.sh</code> + <code>statusline-session.sh</code></td>
+                <td>12 KB</td>
+                <td>Custom status-line renderer: shows session label stack, branch, and per-session metadata.</td>
+              </tr>
+              <tr>
+                <td><code>notion-sync-manifest.json</code></td>
+                <td>4 KB</td>
+                <td>Maps which markdown files auto-sync to which Notion page. The hook reads this; zero LLM tokens consumed per sync.</td>
+              </tr>
+              <tr>
+                <td><code>README.md</code> · <code>PRINCIPLES.md</code> · <code>INSIGHTS_FROM_OPENPHIL.md</code> · <code>CRITICAL_LESSONS.md</code></td>
+                <td>24 KB</td>
+                <td>Documentation: what context engineering is, common principles, design ideas distilled from the FLAIR / Oxford Co-Scientist Workshop, hard-won lessons preserved.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: 22px; color: #1f3a5f;">Common Principles</h3>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            A short, living list. Anyone is welcome to add a principle, refine an existing one, or leave a comment on the Notion mirror. The full text lives in <code>execution-layer/PRINCIPLES.md</code>.
+          </p>
+
+          <h4 style="margin-top: 16px; color: #1f3a5f; font-size: 15px;">Principle 1 — Multi-agent dispatch</h4>
+
+          <ul style="font-size: 14px; line-height: 1.7em;">
+            <li><strong>(a) Within a single problem, run multiple parallel subagents.</strong> A research replication has many independent sub-tasks: data ingestion, world-model interface, regression specification, figure generation, robustness checks. Run them concurrently. The wall-clock cost of N parallel subagents is bounded by the slowest one, not the sum.</li>
+            <li><strong>(b) Across unrelated problems, never run multiple parallel agents.</strong> The failure mode is non-obvious: when two or three unrelated investigations run at once, the human in the loop cannot keep all of them in working memory at the same depth. The bottleneck is human comprehension, not compute. <em>Fan out within a problem, queue up across problems.</em></li>
+          </ul>
+
+          <h4 style="margin-top: 16px; color: #1f3a5f; font-size: 15px;">Principle 2 — Session management with explicit forks</h4>
+
+          <ul style="font-size: 14px; line-height: 1.7em;">
+            <li><strong>(a) Go deeper inside one session.</strong> Continuing the same thread keeps accumulated context, prior tool outputs, and partial conclusions in one place. Starting fresh forces a context re-bootstrap and often loses the nuance the agent already discovered.</li>
+            <li><strong>(b) When the investigation legitimately branches, fork the session.</strong> Use <code>claude --resume &lt;parent-id&gt;</code> and <code>claude --resume &lt;parent-id&gt; --fork-session</code> to spawn explicit sub-sessions. The parent thread holds the high-level plan; several forks explore alternative paths in parallel; survivors merge findings back into the parent.</li>
+          </ul>
+
+          <pre style="background: #f6f8fa; border: 1px solid #d0d0d0; border-radius: 6px; padding: 14px; font-family: 'Courier New', monospace; font-size: 12.5px; line-height: 1.5em; overflow-x: auto; margin: 12px 0;"># Parent session: top-level investigation
+claude --resume &lt;parent-session-id&gt;
+
+# Sub-session A / B / C: try design A / B / C in parallel
+claude --resume &lt;parent-session-id&gt; --fork-session
+claude --resume &lt;parent-session-id&gt; --fork-session
+claude --resume &lt;parent-session-id&gt; --fork-session</pre>
+
+          <p style="font-size: 13.5px; line-height: 1.7em;">
+            Together: Principle 1 is breadth control (do not spread agents across unrelated topics). Principle 2 is depth navigation (when a single topic legitimately branches, fork rather than restart). At any given moment one topic is active; inside that topic, work fans out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem.
+          </p>
+
+          <h3 style="margin-top: 22px; color: #1f3a5f;">What Is Filtered Out</h3>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            The published copy filters every secret and every transient artefact: <code>.credentials.json</code> and other token files (Claude Code auth, Notion integration token, GitHub PAT, HuggingFace token), the entire <code>~/.claude/projects/</code> directory of full chat transcripts, all <code>*.log</code> files, paste / file caches, session metadata, third-party plugin state, and MCP auth caches. A grep across the published files for common token formats (GitHub, HuggingFace, Anthropic, OpenAI, AWS, GCP, Notion, xAI) confirmed zero leakage.
+          </p>
+
+          <h3 style="margin-top: 22px; color: #1f3a5f;">How to Contribute</h3>
+
+          <ul style="font-size: 14px; line-height: 1.7em;">
+            <li>To propose a new principle: write a one-sentence rule (the part everyone should remember), two to four sentences of motivation, and an optional command snippet. Open a pull request against <code>execution-layer/PRINCIPLES.md</code> on GitHub, or leave a comment on the Notion mirror.</li>
+            <li>To add or improve a skill: each skill is a self-contained folder with a SKILL.md. Follow the existing pattern (description, when to use, process, anti-patterns, related skills). Skills should be invocable by trigger phrases and produce a clear final state.</li>
+            <li>To add a hook: hooks are short shell or Python scripts that run on a specific event (PostToolUse, Stop, etc.). Keep them idempotent and side-effect-light; they run on every matching event and budget overruns block the next turn.</li>
+          </ul>
+
+          <p style="margin-top: 18px; font-size: 13px; color: #555; font-style: italic;">
+            Maintainers: Kang Li · Aramis Fereydoun · contributors welcome via GitHub PRs or Notion block-level comments.
+          </p>
+        </div>
+      </div>
+
       <!-- Final processing flow — 4 colored step boxes -->
       <h3 style="margin-top: 30px;">End-to-End Flow</h3>
 
