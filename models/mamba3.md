@@ -1,25 +1,25 @@
 # Task: mamba3
 
-## 元信息
-- **任务类型**: Internal SOTA Model Card (非 paper replication)
-- **架构**: Mamba3 SISO (Selective State Space, single-input single-output) 替换 LOBS5 的 S5 SSM 层
-- **训练目标**: Token-level autoregressive next-token prediction on LOB message flow
-- **数据**: 8 tickers × 4 yr (2022-2025), 26-token encoding, msg_seq_len=500
-- **维护者**: kangli.s5e + aramis.s5e (Oxford LOB lab)
+## Metadata
+- **Task type**: Internal SOTA Model Card (not a paper replication)
+- **Architecture**: Mamba3 SISO (Selective State Space, single-input single-output) replacing the S5 SSM layers in LOBS5
+- **Training objective**: Token-level autoregressive next-token prediction on LOB message flow
+- **Data**: 8 tickers × 4 yr (2022-2025), 26-token encoding, msg_seq_len=500
+- **Maintainers**: kangli.s5e + aramis.s5e (Oxford LOB lab)
 
-## TLDR (一句话)
-基于 LOBS5 框架，把 S5 的 diagonal complex SSM 替换成 Mamba3 SISO 选择性 state-space 层（per-token 输入依赖的 $\Delta_t, B_t, C_t$），用 Muon optimizer + hierarchical 2D mesh AllReduce 在 4-node × 4-GPU 上训了 ~46k 步，IC@g=2000 达到 **0.102**，是当前 mamba3 task 的 baseline SOTA。
+## TLDR (one line)
+Built on the LOBS5 framework, replaces S5's diagonal complex SSM with a Mamba3 SISO selective state-space layer (per-token input-dependent $\Delta_t, B_t, C_t$), trained with Muon optimizer + hierarchical 2D mesh AllReduce on 4-node × 4-GPU for ~46k steps, achieving IC@g=2000 of **0.102**, which is the current baseline SOTA for the mamba3 task.
 
-## 架构与配置
-**Backbone**: LOBS5 `PaddedLobPredModel`（message encoder + book encoder + fused trunk + decoder），fused trunk 的 SSM 层从 S5 换成 Mamba3。
+## Architecture and Configuration
+**Backbone**: LOBS5 `PaddedLobPredModel` (message encoder + book encoder + fused trunk + decoder), with the SSM layers in the fused trunk swapped from S5 to Mamba3.
 
-**Mamba3 SISO 层**（每个 SequenceLayer 内）:
+**Mamba3 SISO layer** (inside each SequenceLayer):
 - $\Delta_t = \text{softplus}(W_\Delta x_t + b_\Delta)$ (input-dependent step size)
 - $B_t = W_B x_t$, $C_t = W_C x_t$ (input-dependent state matrices)
 - $A$ = HiPPO-LegS init, real-valued diagonal (`d_state=128`, `headdim=64`)
-- 离散化: $\bar A = \exp(\Delta_t A)$, $\bar B = \Delta_t B_t$
+- Discretization: $\bar A = \exp(\Delta_t A)$, $\bar B = \Delta_t B_t$
 - Recurrence: $h_t = \bar A h_{t-1} + \bar B x_t$, $y_t = C_t h_t$
-- Pure JAX 实现（`use_triton=False`），用 `jax.lax.scan` 而非 Triton kernel
+- Pure JAX implementation (`use_triton=False`), using `jax.lax.scan` instead of a Triton kernel
 
 **Trunk config**:
 | Hyperparam | Value |
@@ -50,8 +50,8 @@
 
 ## Best Model So Far
 
-> **唯一 SOTA checkpoint**: `pw8u0edj` 的 **step 46050** (569 MB single step).
-> 学生 reproduce 必须使用 **这一个** ckpt + commit `3f6d32a6`，其他训练 run 不在本 task 的 SOTA 范围内。
+> **Sole SOTA checkpoint**: `pw8u0edj` at **step 46050** (569 MB single step).
+> Students reproducing results must use **this exact** ckpt + commit `3f6d32a6`. Other training runs are outside the SOTA scope of this task.
 
 | Field | Value |
 |-------|-------|
@@ -71,7 +71,7 @@
 | **Train length** | ~46050 steps × micro_bsz 4 × 16 GPU = ~2.95M token sequences seen |
 | **Public mirror** | ✅ [GitHub Release `ckpt-mamba3-pw8u0edj-step46050`](https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050) — 567 MB tar.zst, sha256 `8cb798a570…0bc67`. See [`mamba3_ckpt_README.md`](mamba3_ckpt_README.md) for download + decompress + load. |
 
-### 验证指标 (Information Coefficient at multi-horizon, step 46050)
+### Validation Metrics (Information Coefficient at multi-horizon, step 46050)
 
 | Horizon (gap) | IC | Comment |
 |---------------|-----|---------|
@@ -80,32 +80,32 @@
 | g = 1000 | 0.069 | long-horizon |
 | g = 2000 | **0.102** | very long, mamba3 task SOTA |
 
-> Note: IC = Pearson correlation between predicted and realized $r_{t,t+g}$. 这是 mamba3 task 的核心 metric。
+> Note: IC = Pearson correlation between predicted and realized $r_{t,t+g}$. This is the core metric for the mamba3 task.
 
-## 数据需求
-- **Tickers**: GOOG, AAPL, NVDA, AMZN, META, TSLA, MSFT, AMD (8 个 NASDAQ 主流大盘股)
-- **Train range**: 2022-01-01 至 2025-12-31 (4 年)
-- **Test range**: 2026-01-01 至 2026-01-31 (held-out, 9 trading days)
-- **Encoding**: 26-token (base-100, vocab 含书 quote levels + msg fields)
+## Data Requirements
+- **Tickers**: GOOG, AAPL, NVDA, AMZN, META, TSLA, MSFT, AMD (8 major NASDAQ large-cap stocks)
+- **Train range**: 2022-01-01 to 2025-12-31 (4 years)
+- **Test range**: 2026-01-01 to 2026-01-31 (held-out, 9 trading days)
+- **Encoding**: 26-token (base-100, vocab includes book quote levels + msg fields)
 - **Data root (HPC)**: `/lus/lfs1aip2/projects/s5e/lob_preproc_26tok`
-  > ⚠️ 注意：CLAUDE.md 旧版写的 `GOOG_GOOGL_2016TO2021_24tok_preproc` 已失效（24tok 路径），mamba3 task 用的是 26tok 新路径
-- **数据源**: LOBSTER (NASDAQ ITCH-derived) → 内部 token preproc pipeline (`lob_pipeline/`)
+  > ⚠️ Note: The old CLAUDE.md path `GOOG_GOOGL_2016TO2021_24tok_preproc` is no longer valid (24tok path). The mamba3 task uses the new 26tok path.
+- **Data source**: LOBSTER (NASDAQ ITCH-derived) → internal token preproc pipeline (`lob_pipeline/`)
 
-## 复现协议 (学生 step-by-step)
+## Reproduction Protocol (student step-by-step)
 
-### Step 1: clone LOBS5 + 切到正确 commit
+### Step 1: clone LOBS5 + check out the correct commit
 ```bash
 git clone git@github.com:KangOxford/LOBS5.git
 cd LOBS5
 git checkout 3f6d32a6d8ec79bd24e91dd9ec5fc18c43ad3f28
-# 或: git checkout exp/R1-Mamba3 (但 branch HEAD 可能已前进，optimal 是固定 commit)
+# or: git checkout exp/R1-Mamba3 (but branch HEAD may have advanced; pinning to the commit is preferred)
 ```
 
-### Step 2: 准备数据
-- HPC 内部用户: 直接读 `/lus/lfs1aip2/projects/s5e/lob_preproc_26tok/`
-- 外部学生: contact Kang (kang.li@stats.ox.ac.uk) 拿 LOBSTER 26tok preproc 的下载链接（数据在 NDA 内，需要走学术使用协议）
+### Step 2: prepare data
+- HPC internal users: read directly from `/lus/lfs1aip2/projects/s5e/lob_preproc_26tok/`
+- External students: contact Kang (kang.li@stats.ox.ac.uk) for the LOBSTER 26tok preproc download link (data is under NDA and requires an academic use agreement)
 
-### Step 3: 加载 checkpoint
+### Step 3: load checkpoint
 ```python
 import orbax.checkpoint as ocp
 ckpt_path = "/lus/.../experiments/exp_R1_Mamba3/checkpoints/j3417629_pw8u0edj_3417629/46050"
@@ -113,7 +113,7 @@ mngr = ocp.CheckpointManager(ckpt_path)
 state = mngr.restore(46050)
 ```
 
-### Step 4: Eval (重现 IC@g=2000=0.102)
+### Step 4: Eval (reproduce IC@g=2000=0.102)
 ```bash
 python eval_per_field_accuracy.py \
     --restore /lus/.../checkpoints/j3417629_pw8u0edj_3417629/46050 \
@@ -124,41 +124,41 @@ python eval_per_field_accuracy.py \
 
 ### Step 5: From-scratch retrain (verify reproducibility)
 ```bash
-# 在 4-node × 4-GPU GH200 上提交
+# Submit on 4-node × 4-GPU GH200
 sbatch --nodes=4 --time=24:00:00 \
     --job-name=mamba3-paper-baseline-repro \
     train_full_autoreg.batch
-# 关键 env vars: D_MODEL=1024 N_LAYERS=6 SSM_SIZE_BASE=1024 BLOCKS=16
-#                 PER_GPU_BSZ=4 SSM_TYPE=mamba3 OPT_CONFIG=muon
+# Key env vars: D_MODEL=1024 N_LAYERS=6 SSM_SIZE_BASE=1024 BLOCKS=16
+#               PER_GPU_BSZ=4 SSM_TYPE=mamba3 OPT_CONFIG=muon
 ```
 
-## 期望结果
-- **Sanity check (1 节点 BSZ=2 smoke)**: 50 步内 train loss 从 ~10 降到 ~5（loss 单位是 nats/token in vocab=2112）
-- **稳态 train loss**: ~0.6 at step 46050
+## Expected Results
+- **Sanity check (1-node BSZ=2 smoke)**: train loss drops from ~10 to ~5 within 50 steps (loss in nats/token, vocab=2112)
+- **Steady-state train loss**: ~0.6 at step 46050
 - **IC@g=2000 on test 2026-01**: **0.10 ± 0.005** (paper baseline target)
-- **Speed**: ~1.5 it/s on 4 nodes × 4 GH200 GPU (微批 4 per GPU, 16 GPU 总), 单 step ~660 ms
+- **Speed**: ~1.5 it/s on 4 nodes × 4 GH200 GPU (micro-batch 4 per GPU, 16 GPU total), ~660 ms per step
 - **Train wall-time to step 46050**: ~8.5 hours
 
-## Caveats / 学生注意
-- **MarS data 不是 mamba3 task 的输入** — 那是另一条 generative simulator 线，不要混
-- **Token 模式必须是 26tok** — 24tok 是 paper deprecated 的旧 schema
-- **Triton path 是关闭的** (`mamba3_use_triton=False`) — 这次 SOTA 用的是 pure JAX。后续 R1g default 切到 CUDA FFI state-scan (commit `fc82838b`)，但 paper baseline 没用
-- **Aramis 的 ckpt 在共享 worktree** (`exp_R1_Mamba3/`)，不是 LOBS5/checkpoints 主目录 — 学生跑 reload 要给完整路径
-- **本 task 只认一个 SOTA ckpt**: pw8u0edj@46050。其他 mamba3 wandb run（curriculum 等）不在本 task 范围，学生看到 wandb 里有别的 run 不要混淆
+## Caveats / Notes for Students
+- **MarS data is not an input for the mamba3 task** — that belongs to a separate generative simulator track; do not mix them up
+- **Token mode must be 26tok** — 24tok is the deprecated legacy schema from earlier paper versions
+- **Triton path is disabled** (`mamba3_use_triton=False`) — this SOTA was produced with pure JAX. Subsequent R1g defaults switched to CUDA FFI state-scan (commit `fc82838b`), but the paper baseline did not use it
+- **Aramis's checkpoint lives in the shared worktree** (`exp_R1_Mamba3/`), not in the main LOBS5/checkpoints directory — students must supply the full path when reloading
+- **Only one SOTA checkpoint is recognized for this task**: pw8u0edj@46050. Other mamba3 wandb runs (curriculum, etc.) are out of scope; students seeing additional runs in wandb should not confuse them with the canonical baseline
 
-## 参考资料
-- **Mamba3 论文**: _Mamba: Linear-Time Sequence Modeling with Selective State Spaces_ (Gu & Dao, 2023, arXiv:2312.00752) 的 Mamba2/3 evolution
+## References
+- **Mamba3 paper**: _Mamba: Linear-Time Sequence Modeling with Selective State Spaces_ (Gu & Dao, 2023, arXiv:2312.00752), Mamba2/3 evolution
 - **LOBS5 paper**: Lyu, Cohen, Cartea (2024) Generative Models for the Limit Order Book
 - **S5 paper**: Smith, Warrington, Linderman (2023) Simplified State Space Layers for Sequence Modeling (ICLR)
 - **Muon optimizer**: Jordan, Jin, Boza, Sun, Bernstein (2024) Muon (https://kellerjordan.github.io/posts/muon/)
 - **HiPPO**: Gu, Dao, Ermon, Rudra, Re (2020) HiPPO (NeurIPS)
 
-## 与其他 auto-research tasks 的关系
-- **Lillo & Farmer (2004)**: 对 mamba3 generated samples 做 trade sign Hurst 估计，应得 $H \approx 0.7$（验证 long memory 是否被模型 capture）
-- **Toth et al. (2011)**: 对 mamba3 生成的 metaorder 计算 square-root impact，应得 $\beta \approx 0.5$
-- **Cont, Stoikov, Talreja (2009)**: 对 mamba3 生成的 LOB shape 做 stochastic dynamics 拟合，应匹配 stylized facts
+## Relationship to Other Auto-Research Tasks
+- **Lillo & Farmer (2004)**: estimate the trade-sign Hurst exponent on mamba3-generated samples; expected $H \approx 0.7$ (validates whether the model captures long memory)
+- **Toth et al. (2011)**: compute square-root market impact on mamba3-generated metaorders; expected $\beta \approx 0.5$
+- **Cont, Stoikov, Talreja (2009)**: fit stochastic dynamics to mamba3-generated LOB shapes; results should match stylized facts
 
-## 引用本 model card
+## Citing This Model Card
 ```bibtex
 @misc{lobster_mamba3_2026,
   title={Mamba3 SISO Baseline on LOBSTER 26-token Encoding (Auto Research Internal SOTA)},
