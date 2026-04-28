@@ -1,860 +1,406 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AutoResearch — Paper to Verified Replication in 48 Hours</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AutoResearch: From Paper to Verified Replication in 48 Hours — an autonomous AI research agent for finance microstructure">
+  <meta name="keywords" content="auto research, autonomous research, finance microstructure, limit order book, paper replication, AI agent, Claude Code">
+  <title>AutoResearch: From Paper to Verified Replication in 48 Hours</title>
+
+  <!-- Bootstrap 3 + Font Awesome 4 (CDN, identical to sigma0) -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+  <!-- MathJax 3 -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <!-- Inline CSS (extracted from sigma0 template, self-contained so /.nojekyll repos render correctly) -->
   <style>
-    /* ── Reset & Base ─────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Lato fonts via Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-    :root {
-      --bg:        #0a0e1a;
-      --bg2:       #111827;
-      --bg3:       #1a2236;
-      --border:    #1f2d45;
-      --text:      #e0e6ed;
-      --muted:     #8899aa;
-      --accent:    #4ade80;
-      --accent2:   #38bdf8;
-      --accent3:   #f59e0b;
-      --danger:    #f87171;
-      --mono:      'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-      --sans:      'Inter', 'Segoe UI', system-ui, sans-serif;
-      --max:       900px;
-      --radius:    10px;
+    body, td, th, tr, p, a {
+      font-family: 'Lato', Verdana, Helvetica, Calibri;
     }
+    a { color: #1772d0; text-decoration: none; }
+    a:focus, a:hover { color: #f09228; text-decoration: none; }
+    p { line-height: 1.7em; font-size: 15px; }
+    img { display: block; margin-left: auto; margin-right: auto; }
+    h2 { margin-top: 2em; padding-bottom: 0.3em; border-bottom: 1px solid #eee; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.65;
-      min-height: 100vh;
+    /* Hero TL;DR */
+    blockquote {
+      border-left: none;
+      border: 1px solid #d0d0d0;
+      border-radius: 12px;
+      padding: 25px 30px;
+      margin: 25px 0;
+      background-color: #f0f5fa;
+      font-size: 15px;
+      line-height: 1.7em;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
+    blockquote p { margin: 0; }
 
-    a { color: var(--accent2); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    /* Data tables */
+    .data-table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 14px; }
+    .data-table th { background-color: #f5f5f5; border: 1px solid #ddd; padding: 8px 12px; text-align: left; font-weight: 700; }
+    .data-table td { border: 1px solid #ddd; padding: 8px 12px; }
+    .data-table tr:nth-child(even) { background-color: #fafafa; }
 
-    /* ── Layout Helpers ───────────────────────────────────────────── */
-    .container {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    section { padding: 64px 0; }
-    section + section { border-top: 1px solid var(--border); }
-
-    h2 {
-      font-size: 1.55rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 10px;
-    }
-
-    .section-subtitle {
-      color: var(--muted);
-      margin-bottom: 40px;
-      max-width: 600px;
-    }
-
-    /* ── Header / Hero ────────────────────────────────────────────── */
-    header {
-      border-bottom: 1px solid var(--border);
-      padding: 20px 0;
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links a {
-      margin-left: 28px;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    /* Hero */
-    .hero {
-      padding: 100px 0 80px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .badge {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      padding: 4px 12px;
-      border: 1px solid var(--accent);
-      border-radius: 100px;
-      color: var(--accent);
-      margin-bottom: 28px;
-      letter-spacing: 0.06em;
-    }
-
-    .hero h1 {
-      font-size: clamp(2.6rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 18px;
-    }
-
-    .hero h1 span { color: var(--accent); }
-
-    .tagline {
-      font-size: 1.15rem;
-      color: var(--muted);
-      max-width: 640px;
-      margin-bottom: 48px;
-    }
-
-    .tagline strong { color: var(--text); }
-
-    .hero-stats {
-      display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .stat {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .stat-num {
-      font-family: var(--mono);
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: var(--accent);
-      line-height: 1;
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-
-    /* ── Capabilities Cards ───────────────────────────────────────── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover { border-color: var(--accent); }
-
-    .card-icon {
-      font-size: 1.6rem;
-      margin-bottom: 14px;
-    }
-
-    .card h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .card .tag {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: 0.67rem;
-      padding: 2px 8px;
-      background: var(--bg3);
-      border-radius: 4px;
-      color: var(--accent2);
-      margin-top: 12px;
-    }
-
-    /* ── Case Study ───────────────────────────────────────────────── */
-    .paper-card {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent3);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      margin-bottom: 32px;
-    }
-
-    .paper-card .paper-label {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent3);
-      margin-bottom: 6px;
-      letter-spacing: 0.08em;
-    }
-
-    .paper-card .paper-title {
-      font-size: 0.95rem;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .paper-card .paper-meta {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    /* Result highlight */
-    .result-highlight {
-      background: var(--bg3);
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 28px 32px;
-      margin: 28px 0;
-    }
-
-    .result-highlight .rh-label {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      margin-bottom: 14px;
-    }
-
-    .result-row {
-      display: flex;
-      align-items: baseline;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .beta-big {
-      font-family: var(--mono);
-      font-size: 3rem;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-
-    .beta-detail {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .beta-detail span { color: var(--text); }
-
-    /* Comparison row */
-    .compare-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin: 24px 0;
-    }
-
-    .compare-box {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 18px 20px;
-    }
-
-    .compare-box .cb-label {
-      font-family: var(--mono);
-      font-size: 0.67rem;
-      color: var(--muted);
-      margin-bottom: 8px;
-      letter-spacing: 0.08em;
-    }
-
-    .compare-box .cb-val {
-      font-family: var(--mono);
-      font-size: 1.4rem;
-      font-weight: 700;
-    }
-
-    .cb-paper .cb-val { color: var(--accent3); }
-    .cb-ours .cb-val  { color: var(--accent); }
-
-    .compare-box .cb-note {
-      font-size: 0.75rem;
-      color: var(--muted);
-      margin-top: 6px;
-    }
-
-    /* Per-ticker table */
-    .ticker-table {
+    /* Collapsibles */
+    .collapsible {
+      background-color: #f1f1f1;
+      color: #333;
+      cursor: pointer;
+      padding: 12px 18px;
       width: 100%;
-      border-collapse: collapse;
-      font-size: 0.82rem;
-      margin-top: 24px;
-    }
-
-    .ticker-table th {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      font-weight: 600;
+      border: 1px solid #ddd;
+      border-radius: 4px;
       text-align: left;
-      padding: 8px 12px;
-      color: var(--muted);
-      border-bottom: 1px solid var(--border);
-      letter-spacing: 0.06em;
+      outline: none;
+      font-size: 14px;
+      margin-top: 10px;
+      transition: background-color 0.3s;
     }
+    .collapsible:hover { background-color: #e1e1e1; }
+    .collapsible:after { content: '\25BC'; float: right; font-size: 12px; }
+    .collapsible.active:after { content: '\25B2'; }
 
-    .ticker-table td {
-      padding: 9px 12px;
-      border-bottom: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 0.8rem;
+    .contentx {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+      background-color: #fafafa;
+      border: 1px solid #ddd;
+      border-top: none;
+      border-radius: 0 0 4px 4px;
     }
+    .contentx.show { max-height: 4000px; padding: 12px 18px; }
 
-    .ticker-table tr:last-child td { border-bottom: none; }
-    .ticker-table tr:hover td { background: var(--bg3); }
-
-    .positive { color: var(--accent); }
-    .negative { color: var(--danger); }
-    .neutral  { color: var(--muted); }
-
-    td.ticker-name { color: var(--accent2); font-weight: 600; }
-
-    /* ── Pipeline Visualization ───────────────────────────────────── */
-    .pipeline-wrap {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 32px;
-      overflow-x: auto;
+    /* Example cards (2-col grid) */
+    .example-grid {
+      display: grid;
+      gap: 15px;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 15px;
     }
+    @media (max-width: 700px) {
+      .example-grid { grid-template-columns: 1fr; }
+    }
+    .example-card {
+      border: 1px solid #d0d0d0;
+      border-radius: 10px;
+      padding: 18px 22px;
+      background: #fafafa;
+    }
+    .example-card h4 { margin: 0 0 10px; font-size: 15px; }
+    .example-card p { font-size: 13px; margin: 0 0 8px; line-height: 1.5em; }
+    .example-card .stat-line { font-family: 'Courier New', monospace; font-size: 13px; color: #555; margin-top: 8px; }
+    .example-card .badge-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .badge-completed { background: #d4edda; color: #155724; }
+    .badge-pending   { background: #fff3cd; color: #856404; }
 
-    .pipeline-wrap pre {
-      font-family: var(--mono);
-      font-size: 0.82rem;
-      color: var(--text);
-      line-height: 1.7;
+    /* Pipeline ASCII */
+    .pipeline-ascii {
+      background: #f6f8fa;
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 18px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
       white-space: pre;
+      line-height: 1.4em;
+      overflow-x: auto;
+      margin: 20px 0;
     }
 
-    .pipeline-wrap pre .c-green   { color: var(--accent); }
-    .pipeline-wrap pre .c-blue    { color: var(--accent2); }
-    .pipeline-wrap pre .c-yellow  { color: var(--accent3); }
-    .pipeline-wrap pre .c-muted   { color: var(--muted); }
+    /* Stat tiles */
+    .stat-tile {
+      text-align: center;
+      padding: 18px 12px;
+      border: 1px solid #d0d0d0;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+    .stat-tile .num { font-size: 32px; font-weight: 700; color: #1772d0; line-height: 1; }
+    .stat-tile .lbl { font-size: 12px; color: #666; margin-top: 6px; }
 
-    /* Architecture diagram */
-    .arch-grid {
+    /* Three-layer architecture */
+    .layer-grid {
       display: grid;
-      grid-template-columns: 1fr 40px 1fr 40px 1fr;
+      grid-template-columns: 1fr 30px 1fr 30px 1fr;
       gap: 0;
-      align-items: center;
-      margin: 32px 0;
+      align-items: stretch;
+      margin: 25px 0;
     }
-
-    .arch-box {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
+    @media (max-width: 800px) {
+      .layer-grid { grid-template-columns: 1fr; }
+      .layer-grid .arrow { display: none; }
+    }
+    .layer-box {
+      border: 1px solid #d0d0d0;
+      border-radius: 8px;
+      padding: 18px;
+      background: #fafafa;
       text-align: center;
     }
-
-    .arch-box.highlight { border-color: var(--accent); }
-
-    .arch-box .ab-label {
-      font-family: var(--mono);
-      font-size: 0.67rem;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      margin-bottom: 6px;
+    .layer-box .layer-num {
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      color: #999;
+      letter-spacing: 1px;
     }
+    .layer-box h4 { margin: 6px 0 10px; font-size: 15px; }
+    .layer-box p { font-size: 13px; line-height: 1.5em; margin: 0; }
+    .arrow { display: flex; align-items: center; justify-content: center; color: #999; font-size: 18px; }
 
-    .arch-box .ab-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .arch-box .ab-sub {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    .arch-arrow {
-      text-align: center;
-      color: var(--muted);
-      font-size: 1.4rem;
-    }
-
-    /* ── Timeline ─────────────────────────────────────────────────── */
-    .timeline {
-      position: relative;
-      padding-left: 24px;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 8px;
-      bottom: 8px;
-      width: 2px;
-      background: var(--border);
-    }
-
-    .tl-item {
-      position: relative;
-      margin-bottom: 28px;
-    }
-
-    .tl-item::before {
-      content: '';
-      position: absolute;
-      left: -21px;
-      top: 7px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: 2px solid var(--bg);
-    }
-
-    .tl-item .tl-time {
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .tl-item .tl-title {
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-bottom: 2px;
-    }
-
-    .tl-item .tl-desc {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    /* ── Tech Stack ───────────────────────────────────────────────── */
-    .tech-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
+    /* Stack chips */
+    .tech-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 16px; }
     .chip {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      padding: 5px 14px;
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      color: var(--text);
+      display: inline-block;
+      padding: 4px 10px;
+      background: #f5f5f5;
+      border: 1px solid #d0d0d0;
+      border-radius: 14px;
+      font-size: 12px;
+      color: #555;
     }
 
-    .chip.accent { border-color: var(--accent); color: var(--accent); }
-    .chip.blue   { border-color: var(--accent2); color: var(--accent2); }
-
-    /* ── Key Metrics Row ──────────────────────────────────────────── */
-    .metrics-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin: 32px 0;
-    }
-
-    .metric-box {
-      background: var(--bg2);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      text-align: center;
-    }
-
-    .metric-box .m-val {
-      font-family: var(--mono);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: var(--accent2);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .metric-box .m-label {
-      font-size: 0.75rem;
-      color: var(--muted);
-    }
-
-    /* ── Footer ───────────────────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 40px 0;
-      color: var(--muted);
-      font-size: 0.82rem;
-    }
-
-    .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-logo {
-      font-family: var(--mono);
-      font-size: 1rem;
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .footer-links a {
-      margin-left: 20px;
-      color: var(--muted);
-    }
-    .footer-links a:hover { color: var(--accent); }
-
-    /* ── Responsive ───────────────────────────────────────────────── */
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 2.2rem; }
-      .compare-row { grid-template-columns: 1fr; }
-      .arch-grid { grid-template-columns: 1fr; }
-      .arch-arrow { transform: rotate(90deg); }
-      .nav-links { display: none; }
-      .hero-stats { gap: 24px; }
+    /* Footer */
+    .footnotes {
+      margin-top: 3em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 13px;
+      color: #666;
     }
   </style>
 </head>
+
 <body>
+<div class="container" id="main">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
 
-<!-- ── Navigation ─────────────────────────────────────────────────── -->
-<header>
-  <div class="container nav-inner">
-    <span class="logo">AutoResearch</span>
-    <nav class="nav-links">
-      <a href="#capabilities">Capabilities</a>
-      <a href="#casestudy">Case Study</a>
-      <a href="#pipeline">Pipeline</a>
-      <a href="#stack">Stack</a>
-      <a href="https://github.com/KangOxford/auto-quant-research" target="_blank">GitHub</a>
-    </nav>
-  </div>
-</header>
+      <!-- ========== TITLE ========== -->
+      <div class="text-center" style="margin-top: 40px;">
+        <h1 style="font-size: 48px; font-weight: 700; font-family: 'Georgia', 'Times New Roman', serif;">
+          AutoResearch
+        </h1>
+        <p style="font-size: 20px; color: #555; margin-top: 8px; font-style: italic;">
+          From Paper to Verified Replication in 48 Hours
+        </p>
+      </div>
 
-<!-- ── Hero ───────────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="container">
-    <div class="badge">Research Automation System</div>
-    <h1>
-      Paper <span>&rarr;</span> Three-Layer<br>
-      Verification in <span>48 Hours</span>
-    </h1>
-    <p class="tagline">
-      Given an arbitrary finance microstructure paper, an AI research agent
-      reads it, <strong>designs a three-layer verification pipeline</strong>,
-      runs empirical replication on real limit-order-book data,
-      and publishes the results to Overleaf, Notion, and GitHub Pages.
-    </p>
-    <div class="hero-stats">
-      <div class="stat">
-        <span class="stat-num">12</span>
-        <span class="stat-label">minutes to first &beta; estimate</span>
+      <!-- ========== AUTHORS ========== -->
+      <div class="text-center" style="margin-top: 24px;">
+        <p style="font-size: 15px; line-height: 2.0em; margin-bottom: 4px;">
+          <a href="https://github.com/KangOxford" style="color:#1772d0;">Kang Li</a> &middot;
+          <a href="https://www.linkedin.com/in/aramis-fereydoun" style="color:#1772d0;">Aramis Fereydoun</a>
+        </p>
       </div>
-      <div class="stat">
-        <span class="stat-num">9</span>
-        <span class="stat-label">parallel subagents dispatched</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">46M</span>
-        <span class="stat-label">limit orders analyzed</span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">~1000</span>
-        <span class="stat-label">lines of auto-generated code</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── Capabilities ───────────────────────────────────────────────── -->
-<section id="capabilities">
-  <div class="container">
-    <div class="section-label">What It Does</div>
-    <h2>End-to-End Research Automation</h2>
-    <p class="section-subtitle">
-      From raw PDF to reproducible results, every stage is orchestrated
-      autonomously with verifiable outputs.
-    </p>
-    <div class="cards">
-      <div class="card">
-        <div class="card-icon">📄</div>
-        <h3>Paper Ingestion</h3>
-        <p>PDF parsed into structured abstract, equations, and regression specs.
-           LLM extracts hypothesis, dependent/independent variables, and
-           identification strategy.</p>
-        <span class="tag">pymupdf + LLM extraction</span>
+      <!-- ========== AFFILIATIONS ========== -->
+      <div class="text-center" style="margin-top: 12px; margin-bottom: 30px;">
+        <p style="font-size: 14px; color: #777;">
+          University of Oxford &middot; Department of Statistics &middot; FLAIR
+        </p>
       </div>
-      <div class="card">
-        <div class="card-icon">🏗️</div>
-        <h3>Architecture Design</h3>
-        <p>Three-layer spec: World Model (market simulator for synthetic data),
-           Teacher (IC-optimized predictor), Student (low-latency distilled
-           real-time model).</p>
-        <span class="tag">Mamba3 / GDN / S5</span>
-      </div>
-      <div class="card">
-        <div class="card-icon">🔬</div>
-        <h3>Empirical Replication</h3>
-        <p>SLURM-scale OLS on tens of millions of limit orders, with clustered
-           standard errors, fixed effects, and per-ticker heterogeneity
-           analysis.</p>
-        <span class="tag">statsmodels + SLURM</span>
-      </div>
-      <div class="card">
-        <div class="card-icon">📊</div>
-        <h3>Multi-Channel Publishing</h3>
-        <p>Results automatically pushed to Overleaf LaTeX, Notion with KaTeX
-           rendering, and GitHub Pages — all from a single pipeline run.</p>
-        <span class="tag">Overleaf Git + Notion REST</span>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── Case Study ─────────────────────────────────────────────────── -->
-<section id="casestudy">
-  <div class="container">
-    <div class="section-label">Live Case Study</div>
-    <h2>Dugast 2026: Market Depth &amp; Execution Delays</h2>
-    <p class="section-subtitle">
-      A full replication of a working paper using Nasdaq LOB data,
-      run autonomously from PDF to published results.
-    </p>
-
-    <!-- Source paper card -->
-    <div class="paper-card">
-      <div class="paper-label">SOURCE PAPER</div>
-      <div class="paper-title">
-        "Market Depth and Execution Delays"
+      <!-- ========== NAV BUTTONS ========== -->
+      <div class="text-center" style="margin-top: 20px; margin-bottom: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+        <a href="#examples" style="padding: 10px 18px; border: 1px solid #d0d0d0; border-radius: 8px; color: #333; font-size: 14px; background: #fafafa;">
+          <i class="fa fa-flask" style="margin-right: 6px;"></i>Examples
+        </a>
+        <a href="https://github.com/KangOxford/auto-quant-research" style="padding: 10px 18px; border: 1px solid #d0d0d0; border-radius: 8px; color: #333; font-size: 14px; background: #fafafa;">
+          <i class="fa fa-github" style="margin-right: 6px;"></i>GitHub
+        </a>
+        <a href="https://github.com/KangOxford/auto-quant-research/blob/main/RESOURCES.md" style="padding: 10px 18px; border: 1px solid #d0d0d0; border-radius: 8px; color: #333; font-size: 14px; background: #fafafa;">
+          <i class="fa fa-database" style="margin-right: 6px;"></i>Resources
+        </a>
+        <a href="https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050" style="padding: 10px 18px; border: 1px solid #d0d0d0; border-radius: 8px; color: #333; font-size: 14px; background: #fafafa;">
+          <i class="fa fa-cube" style="margin-right: 6px;"></i>Checkpoint
+        </a>
       </div>
-      <div class="paper-meta">
-        Dugast, Marta, Riva (2026) &middot; SSRN 6440898
-        &middot; Core finding: &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE
+
+      <!-- ========== TL;DR ========== -->
+      <blockquote>
+        <p>
+          <strong>TL;DR</strong>: <strong>AutoResearch</strong> is an autonomous AI research agent. Given a finance microstructure paper as a PDF, it reads the paper, designs a three-layer verification pipeline, runs empirical replication on real limit-order-book data, and publishes the results to Overleaf, Notion, and GitHub Pages. <strong>Time from PDF to first &beta; estimate: 12 minutes.</strong> Time to full three-layer specification: 48 hours. Built on Claude Code with Sonnet 4.6 orchestrating Opus 4.7 subagents on a SLURM HPC cluster.
+        </p>
+      </blockquote>
+
+      <!-- ========== KEY STATS ========== -->
+      <div class="row" style="margin-top: 30px;">
+        <div class="col-sm-3"><div class="stat-tile"><div class="num">12</div><div class="lbl">min from PDF to first &beta;</div></div></div>
+        <div class="col-sm-3"><div class="stat-tile"><div class="num">9</div><div class="lbl">parallel subagents</div></div></div>
+        <div class="col-sm-3"><div class="stat-tile"><div class="num">46M</div><div class="lbl">limit orders analyzed</div></div></div>
+        <div class="col-sm-3"><div class="stat-tile"><div class="num">~1k</div><div class="lbl">lines auto-generated</div></div></div>
       </div>
-    </div>
 
-    <!-- Our result highlight -->
-    <div class="result-highlight">
-      <div class="rh-label">OUR REPLICATION RESULT &mdash; SLURM JOB 4093982</div>
-      <div class="result-row">
-        <div class="beta-big">&beta;&nbsp;=&nbsp;+0.2140</div>
-        <div class="beta-detail">
-          <span>SE 0.0106</span> &nbsp;|&nbsp; <span>t = 20.26</span><br>
-          <span>N = 46,094,530</span> orders<br>
-          <span>8 Nasdaq primaries</span> &times; Q1 2025<br>
-          Wall-clock to first estimate: <span>12 min</span>
-        </div>
+      <!-- ========== WHAT IS AUTORESEARCH ========== -->
+      <h2>What Is AutoResearch?</h2>
+      <p>
+        AutoResearch is a system for <strong>fully autonomous research replication</strong> in finance microstructure. The user hands the agent a paper, in PDF, SSRN URL, or arXiv link, and walks away. Within minutes, the agent has parsed the paper into a structured regression specification, dispatched parallel subagents to design the data pipeline, world model, and empirical replication code, generated approximately one thousand lines of code, committed to Git for traceability, and submitted a SLURM batch job that runs the analysis on tens of millions of real limit-order-book events. By the time the user returns, the agent has pushed results to Overleaf as LaTeX, to Notion with KaTeX-rendered equations, and to a GitHub Pages site, all reproducible from the exact commit hash.
+      </p>
+      <p>
+        The system is built on <strong>Claude Code</strong>, with Claude Sonnet 4.6 acting as the orchestrator and Claude Opus 4.7 spawning specialized subagents for each design and implementation task. The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3; the empirical layer uses statsmodels OLS with clustered standard errors, fixed effects, and per-ticker heterogeneity analysis.
+      </p>
+
+      <!-- ========== EXAMPLES (the heart of the page) ========== -->
+      <h2 id="examples">Examples</h2>
+      <p>
+        AutoResearch has been validated on multiple finance microstructure papers and on internal benchmark tasks. Each example pins a specific Git commit so that reproductions anchor to an exact code state, not a moving branch.
+      </p>
+
+      <!-- Example 1: Dugast 2026 -->
+      <button class="collapsible">Example 1 &mdash; Dugast, Marta, Riva (2026): Market Depth and Execution Delays</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          <span class="badge-status badge-completed">COMPLETED</span>
+          The flagship live demonstration: a full replication of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6440898">Dugast, Marta, Riva (2026) &ldquo;Market Depth and Execution Delays&rdquo;</a> using Nasdaq LOB data.
+        </p>
+        <p>
+          <strong>Paper finding</strong>: &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE TAQ data (2000s).
+        </p>
+        <p>
+          <strong>Our replication</strong>: &beta; = +0.2140 (SE 0.0106, t = 20.26), N = 46,094,530 limit orders, 8 Nasdaq primaries &times; Q1 2025. SLURM job 4093982, 1 node &times; 64 CPU, wall-clock 12 minutes.
+        </p>
+        <p>
+          The result is directionally consistent with the paper but somewhat larger, expected because Nasdaq primaries in 2025 have faster matching engines and more extreme depth heterogeneity than the NYSE sample, and venue fragmentation plus the PFOF ecosystem shift the depth-delay relationship upward. Per-ticker heterogeneity ranges from &beta; = +0.289 (GOOG, strong depth-delay link) to &beta; = -0.073 (MSFT, venue fragmentation effect).
+        </p>
+        <table class="data-table" style="max-width: 600px; margin: 12px auto;">
+          <thead><tr><th>Ticker</th><th>&beta;</th><th>SE</th><th>t</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td>GOOG</td><td>+0.289</td><td>0.018</td><td>+16.1</td><td>Strong depth-delay link</td></tr>
+            <tr><td>NVDA</td><td>+0.261</td><td>0.021</td><td>+12.4</td><td>High retail fragmentation</td></tr>
+            <tr><td>AAPL</td><td>+0.233</td><td>0.015</td><td>+15.5</td><td>Consistent with paper</td></tr>
+            <tr><td>AMZN</td><td>+0.198</td><td>0.017</td><td>+11.6</td><td>Near pooled average</td></tr>
+            <tr><td>TSLA</td><td>+0.174</td><td>0.023</td><td>+7.6</td><td>High idiosyncratic vol</td></tr>
+            <tr><td>META</td><td>-0.041</td><td>0.019</td><td>-2.2</td><td>PFOF internalization</td></tr>
+            <tr><td>MSFT</td><td>-0.073</td><td>0.016</td><td>-4.6</td><td>Venue fragmentation</td></tr>
+            <tr><td>GOOGL</td><td>+0.218</td><td>0.020</td><td>+10.9</td><td>Dual-class structure</td></tr>
+          </tbody>
+        </table>
       </div>
-    </div>
 
-    <!-- Paper vs Ours comparison -->
-    <div class="compare-row">
-      <div class="compare-box cb-paper">
-        <div class="cb-label">PAPER (DUGAST ET AL.)</div>
-        <div class="cb-val">0.133 &ndash; 0.169</div>
-        <div class="cb-note">NYSE &middot; 2000s data &middot; TAQ-based</div>
+      <!-- Example 2: Lillo & Farmer 2004 -->
+      <button class="collapsible">Example 2 &mdash; Lillo &amp; Farmer (2004): The Long Memory of the Efficient Market</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          <span class="badge-status badge-completed">COMPLETED</span>
+          A canonical microstructure stylized fact: trade-sign series exhibit long memory, with Hurst exponent <em>H</em> &asymp; 0.7 across liquid stocks and venues.
+        </p>
+        <p>
+          <strong>Paper finding</strong>: <em>H</em> = 0.696 &plusmn; 0.032 on LSE 1999&ndash;2002, across 20+ stocks (Lillo &amp; Farmer 2004, <em>Studies in Nonlinear Dynamics &amp; Econometrics</em>).
+        </p>
+        <p>
+          <strong>Our replication</strong>: DFA <em>H</em> = <strong>0.7053</strong> on full-year GOOG 2022 LOBSTER data (251 trading days, 10,868,894 trade-sign events). <strong>Within &plusmn;1&sigma; of the paper value.</strong> SLURM job 4384364, 1 node &times; 64 CPU, wall-clock 8 minutes.
+        </p>
+        <p>
+          The classical estimator is implemented in <a href="https://github.com/KangOxford/auto-quant-research/blob/main/scripts/hurst_lillo_farmer.py">scripts/hurst_lillo_farmer.py</a>: extract LOBSTER &middot;7z archives, filter event_type &isin; {4, 5} for executed trades, take the &plusmn;1 trade-direction series, and compute the Hurst exponent via both ACF tail-decay and Detrended Fluctuation Analysis. DFA is more robust on finite samples and is the canonical estimator used by the paper.
+        </p>
+        <p style="font-family: 'Courier New', monospace; font-size: 13px; background: #f6f8fa; padding: 12px; border-radius: 4px; border: 1px solid #ddd;">
+          Paper:        H = 0.696 &plusmn; 0.032 (LSE 1999&ndash;2002, 20+ stocks)<br>
+          Our (DFA):    H = 0.7053&nbsp;&nbsp;&larr; within &plusmn;1&sigma; &check;<br>
+          Our (ACF):    H = 0.8989 (&alpha; = 0.2022, tail-decay finite-sample bias)<br>
+          Data:         GOOG 2022, 251 days, 10,868,894 trades<br>
+          Sign balance: +1: 66.7%, &minus;1: 33.3% (buy-pressure asymmetry)
+        </p>
       </div>
-      <div class="compare-box cb-ours">
-        <div class="cb-label">OUR REPLICATION</div>
-        <div class="cb-val">+0.2140</div>
-        <div class="cb-note">Nasdaq &middot; Q1 2025 &middot; full LOB at nanosecond</div>
+
+      <!-- Example 3: T&oacute;th 2011 -->
+      <button class="collapsible">Example 3 &mdash; T&oacute;th et al. (2011): Anomalous Price Impact &amp; Square-Root Law</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          <span class="badge-status badge-pending">REPLICATION PENDING</span>
+          The square-root impact law: meta-order permanent price impact scales as <em>I</em> &prop; <em>Q</em><sup>0.5</sup>, exponent <em>&delta;</em> &asymp; 0.5 universally across stocks, futures, and asset classes (T&oacute;th et al. 2011, <em>Phys. Rev. X</em>).
+        </p>
+        <p>
+          <strong>Paper finding</strong>: <em>I</em>(<em>Q</em>) = <em>Y</em> &middot; &sigma;<sub>daily</sub> &middot; &radic;(<em>Q</em>/<em>V</em><sub>daily</sub>), where <em>Y</em> &asymp; 0.5 is a universal constant. Reflects market self-organized criticality with V-shaped latent order book.
+        </p>
+        <p>
+          <strong>Replication plan</strong>: same .7z extraction pipeline, then heuristic meta-order clustering (same-side trades within 60-second gap) followed by log-log OLS on (<em>I</em>, <em>Q</em>). Expected exponent in [0.4, 0.6] across 8 tickers &times; 4 years. Spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/toth_2011_sqrt_impact.md">papers/toth_2011_sqrt_impact.md</a>.
+        </p>
       </div>
-    </div>
 
-    <p style="font-size:0.85rem; color:var(--muted); margin: 0 0 28px;">
-      Our &beta; is directionally consistent with and somewhat larger than the paper
-      result, which is expected: Nasdaq primaries in 2025 have faster
-      matching engines and more extreme depth heterogeneity than the NYSE
-      sample in the original study. Venue fragmentation and the PFOF
-      ecosystem also shift the depth-delay relationship upward.
-    </p>
-
-    <!-- Per-ticker table -->
-    <h3 style="font-size:0.95rem; font-weight:700; margin-bottom:4px;">
-      Per-Ticker Heterogeneity
-    </h3>
-    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:0;">
-      Pooled &beta; masks substantial cross-stock variation driven by
-      fragmentation and institutional order flow.
-    </p>
-    <table class="ticker-table">
-      <thead>
-        <tr>
-          <th>Ticker</th>
-          <th>&beta; (log depth &rarr; log delay)</th>
-          <th>SE</th>
-          <th>t-stat</th>
-          <th>Interpretation</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="ticker-name">GOOG</td>
-          <td class="positive">+0.289</td>
-          <td>0.018</td>
-          <td class="positive">+16.1</td>
-          <td style="color:var(--muted)">Strong depth-delay link</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">NVDA</td>
-          <td class="positive">+0.261</td>
-          <td>0.021</td>
-          <td class="positive">+12.4</td>
-          <td style="color:var(--muted)">High retail fragmentation</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">AAPL</td>
-          <td class="positive">+0.233</td>
-          <td>0.015</td>
-          <td class="positive">+15.5</td>
-          <td style="color:var(--muted)">Consistent with paper</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">AMZN</td>
-          <td class="positive">+0.198</td>
-          <td>0.017</td>
-          <td class="positive">+11.6</td>
-          <td style="color:var(--muted)">Near pooled average</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">TSLA</td>
-          <td class="positive">+0.174</td>
-          <td>0.023</td>
-          <td class="positive">+7.6</td>
-          <td style="color:var(--muted)">High idiosyncratic vol</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">META</td>
-          <td class="negative">-0.041</td>
-          <td>0.019</td>
-          <td class="negative">-2.2</td>
-          <td style="color:var(--muted)">PFOF internalization</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">MSFT</td>
-          <td class="negative">-0.073</td>
-          <td>0.016</td>
-          <td class="negative">-4.6</td>
-          <td style="color:var(--muted)">Venue fragmentation effect</td>
-        </tr>
-        <tr>
-          <td class="ticker-name">GOOGL</td>
-          <td class="positive">+0.218</td>
-          <td>0.020</td>
-          <td class="positive">+10.9</td>
-          <td style="color:var(--muted)">Dual-class share structure</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- Three-layer architecture -->
-    <h3 style="font-size:0.95rem; font-weight:700; margin: 40px 0 8px;">
-      Three-Layer Verification Architecture
-    </h3>
-    <p style="font-size:0.82rem; color:var(--muted); margin-bottom:24px;">
-      Each layer provides an independent signal on the paper hypothesis,
-      from synthetic market simulation to live-trading IC measurement.
-    </p>
-
-    <div class="arch-grid">
-      <div class="arch-box">
-        <div class="ab-label">LAYER 1</div>
-        <div class="ab-title">World Model</div>
-        <div class="ab-sub">
-          LOB market simulator.<br>
-          Synthetic depth shocks &rarr;<br>
-          measure delay distribution.
-        </div>
+      <!-- Example 4: Cont/Stoikov/Talreja 2009 -->
+      <button class="collapsible">Example 4 &mdash; Cont, Stoikov, Talreja (2009): Stochastic Model for Order Book Dynamics</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          <span class="badge-status badge-pending">REPLICATION PENDING</span>
+          Models the LOB at each price level as an independent birth-death queue: limit-order arrivals decay as power law <em>&lambda;</em>(<em>i</em>) = <em>k</em>/<em>i</em><sup>&alpha;</sup>, cancellations strictly proportional to queue size <em>&theta;</em>(<em>i</em>) &middot; <em>n</em>, market orders Poisson with rate <em>&mu;</em>.
+        </p>
+        <p>
+          <strong>Paper finding</strong> (Sky Perfect Communications, TSE Level II): <em>&alpha;</em> = 0.52, <em>&mu;</em> = 0.94/min, <em>&theta;</em>(1) = 0.71, all in units of limit-order-size blocks per minute.
+        </p>
+        <p>
+          <strong>Replication plan</strong>: extract LOBSTER message events, split by event_type into limit / cancel / market, fit three rates per level. Expected <em>&alpha;</em> &isin; [0.5, 2.5] (cross-market variation), <em>&mu;</em> &asymp; 1/min, <em>&theta;</em>(1) &isin; [0.4, 0.8]. Spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/cont_stoikov_talreja_2009.md">papers/cont_stoikov_talreja_2009.md</a>.
+        </p>
       </div>
-      <div class="arch-arrow">&rarr;</div>
-      <div class="arch-box highlight">
-        <div class="ab-label">LAYER 2</div>
-        <div class="ab-title">Teacher</div>
-        <div class="ab-sub">
-          IC-optimized predictor.<br>
-          Uses depth features to<br>
-          forecast execution time.
-        </div>
-      </div>
-      <div class="arch-arrow">&rarr;</div>
-      <div class="arch-box">
-        <div class="ab-label">LAYER 3</div>
-        <div class="ab-title">Student</div>
-        <div class="ab-sub">
-          Distilled low-latency model.<br>
-          Deploys in microsecond<br>
-          order-routing decisions.
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── Pipeline Visualization ──────────────────────────────────────── -->
-<section id="pipeline">
-  <div class="container">
-    <div class="section-label">Automation Pipeline</div>
-    <h2>From PDF to Published Results</h2>
-    <p class="section-subtitle">
-      9 parallel subagents (B/C/D/E/F/G/H/H2/I) orchestrated in under 3 minutes
-      after paper ingestion.
-    </p>
+      <!-- Example 5: mamba3 model -->
+      <button class="collapsible">Example 5 &mdash; mamba3: Internal SOTA Model Card</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          <span class="badge-status badge-completed">PUBLISHED</span>
+          Beyond paper replications, AutoResearch curates internal SOTA models. <strong>mamba3</strong> is the current single-best checkpoint for the LOB next-token prediction task: 78M parameters, Mamba3 SISO state-space architecture, 26-token encoding, trained on 8 tickers &times; 4 years (2022&ndash;2025).
+        </p>
+        <p>
+          <strong>Validation IC</strong> on test set 2026-01:
+        </p>
+        <table class="data-table" style="max-width: 400px; margin: 12px auto;">
+          <thead><tr><th>Horizon (gap)</th><th>IC</th></tr></thead>
+          <tbody>
+            <tr><td>g = 250</td><td>0.044</td></tr>
+            <tr><td>g = 500</td><td>0.051</td></tr>
+            <tr><td>g = 1000</td><td>0.069</td></tr>
+            <tr><td>g = 2000</td><td><strong>0.102</strong></td></tr>
+          </tbody>
+        </table>
+        <p>
+          The checkpoint is published as a <a href="https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050">GitHub Release</a>: 567 MB tar.zst, sha256-pinned, with download and decompression instructions at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3_ckpt_README.md">models/mamba3_ckpt_README.md</a>. Reproductions must check out LOBS5 commit <code>3f6d32a6</code> on branch <code>exp/R1-Mamba3</code> to match the exact Flax module structure.
+        </p>
+      </div>
 
-    <div class="pipeline-wrap">
-<pre>
-  User hands the system a PDF
+      <!-- ========== AUTOMATION PIPELINE ========== -->
+      <h2>Automation Pipeline</h2>
+      <p>
+        Nine parallel subagents (B, C, D, E, F, G, H, H2, I) are dispatched simultaneously within approximately three minutes after paper ingestion. Each handles one slice of the design or implementation task. The orchestrator merges their outputs, commits to Git, and sbatches the analysis.
+      </p>
+
+      <div class="pipeline-ascii">  User hands the system a PDF
           │
           ▼
   ┌───────────────────────────────────────────┐
   │  PDF Extraction                           │
-  │  pymupdf + LLM structured parsing        │
+  │  pymupdf + LLM structured parsing         │
   │  → hypothesis, regression spec, data req  │
   └───────────────────┬───────────────────────┘
                       │
           ┌───────────▼───────────┐
           │   9 Parallel Agents   │  ← dispatched simultaneously, ~3 min
-          │  B · C · D · E · F   │
-          │  G · H · H2 · I      │
+          │  B · C · D · E · F    │
+          │  G · H · H2 · I       │
           └───────────┬───────────┘
                       │
      ┌────────────────▼────────────────────┐
@@ -873,7 +419,7 @@
      ┌────────────────▼────────────────────┐
      │  SLURM sbatch                       │
      │  Job 4093982 · 1 node · 64 CPU      │
-     │  46M orders · wall-clock: 12 min   │
+     │  46M orders · wall-clock: 12 min    │
      └────────────────┬────────────────────┘
                       │
           ┌───────────▼───────────┐
@@ -882,190 +428,132 @@
           │  Overleaf (LaTeX PDF) │
           │  Notion   (KaTeX)     │
           │  GitHub Pages (HTML)  │
-          └───────────────────────┘
-</pre>
-    </div>
+          └───────────────────────┘</div>
 
-    <!-- Key timing metrics -->
-    <div class="metrics-row">
-      <div class="metric-box">
-        <div class="m-val">12<span style="font-size:1rem">min</span></div>
-        <div class="m-label">Paper to first &beta; estimate<br>(SLURM job 4093982)</div>
+      <!-- ========== THREE-LAYER ARCHITECTURE ========== -->
+      <h2>Three-Layer Verification Architecture</h2>
+      <p>
+        Each replicated paper is verified at three independent layers, from synthetic market simulation to live IC measurement. Each layer provides an independent signal on the paper hypothesis: if the world model captures the stylized fact, the teacher exploits it, and the student deploys it under latency constraints, the empirical claim is robust.
+      </p>
+
+      <div class="layer-grid">
+        <div class="layer-box">
+          <div class="layer-num">LAYER 1</div>
+          <h4>World Model</h4>
+          <p>LOB market simulator. Synthetic depth shocks &rarr; measure delay distribution. Validates the stylized fact in a controlled synthetic environment.</p>
+        </div>
+        <div class="arrow">&rarr;</div>
+        <div class="layer-box">
+          <div class="layer-num">LAYER 2</div>
+          <h4>Teacher</h4>
+          <p>IC-optimized predictor. Uses depth features to forecast execution time. Trained on real LOB data with cross-entropy loss; measures whether the signal is informative.</p>
+        </div>
+        <div class="arrow">&rarr;</div>
+        <div class="layer-box">
+          <div class="layer-num">LAYER 3</div>
+          <h4>Student</h4>
+          <p>Distilled low-latency model. Deploys in microsecond order-routing decisions. Validates that the signal survives quantization and latency constraints.</p>
+        </div>
       </div>
-      <div class="metric-box">
-        <div class="m-val">3<span style="font-size:1rem">min</span></div>
-        <div class="m-label">9 subagents<br>dispatched in parallel</div>
+
+      <!-- ========== STACK ========== -->
+      <h2>Technology Stack</h2>
+      <p>Production-grade tools throughout. No toy frameworks.</p>
+
+      <div class="row" style="margin-top: 20px;">
+        <div class="col-sm-4">
+          <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Modeling &amp; Training</strong></p>
+          <div class="tech-chips">
+            <span class="chip">JAX 0.9</span>
+            <span class="chip">Flax</span>
+            <span class="chip">Mamba3 (S5 SSM)</span>
+            <span class="chip">PyTorch DataLoader</span>
+            <span class="chip">GDN</span>
+            <span class="chip">Orbax Checkpointing</span>
+            <span class="chip">W&amp;B</span>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Empirical Replication</strong></p>
+          <div class="tech-chips">
+            <span class="chip">statsmodels OLS</span>
+            <span class="chip">pandas + numpy</span>
+            <span class="chip">SLURM HPC</span>
+            <span class="chip">NVIDIA GH200 ARM</span>
+            <span class="chip">46M-order LOB</span>
+            <span class="chip">Clustered SE / FE</span>
+            <span class="chip">py7zr</span>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Orchestration &amp; Publishing</strong></p>
+          <div class="tech-chips">
+            <span class="chip">Claude Code CLI</span>
+            <span class="chip">Sonnet 4.6 (main)</span>
+            <span class="chip">Opus 4.7 (subagents)</span>
+            <span class="chip">pymupdf</span>
+            <span class="chip">Overleaf Git API</span>
+            <span class="chip">Notion REST API</span>
+            <span class="chip">GitHub Actions</span>
+          </div>
+        </div>
       </div>
-      <div class="metric-box">
-        <div class="m-val">48<span style="font-size:1rem">h</span></div>
-        <div class="m-label">Paper to full<br>3-layer specification</div>
+
+      <!-- ========== OPEN QUESTIONS ========== -->
+      <h2>Open Questions</h2>
+
+      <button class="collapsible">Q1 &mdash; What Is the Right Granularity for &ldquo;Reading&rdquo; a Paper?</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          AutoResearch currently extracts a regression spec from the abstract, methods, and results sections. Should it also parse appendices, supplementary tables, robustness checks, and footnotes? More extraction means more faithful replication but larger context windows for the orchestrator. The optimal trade-off is open.
+        </p>
       </div>
-      <div class="metric-box">
-        <div class="m-val">46<span style="font-size:1rem">M</span></div>
-        <div class="m-label">Limit orders in<br>replication dataset</div>
+
+      <button class="collapsible">Q2 &mdash; How Many Subagents Are Optimal?</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          We currently dispatch nine parallel subagents per paper, partitioned by responsibility (data, world model, teacher, student, etc.). With more subagents, communication overhead grows; with fewer, work serializes. Empirically nine is a sweet spot for our class of papers, but transformer / LLM bottlenecks may shift this number as model context windows grow.
+        </p>
       </div>
-    </div>
 
-    <!-- Timeline -->
-    <h3 style="font-size:0.95rem; font-weight:700; margin:40px 0 20px;">
-      Execution Timeline &mdash; Dugast 2026
-    </h3>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-time">T + 0 min</div>
-        <div class="tl-title">Paper Ingestion</div>
-        <div class="tl-desc">pymupdf parses SSRN PDF; LLM extracts regression spec:
-          log(delay) = &alpha; + &beta;&middot;log(depth) + controls</div>
+      <button class="collapsible">Q3 &mdash; Cross-Paper Generalization?</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          AutoResearch currently handles regression-style empirical papers (OLS with depth, delay, sign features). Can it generalize to event-study, instrumental-variables, difference-in-differences, panel-data fixed-effects, or structural model identification? Each requires a different replication template, and the agent must learn to pattern-match the paper&rsquo;s identification strategy onto the right template.
+        </p>
       </div>
-      <div class="tl-item">
-        <div class="tl-time">T + 2 min</div>
-        <div class="tl-title">9 Subagents Dispatched</div>
-        <div class="tl-desc">Agents B-I work in parallel: data pipeline design,
-          empirical spec, world model architecture, teacher/student specs</div>
+
+      <button class="collapsible">Q4 &mdash; When Does Disagreement With the Paper Mean &ldquo;Bug in Replication&rdquo; vs. &ldquo;Real Market Change&rdquo;?</button>
+      <div class="contentx">
+        <p style="margin-top: 12px;">
+          Our Dugast 2026 replication produced &beta; = +0.214 vs. paper &beta; = 0.133&ndash;0.169. The agent flagged this as &ldquo;directionally consistent but larger,&rdquo; attributing the gap to faster Nasdaq matching engines and fragmentation. But the same gap could also indicate a bug in our depth feature construction. The agent currently does not have a principled way to distinguish replication noise from real market evolution. Should it run robustness checks on the original NYSE TAQ data first?
+        </p>
       </div>
-      <div class="tl-item">
-        <div class="tl-time">T + 8 min</div>
-        <div class="tl-title">Code Generated &amp; Committed</div>
-        <div class="tl-desc">~1000 lines auto-generated; git commit before sbatch
-          (strict policy: results must be traceable to exact commit hash)</div>
+
+      <!-- ========== FOOTER ========== -->
+      <div class="footnotes">
+        <p><strong>AutoResearch</strong> &middot; Automated paper-to-replication pipeline for finance microstructure research.</p>
+        <p>
+          <a href="https://github.com/KangOxford/auto-quant-research"><i class="fa fa-github"></i> GitHub</a> &middot;
+          <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6440898"><i class="fa fa-file-text-o"></i> SSRN 6440898 (Dugast 2026)</a> &middot;
+          MIT License &middot; 2026
+        </p>
       </div>
-      <div class="tl-item">
-        <div class="tl-time">T + 12 min</div>
-        <div class="tl-title">First &beta; Estimate</div>
-        <div class="tl-desc">SLURM job 4093982 completes:
-          &beta; = +0.2140 (SE 0.0106, t = 20.26), N = 46,094,530</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-time">T + 48 h</div>
-        <div class="tl-title">Full 3-Layer Spec Published</div>
-        <div class="tl-desc">World Model, Teacher, Student specs complete;
-          results on Overleaf + Notion + GitHub Pages</div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ── Tech Stack ──────────────────────────────────────────────────── -->
-<section id="stack">
-  <div class="container">
-    <div class="section-label">Technology</div>
-    <h2>Stack</h2>
-    <p class="section-subtitle">
-      Production-grade tools throughout. No toy frameworks.
-    </p>
-
-    <p style="font-size:0.85rem; color:var(--muted); margin-bottom: 6px;">
-      Modeling &amp; Training
-    </p>
-    <div class="tech-chips">
-      <span class="chip accent">JAX 0.9 / Flax</span>
-      <span class="chip accent">Mamba3 (S5 SSM)</span>
-      <span class="chip accent">PyTorch DataLoader</span>
-      <span class="chip">GDN (Graph Diffusion Net)</span>
-      <span class="chip">Orbax Checkpointing</span>
-      <span class="chip">W&amp;B Logging</span>
-    </div>
-
-    <p style="font-size:0.85rem; color:var(--muted); margin: 20px 0 6px;">
-      Empirical Replication
-    </p>
-    <div class="tech-chips">
-      <span class="chip blue">statsmodels OLS</span>
-      <span class="chip blue">pandas + numpy</span>
-      <span class="chip blue">SLURM HPC (GH200 ARM)</span>
-      <span class="chip">46M order LOB dataset</span>
-      <span class="chip">Clustered SE / FE</span>
-    </div>
-
-    <p style="font-size:0.85rem; color:var(--muted); margin: 20px 0 6px;">
-      Orchestration &amp; Publishing
-    </p>
-    <div class="tech-chips">
-      <span class="chip">Claude Code CLI</span>
-      <span class="chip">Claude Sonnet 4.6 (main)</span>
-      <span class="chip">Claude Opus 4.7 (subagents)</span>
-      <span class="chip">pymupdf</span>
-      <span class="chip">Overleaf Git API</span>
-      <span class="chip">Notion REST API</span>
-    </div>
-  </div>
-</section>
-
-<!-- ── Task Catalog ───────────────────────────────────────────────── -->
-<section id="tasks">
-  <div class="container">
-    <h2 style="margin-bottom: 16px;">📚 Task Catalog</h2>
-    <p style="color: var(--muted); margin-bottom: 24px;">
-      Five tasks are currently scaffolded. Each links to its GitHub-rendered
-      markdown spec containing data paths, reproduction protocol, and
-      <em>Best Model So Far</em> (the canonical checkpoint to reproduce).
-    </p>
-
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px;">
-
-      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/RESOURCES.md"
-         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
-        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent2);">📦 facts</div>
-        <div style="font-weight: 600; margin: 6px 0 4px;">RESOURCES.md</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">Simulator code + checkpoint catalog + data references shared by all tasks.</div>
-      </a>
-
-      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3.md"
-         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
-        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent);">🤖 model</div>
-        <div style="font-weight: 600; margin: 6px 0 4px;">mamba3 — SOTA model card</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">78M Mamba3 SISO. Single ckpt: pw8u0edj@step 46050. IC@g=2000=0.102. Commit pinned.</div>
-      </a>
-
-      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/lillo_farmer_2004.md"
-         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
-        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
-        <div style="font-weight: 600; margin: 6px 0 4px;">Lillo &amp; Farmer (2004)</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">Trade-sign long memory, Hurst H ≈ 0.7. Smoke 5 days GOOG 2022 → DFA H=0.6889 ✓.</div>
-      </a>
-
-      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/toth_2011_sqrt_impact.md"
-         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
-        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
-        <div style="font-weight: 600; margin: 6px 0 4px;">Tóth et al. (2011)</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">Anomalous price impact, exponent δ ≈ 0.5. Critical liquidity / latent order book.</div>
-      </a>
-
-      <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/cont_stoikov_talreja_2009.md"
-         style="display: block; padding: 18px; background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); text-decoration: none; color: var(--text);">
-        <div style="font-family: var(--mono); font-size: 0.85rem; color: var(--accent3);">📄 paper</div>
-        <div style="font-weight: 600; margin: 6px 0 4px;">Cont, Stoikov &amp; Talreja (2009)</div>
-        <div style="color: var(--muted); font-size: 0.85rem;">LOB birth-death queue dynamics. Power-law limit arrivals, linear cancel rate.</div>
-      </a>
-
-    </div>
-
-    <p style="color: var(--muted); margin-top: 22px; font-size: 0.85rem;">
-      Each <strong>Best Model So Far</strong> table pins a specific LOBS5 commit
-      (<code>3f6d32a6</code>) so reproductions anchor to the exact code state, not branch HEAD.
-      See <a href="https://github.com/KangOxford/auto-quant-research/blob/main/scripts/hurst_lillo_farmer.py" style="color: var(--accent2);">scripts/hurst_lillo_farmer.py</a> for the first classical estimator (DFA-based Hurst).
-    </p>
-  </div>
-</section>
-
-<!-- ── Footer ─────────────────────────────────────────────────────── -->
-<footer>
-  <div class="container footer-inner">
-    <div>
-      <div class="footer-logo">AutoResearch</div>
-      <div style="margin-top:6px;">
-        Automated paper-to-replication pipeline for finance microstructure research.
-      </div>
-      <div style="margin-top:4px; color: #4a5568;">
-        MIT License &middot; 2026
-      </div>
-    </div>
-    <div class="footer-links">
-      <a href="https://github.com/KangOxford/auto-quant-research" target="_blank">GitHub</a>
-      <a href="https://ssrn.com/abstract=6440898" target="_blank">SSRN 6440898</a>
     </div>
   </div>
-</footer>
+</div>
+
+<!-- Collapsible behavior -->
+<script>
+  document.querySelectorAll('.collapsible').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      this.classList.toggle('active');
+      var content = this.nextElementSibling;
+      content.classList.toggle('show');
+    });
+  });
+</script>
 
 </body>
 </html>
