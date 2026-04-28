@@ -299,14 +299,20 @@
       <!-- ========== AUTHORS ========== -->
       <div class="text-center" style="margin-top: 24px;">
         <p style="font-size: 15px; line-height: 2.0em; margin-bottom: 4px;">
-          <a href="https://github.com/KangOxford" style="color:#1772d0;">Kang Li</a>
+          <a href="https://github.com/KangOxford" style="color:#1772d0;">Kang Li</a><sup>*</sup> &middot;
+          Yulin Wang<sup>*</sup> &middot;
+          Mihai Cucuringu<sup>&dagger;</sup> &middot;
+          Jakob Foerster<sup>&dagger;</sup>
         </p>
       </div>
 
       <!-- ========== AFFILIATIONS ========== -->
       <div class="text-center" style="margin-top: 12px; margin-bottom: 30px;">
-        <p style="font-size: 14px; color: #777;">
+        <p style="font-size: 14px; color: #777; margin-bottom: 4px;">
           FLAIR, University of Oxford &middot; University of California, Los Angeles
+        </p>
+        <p style="font-size: 12px; color: #999; margin-bottom: 0;">
+          <sup>*</sup> Equal contribution. &nbsp; <sup>&dagger;</sup> Equal supervision.
         </p>
       </div>
 
@@ -592,44 +598,20 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
             </li>
           </ol>
 
-          <!-- (2) Why a Wiki — clean 4-block flow: punchline → why → side-by-side → HITL takeaway -->
+          <!-- (2) Why a Wiki — flat prose, no decorative boxes -->
           <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">📖 Why a Wiki, not a chat log</h4>
 
-          <!-- Punchline: single bold blue callout -->
-          <div style="border-left: 4px solid #1f3a5f; background: #eaf4ff; padding: 14px 18px; margin: 10px 0 16px; border-radius: 0 6px 6px 0;">
-            <p style="font-size: 15px; margin: 0; line-height: 1.55em; color: #1f3a5f;">
-              <strong>The Wiki is a comprehension scaffold, not a storage tool.</strong>
-            </p>
-          </div>
-
-          <!-- Why: one tight paragraph (merged from prior two) -->
-          <p style="font-size: 13.5px; line-height: 1.7em; margin: 0 0 16px;">
-            Every replicated paper introduces <strong>new domain knowledge</strong> &mdash; a stylized fact, a regression spec, a counterfactual scenario, a microstructure assumption. For the user to make sensible Decision Layer judgements (which direction to back, which robustness check to insist on, which conclusion to promote to the Overleaf draft), they have to <em>fully understand</em> what the Execution Layer found. The Wiki integrates each replication's findings into a readable page with cross-links to related concepts: a <em>reading and learning surface</em>, not an information container.
+          <p style="font-size: 13.5px; line-height: 1.7em; margin: 8px 0;">
+            <strong>The Wiki is a comprehension scaffold, not a storage tool.</strong> Every replicated paper introduces new domain knowledge: a stylized fact, a regression spec, a counterfactual scenario, a microstructure assumption. For the user to make sensible Decision Layer judgements (which direction to back, which robustness check to insist on, which conclusion to promote to the Overleaf draft), they have to fully understand what the Execution Layer found. The Wiki integrates each replication's findings into a readable page with cross-links to related concepts: a reading and learning surface, not an information container.
           </p>
 
-          <!-- Side-by-side comparison (replaces single-row table) -->
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0;">
-            <div style="border: 1.5px solid #d0d0d0; border-radius: 8px; padding: 14px 16px; background: #fafafa;">
-              <div style="font-size: 14px; font-weight: 700; color: #777; margin-bottom: 6px;">📝 Chat log</div>
-              <p style="font-size: 13px; line-height: 1.55em; margin: 0; color: #555;">
-                Records <em>what was said</em>. Linear by time, lossy on retrieval, illegible at the second visit.
-              </p>
-            </div>
-            <div style="border: 2px solid #1f3a5f; border-radius: 8px; padding: 14px 16px; background: #eaf4ff;">
-              <div style="font-size: 14px; font-weight: 700; color: #1f3a5f; margin-bottom: 6px;">📚 Wiki</div>
-              <p style="font-size: 13px; line-height: 1.55em; margin: 0;">
-                <strong>Precipitates the actionable understanding worth keeping.</strong> One concept per page, cross-linked, durable, rereadable.
-              </p>
-            </div>
-          </div>
+          <p style="font-size: 13.5px; line-height: 1.7em; margin: 8px 0;">
+            A chat log records <em>what was said</em>, linear by time, lossy on retrieval, illegible at the second visit. The Wiki precipitates the <em>actionable understanding</em> worth keeping: one concept per page, cross-linked, durable, rereadable.
+          </p>
 
-          <!-- HITL principle takeaway -->
-          <div style="border: 1.5px solid #1f3a5f; background: #f5f9ff; padding: 14px 18px; margin: 18px 0 0; border-radius: 8px;">
-            <p style="font-size: 14px; margin: 0 0 6px; color: #1f3a5f;"><strong>🤝 The Human-in-the-Loop principle</strong></p>
-            <p style="font-size: 13.5px; line-height: 1.6em; margin: 0;">
-              If the human cannot understand the result, the human cannot make an effective decision on it. Approval without comprehension is a formal stamp with no authority behind it. The Wiki is what makes the stamp real.
-            </p>
-          </div>
+          <p style="font-size: 13.5px; line-height: 1.7em; margin: 8px 0 0;">
+            <strong>🤝 Human-in-the-Loop principle.</strong> If the human cannot understand the result, the human cannot make an effective decision on it. Approval without comprehension is a formal stamp with no authority behind it. The Wiki is what makes the stamp real.
+          </p>
 
           <!-- (3) Wiki = Notion + sub-page — 3 cards for (i)(ii)(iii) -->
           <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">🧩 Wiki = Notion + one sub-page per answer</h4>
