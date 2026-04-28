@@ -1,0 +1,75 @@
+{
+  "_comment": "Auto-sync md files to Notion on Edit/Write. Triggered by PostToolUse hook notion-sync-md.sh. Each entry: local_path -> {parent_id (optional, override default), title_prefix, last_page_id (filled after first push)}.",
+  "default_parent_id": "34912c45-68fd-8096-a17c-e8c4600487d5",
+  "files": {
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1g_mamba3_cuda_ffi/RESULTS_d512.md": {
+      "title_prefix": "K3 CUDA FFI \u2014 d_state=512 Results",
+      "parent_id": "34d12c45-68fd-8080-a773-e9d5de348efe",
+      "last_page_id": "34e12c45-68fd-81e5-8db9-ce5b3d0bb7ae",
+      "last_session_id": "fa37c720-6d76-4acd-92cb-47f9f773fdf9"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1_Mamba3/context_scaling_findings_kang.md": {
+      "title_prefix": "Context Scaling Findings (Kang)",
+      "last_page_id": "34912c45-68fd-8122-95c8-f30eef7dc1d8"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/.claude/skills/siso-cuda-kernel-opt-tradeoffs/SKILL.md": {
+      "title_prefix": "Skill: SISO CUDA Kernel Opt Tradeoffs",
+      "last_page_id": "34912c45-68fd-810a-b2a4-f9cebc23bf9d"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/.claude/skills/slurm-fairshare-diagnosis/SKILL.md": {
+      "title_prefix": "Skill: SLURM FairShare Diagnosis",
+      "last_page_id": "34912c45-68fd-81a3-ac16-f21081c4b2cf"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/.claude/skills/notion-auto-sync-md/SKILL.md": {
+      "title_prefix": "Skill: Notion Auto-Sync MD",
+      "last_page_id": "34e12c45-68fd-81d1-bdc7-d310086a7ca3",
+      "last_session_id": "00f05161-05dc-424a-8538-7dca21840846"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1g_mamba3_cuda_ffi/PRECISION_R1_vs_R1g.md": {
+      "title_prefix": "Mamba3 Precision: R1 vs R1g",
+      "parent_id": "34d12c45-68fd-8080-a773-e9d5de348efe",
+      "last_page_id": "34e12c45-68fd-81c4-a6b4-eaa84022a50a"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1g_mamba3_cuda_ffi/MULTINODE_8N_DIAGNOSIS.md": {
+      "title_prefix": "K3 8N Crash Diagnosis (4308498)",
+      "parent_id": "34d12c45-68fd-8080-a773-e9d5de348efe",
+      "last_page_id": "34e12c45-68fd-81b3-bd17-d9c5e6cd02e7"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1g_mamba3_cuda_ffi/QA_LOG.md": {
+      "title_prefix": "K3 Q&A Log (Kang \u2194 Claude)",
+      "parent_id": "34d12c45-68fd-8080-a773-e9d5de348efe",
+      "last_page_id": "34f12c45-68fd-8187-a179-c6f8f14953ad",
+      "last_session_id": "fa37c720-6d76-4acd-92cb-47f9f773fdf9"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_R1g_mamba3_cuda_ffi/KEY_CONCLUSIONS.md": {
+      "title_prefix": "K3 Key Conclusions (Production-Ready)",
+      "parent_id": "34d12c45-68fd-8080-a773-e9d5de348efe",
+      "last_page_id": "34f12c45-68fd-813c-86df-f0b2b030e78d",
+      "last_session_id": "fa37c720-6d76-4acd-92cb-47f9f773fdf9"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_cpp_match_engine/cpp_engine/KEY_CONCLUSIONS.md": {
+      "title_prefix": "SP500 OB10 + L10 Validation: Key Conclusions",
+      "parent_id": "34e12c45-68fd-8141-9f0e-cc8130770bee",
+      "last_page_id": "34f12c45-68fd-811c-a0b4-c543f80ca8db",
+      "last_session_id": "6e350477-8cfd-4834-8333-d38dbc11fd9d"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/experiments/exp_cpp_match_engine/cpp_engine/QA_LOG.md": {
+      "title_prefix": "SP500 OB10 + L10 Validation: Q&A Log",
+      "parent_id": "34e12c45-68fd-8141-9f0e-cc8130770bee",
+      "last_page_id": "34f12c45-68fd-8158-9a15-c5c9551f96ba",
+      "last_session_id": "6e350477-8cfd-4834-8333-d38dbc11fd9d"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/KEY_CONCLUSIONS.md": {
+      "title_prefix": "KEY_CONCLUSIONS, R1g merge into mamba3",
+      "parent_id": "34e12c45-68fd-8128-bcef-c5f9b655a286",
+      "last_page_id": "34f12c45-68fd-81dd-838f-f86c09564c97",
+      "last_session_id": "f45e4532-4517-4437-b0d2-c3041934f5a5"
+    },
+    "/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/QA_LOG.md": {
+      "title_prefix": "QA_LOG, R1g merge into mamba3",
+      "parent_id": "34e12c45-68fd-8128-bcef-c5f9b655a286",
+      "last_page_id": "34f12c45-68fd-8195-901c-f8848a3975c5",
+      "last_session_id": "f45e4532-4517-4437-b0d2-c3041934f5a5"
+    }
+  }
+}
