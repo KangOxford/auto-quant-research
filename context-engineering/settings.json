@@ -1,0 +1,348 @@
+{
+  "env": {
+    "CLAUDE_CODE_DISABLE_TERMINAL_TITLE": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Bash",
+      "Read",
+      "Edit",
+      "Write",
+      "WebFetch",
+      "Grep",
+      "Glob",
+      "LS",
+      "MultiEdit",
+      "NotebookRead",
+      "NotebookEdit",
+      "TodoRead",
+      "TodoWrite",
+      "WebSearch",
+      "Bash(find:*)",
+      "Bash(/tmp/commit_0f814e3_train_helpers.py)",
+      "Bash(ls:*)",
+      "WebFetch(domain:docs.jax.dev)",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:openxla.org)",
+      "Bash(python -m py_compile:*)",
+      "WebFetch(domain:flax.readthedocs.io)",
+      "WebFetch(domain:r2rt.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cat:*)",
+      "Bash(squeue:*)",
+      "Bash(sacct:*)",
+      "Bash(python:*)",
+      "WebFetch(domain:jax.readthedocs.io)",
+      "Bash(sed:*)",
+      "Bash(python3 -c:*)",
+      "WebFetch(domain:uvadlc-notebooks.readthedocs.io)",
+      "WebFetch(domain:apxml.com)",
+      "WebFetch(domain:resources.nvidia.com)",
+      "WebFetch(domain:www.nvidia.com)",
+      "WebFetch(domain:www.amax.com)",
+      "WebFetch(domain:jarvislabs.ai)",
+      "WebFetch(domain:glennklockwood.com)",
+      "Bash(for year in 2016 2017 2018 2019 2020 2021)",
+      "Bash(do echo \"=== $year ===\" ls /lus/lfs1aip2/home/s5e/kangli.s5e/GOOG_GOOGL_2016TO2021_24tok_preproc/GOOG/$year)",
+      "Bash(sbatch:*)",
+      "WebFetch(domain:eshyperscale.github.io)",
+      "Bash(git show:*)",
+      "Bash(mkdir:*)",
+      "Bash(scancel:*)",
+      "Bash(source:*)",
+      "Bash(conda activate:*)",
+      "Bash(python3:*)",
+      "Bash(xargs:*)",
+      "Bash(for job in 1655129 1655130 1655131 1655132)",
+      "Bash(do echo '=== Job $job ===' grep -v sol_gpu_cost_model /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/logs_lobs5_3072x32/training_$job_node0.log)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 log --oneline -10)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade log --oneline --all)",
+      "WebFetch(domain:docs.isambard.ac.uk)",
+      "WebFetch(domain:robotwin-platform.github.io)",
+      "Bash(/bin/ls:*)",
+      "Bash(grep:*)",
+      "Bash(du:*)",
+      "Bash(head:*)",
+      "Bash(JAX_PLATFORMS=cpu python3:*)",
+      "Bash(conda env list:*)",
+      "Bash(JAX_PLATFORMS=cpu python:*)",
+      "Bash(chmod:*)",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/miniforge3/bin/python3:*)",
+      "Bash(sinfo:*)",
+      "Bash(scontrol:*)",
+      "Bash(/bin/sed:*)",
+      "Bash(MODEL_PRESET=55M sbatch:*)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 show b6d3a2c --stat)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 show:*)",
+      "Bash(echo:*)",
+      "Bash(nvidia-smi:*)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 grep -l \"api.wandb.ai\" b6d3a2c)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 diff b6d3a2c -- lob/dataloading.py)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 diff b6d3a2c -- lob/lobster_dataloader.py)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 diff b6d3a2c --stat)",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/run_train.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/train.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/train_helpers.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/init_train.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/dataloading.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/lobster_dataloader.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/lob_seq_model.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/lob/encoding.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/s5/ssm.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/s5/layers.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/s5/seq_model.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/s5/dataloading.py )",
+      "Bash(/lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5/preproc.py )",
+      "Bash(for branch in full_bf16 full_autoreg_mixed_precision main)",
+      "Bash(do echo '=== $branch ===' git show $branch:lob/train_helpers.py)",
+      "Bash(git log:*)",
+      "Bash(GIT_PAGER=cat git log:*)",
+      "WebFetch(domain:optax.readthedocs.io)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 log --oneline -20 -- run_train.py)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 log -p --all -S random_offsets_train -- run_train.py)",
+      "WebFetch(domain:www.alphaxiv.org)",
+      "Bash(tail:*)",
+      "Bash(ln:*)",
+      "Bash(for f in alteggroll.py eggroll_baseline_subtraction.py open_es.py sparse.py)",
+      "Bash(do sed -i 's/if len(base_key\\.shape) == 0:/if base_key.ndim == 1:/' \"$f\")",
+      "Bash(done)",
+      "Bash(export PYTHONDONTWRITEBYTECODE=1:*)",
+      "Bash(git -C /lus/lfs1aip2/home/s5e/kangli.s5e/AlphaTrade/LOBS5 diff HEAD -- es_lobs5/training/es_jaxlob_train.py)",
+      "WebFetch(domain:www.macrotrends.net)",
+      "WebFetch(domain:finance.yahoo.com)",
+      "Bash(JAX_PLATFORMS=cpu /lus/lfs1aip2/home/s5e/kangli.s5e/miniforge3/envs/lobs5/bin/python:*)",
+      "Bash(bash:*)",
+      "Bash(git fetch:*)",
+      "Bash(gh pr view:*)",
+      "Bash(TOKEN_MODE=22 bash:*)",
+      "Bash(TOKEN_MODE=24 bash:*)",
+      "Bash(TOKEN_MODE=22 DIR_NAME='/lus/lfs1aip2/home/s5e/kangli.s5e/GOOG_GOOGL_2016TO2021_24tok_preproc/GOOG/2021' bash:*)",
+      "Bash(conda install:*)",
+      "Bash(export PATH=~/bin:$PATH)",
+      "Bash(~/bin/gh pr:*)",
+      "Bash(TOKEN_MODE=22 DATA_MODE=preproc DIR_NAME='/lus/lfs1aip2/home/s5e/kangli.s5e/GOOG_GOOGL_2016TO2021_24tok_preproc/GOOG/2021' bash:*)",
+      "Bash(TOKEN_MODE=22 DATA_MODE=encoded DIR_NAME='/lus/lfs1aip2/home/s5e/kangli.s5e/GOOG_GOOGL_2016TO2021_24tok_encoded/GOOG/2022' bash:*)",
+      "Bash(git add:*)",
+      "Bash(printf:*)",
+      "Bash(BACKGROUND_MODE=historical_replay sbatch:*)",
+      "Bash(cd:*)",
+      "Bash(chmod +x :*)",
+      "Bash(grep :*)",
+      "Bash(tail :*)",
+      "Read(*)",
+      "Bash(git log :*)",
+      "Bash(git show :*)",
+      "Bash(find :*)",
+      "Bash(echo :*)",
+      "Bash(head :*)",
+      "Search",
+      "Update(file:*)",
+      "Edit(/lus/lfs1aip2/projects/s5e/quant/.claude/hooks/**)",
+      "Write(/lus/lfs1aip2/projects/s5e/quant/.claude/hooks/**)",
+      "Update(/lus/lfs1aip2/projects/s5e/quant/.claude/hooks/**)",
+      "Edit(/lus/lfs1aip2/projects/s5e/quant/.claude/**)",
+      "Write(/lus/lfs1aip2/projects/s5e/quant/.claude/**)",
+      "Update(/lus/lfs1aip2/projects/s5e/quant/.claude/**)",
+      "MultiEdit(/lus/lfs1aip2/projects/s5e/quant/.claude/**)",
+      "Edit(/lus/lfs1aip2/projects/s5e/quant/.claude/skills/**)",
+      "Write(/lus/lfs1aip2/projects/s5e/quant/.claude/skills/**)",
+      "Update(/lus/lfs1aip2/projects/s5e/quant/.claude/skills/**)",
+      "MultiEdit(/lus/lfs1aip2/projects/s5e/quant/.claude/skills/**)",
+      "*",
+      "Bash(git branch:*)",
+      "Skill(commit-commands:commit)",
+      "Skill(planning-with-files)",
+      "Skill(claudeception)",
+      "mcp__drawio__open_drawio_mermaid",
+      "mcp__weixin-search__get_weixin_article_content",
+      "mcp__weixin-search__weixin_search",
+      "mcp__weixin-search__weixin_search_all"
+    ],
+    "deny": [],
+    "ask": [],
+    "defaultMode": "auto",
+    "additionalDirectories": [
+      "/lus/lfs1aip2/projects/s5e/quant/.claude/hooks",
+      "/lus/lfs1aip2/projects/s5e/quant/.claude/skills"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "google-sheets"
+  ],
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/log-sbatch-to-sheets.sh",
+            "timeout": 15,
+            "async": true
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/notion-sync-md.sh",
+            "timeout": 15,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|Bash|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/auto-approve-skills-edits.sh"
+          }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "matcher": "Edit|Write|MultiEdit|Bash|mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/auto-approve-skills-edits.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/claudeception-activator.sh"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/save-subagent-output.sh"
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/archive-btw.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/ntfy-stop.sh",
+            "timeout": 10,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/update-session-label.sh",
+            "timeout": 5,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/print-resume-cmd.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/translate-prompt-stop.sh",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/extract-insights.sh",
+            "timeout": 15,
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/btw-main-stop.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /lus/lfs1aip2/projects/s5e/quant/.claude/hooks/tab-title-start.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ${HOME}/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true,
+    "pua@pua-skills": true,
+    "explanatory-output-style@claude-plugins-official": true,
+    "claude-hud@claude-hud": true,
+    "codex@openai-codex": true,
+    "claude-mem@thedotmack": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "pua-skills": {
+      "source": {
+        "source": "github",
+        "repo": "tanweai/pua"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "claude-hud": {
+      "source": {
+        "source": "github",
+        "repo": "jarrodwatts/claude-hud"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
+  },
+  "language": "中文",
+  "advisorModel": "opus",
+  "autoUpdatesChannel": "stable",
+  "skipAutoPermissionPrompt": true
+}
