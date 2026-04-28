@@ -32,9 +32,17 @@ claude --resume <parent-session-id> --fork-session
 
 Each fork can be killed without losing the parent. The pattern is most valuable when the investigation has a real branching choice: which architecture, which estimator, which dataset to validate first. It is overkill for a strictly linear task.
 
-## Why these two principles ride together
+## Principle 3 — Haste makes waste in the Decision Layer
 
-Principle 1 is about **breadth control** (do not spread agents across unrelated topics). Principle 2 is about **depth navigation** (when a single topic legitimately branches, fork rather than restart). Together they describe a discipline of focus: at any given moment one topic is active; inside that topic, work may fan out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem.
+**(a) Real signoff requires real comprehension.** When the Execution Layer hands the Decision Layer a Notion sub-page full of regression tables, plots, and code, the temptation is to scan and click Approve. Resist it. If you do not actually understand what the agent did, why it did it that way, and what the result implies, you cannot make a real decision; you are rubber-stamping. Errors that pass through a rubber-stamped Decision Layer flow downstream into the Wiki and the Overleaf draft, where they are far more expensive to retract than they would have been to catch at signoff time.
+
+**(b) Slow review at the Decision Layer is fast review overall.** The Wiki section of the system exists precisely so that the human can take the time to genuinely understand each result before signing. Use it. Read the relevant Wiki sub-pages, follow the cross-links, and only when the picture is clear should the result be promoted. The minutes saved by a fast Approve are routinely wiped out by the hours later spent untangling a wrong claim that was already published. Haste makes waste.
+
+A short way to state the rule: **understand first, sign second; never the other way around**.
+
+## Why these three principles ride together
+
+Principle 1 is about **breadth control** (do not spread agents across unrelated topics). Principle 2 is about **depth navigation** (when a single topic legitimately branches, fork rather than restart). Principle 3 is about **comprehension discipline** (do not approve what you do not understand). Together they describe the rhythm of an effective Human-in-the-Loop session: at any given moment one topic is active; inside that topic, work may fan out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem; and at every Decision Layer signoff, take the time to understand the result before signing it off.
 
 ## How to add a principle
 

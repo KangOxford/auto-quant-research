@@ -479,8 +479,15 @@ claude --resume &lt;parent-session-id&gt; --fork-session
 claude --resume &lt;parent-session-id&gt; --fork-session
 claude --resume &lt;parent-session-id&gt; --fork-session</pre>
 
+          <h4 style="margin-top: 16px; color: #1f3a5f; font-size: 15px;">Principle 3 — Haste makes waste in the Decision Layer</h4>
+
+          <ul style="font-size: 14px; line-height: 1.7em;">
+            <li><strong>(a) Real signoff requires real comprehension.</strong> When the Execution Layer hands the Decision Layer a Notion sub-page full of regression tables, plots, and code, the temptation is to scan and click Approve. Resist it. If you do not actually understand what the agent did, why it did it that way, and what the result implies, you cannot make a real decision; you are rubber-stamping. Errors that pass through a rubber-stamped Decision Layer flow downstream into the Wiki and the Overleaf draft, where they are far more expensive to retract.</li>
+            <li><strong>(b) Slow review at the Decision Layer is fast review overall.</strong> The Wiki section of the system exists precisely so that the human can take the time to genuinely understand each result before signing. Use it. Read the relevant Wiki sub-pages, follow the cross-links, and only when the picture is clear should the result be promoted. The minutes saved by a fast Approve are routinely wiped out by the hours later spent untangling a wrong claim that was published.</li>
+          </ul>
+
           <p style="font-size: 13.5px; line-height: 1.7em;">
-            Together: Principle 1 is breadth control (do not spread agents across unrelated topics). Principle 2 is depth navigation (when a single topic legitimately branches, fork rather than restart). At any given moment one topic is active; inside that topic, work fans out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem.
+            Together: Principle 1 is breadth control (do not spread agents across unrelated topics). Principle 2 is depth navigation (when a single topic legitimately branches, fork rather than restart). Principle 3 is comprehension discipline (do not approve what you do not understand). At any given moment one topic is active; inside that topic, work fans out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem; and at every Decision Layer signoff, take the time to understand before you sign.
           </p>
 
           <h3 style="margin-top: 22px; color: #1f3a5f;">What Is Filtered Out</h3>
