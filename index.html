@@ -375,13 +375,6 @@
           After a paper is ingested, the Execution Layer dispatches a fan-out of <strong>N parallel subagents</strong> (the count is task-dependent: simple regression replications use a handful; structural model identification uses more). Each subagent owns one slice of the design or implementation work, the data pipeline, the World Model interface, the empirical regression spec, the figure code. The orchestrator merges their outputs, commits the result to Git for full traceability, and sbatches the analysis to the HPC cluster.
         </p>
 
-        <div style="margin: 18px 0;">
-          <img src="imgs/automation_pipeline.png" alt="Auto Quant Research — Automation Pipeline (general)" style="width: 100%; max-width: 900px; border: 1px solid #d0d0d0; border-radius: 6px;">
-          <p style="text-align: center; color: #777; font-size: 13px; margin-top: 8px; font-style: italic;">
-            Figure 1. Five-stage automation pipeline: Paper Ingestion &rarr; N Parallel Subagents (fan-out) &rarr; Code Generation &rarr; SLURM sbatch on HPC &rarr; Multi-Channel Publish (Overleaf, Notion, GitHub Pages). Captions are intentionally generic; this is a system designed to handle any finance microstructure paper, not a single task.
-          </p>
-        </div>
-
         <!-- Execution scaffold link (moved here from inside the card per HTML spec: anchors cannot live inside buttons) -->
         <div style="margin: 18px 0; padding: 12px 16px; background: #eef2f8; border-left: 3px solid #1f3a5f; border-radius: 4px;">
           <p style="font-size: 13px; line-height: 1.6em; margin: 0; color: #2a3a5a;">
