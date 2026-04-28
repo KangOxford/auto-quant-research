@@ -338,38 +338,19 @@
             <strong>Mechanism</strong>: every time the Decision Layer signs off on a specific answer (a robustness check, a stylized-fact estimate, a counterfactual rollout result), that answer is auto-pushed as a new <strong>sub-page</strong> under the parent Wiki page on Notion. The sub-page captures the question, the evidence, and the references back to the Notion revision and the Git commit that produced it. Over time, the Wiki accumulates one sub-page per substantive answer, cross-linked into a growing knowledge graph.
           </p>
 
-          <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">Why this beats both a chat log and a regular Notion notebook</h4>
+          <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">Why a Wiki, and not a chat log: the Wiki is a comprehension scaffold, not a storage trick</h4>
 
-          <table class="data-table" style="font-size: 13px;">
-            <thead><tr><th style="width: 28%;">Property</th><th style="width: 36%;">Chat log / RAG over transcript</th><th style="width: 36%;">Auto Quant Research Wiki</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>Storage unit</strong></td>
-                <td>Linear transcript</td>
-                <td>One sub-page per concept / answer</td>
-              </tr>
-              <tr>
-                <td><strong>Repeated questions</strong></td>
-                <td>Re-derived from raw documents every time, paying full token cost</td>
-                <td>Read the existing sub-page directly (compounding: cheaper each time)</td>
-              </tr>
-              <tr>
-                <td><strong>Cross-references</strong></td>
-                <td>Manual or absent</td>
-                <td>Auto-generated wiki links between concept pages</td>
-              </tr>
-              <tr>
-                <td><strong>Schema</strong></td>
-                <td>None — drifts over time</td>
-                <td>Enforced by a CLAUDE.md schema; agent lints periodically</td>
-              </tr>
-              <tr>
-                <td><strong>Vendor lock-in</strong></td>
-                <td>Tied to whatever chat platform stored the transcript</td>
-                <td>Plain markdown + Notion export; portable to any agent or store</td>
-              </tr>
-            </tbody>
-          </table>
+          <p style="font-size: 14px; line-height: 1.7em;">
+            Every replicated paper introduces <strong>new domain knowledge</strong>: a stylized fact, a regression specification, a counterfactual scenario, a market microstructure assumption. None of this knowledge enters the user's head automatically. If the user is going to make good decisions in the Decision Layer, deciding which angle to back, which robustness check to insist on, which result to push to Overleaf, the user has to <em>actually understand</em> what the Execution Layer found.
+          </p>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            That is what the Wiki is for. The Wiki turns each replication's findings into a structured page that a human can <em>read and learn from</em>, with cross-links to the related concepts that make the finding interpretable. It is a reading surface, not just a storage surface. A chat log is a record of what was said; a Wiki is a record of what was understood.
+          </p>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            <strong>This is the heart of the Human-in-the-Loop contract.</strong> If the human cannot understand the result, the human cannot decide on the result. Without comprehension there is no real signoff, just rubber-stamping. The Decision Layer's authority depends on the user actually grasping what the agent did, why it did it that way, and what the result implies. The Wiki is the artifact that makes that possible at scale, paper after paper, across an accumulating body of new knowledge.
+          </p>
 
           <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">What sits on the Wiki today</h4>
 
@@ -511,18 +492,8 @@
         </p>
 
         <p style="font-size: 15px; line-height: 1.7em; margin: 0 0 14px;">
-          <strong>Current implementation</strong> (subject to change in future releases): a 78M-parameter state-space architecture from the <a href="https://kangoxford.github.io/sigma0/" style="color:#c0392b;">sigma0</a> project, trained autoregressively on 26-token-encoded order messages, across 8 tickers (GOOG, AAPL, NVDA, AMZN, META, TSLA, MSFT, AMD) and 4 trading years (2022&ndash;2025). Validation Information Coefficient on held-out 2026-01:
+          <strong>Current implementation</strong> (subject to change in future releases): a state-space architecture from the <a href="https://kangoxford.github.io/sigma0/" style="color:#c0392b;">sigma0</a> project, trained autoregressively on tokenized order messages across multiple tickers and trading years.
         </p>
-
-        <table class="data-table" style="max-width: 460px; margin: 12px auto 18px; background: white;">
-          <thead style="background: #fadbd8;"><tr><th>Horizon (gap, ticks)</th><th>IC (Pearson)</th></tr></thead>
-          <tbody>
-            <tr><td>g = 250</td><td>0.044</td></tr>
-            <tr><td>g = 500</td><td>0.051</td></tr>
-            <tr><td>g = 1000</td><td>0.069</td></tr>
-            <tr><td><strong>g = 2000</strong></td><td><strong>0.102</strong></td></tr>
-          </tbody>
-        </table>
 
         <p style="font-size: 14px; line-height: 1.6em; margin: 14px 0 0; color: #555;">
           <strong>Reproducibility</strong>: the current World Model checkpoint is published as a <a href="https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050" style="color:#c0392b;">GitHub Release</a> &mdash; 567 MB tar.zst, sha256-pinned. See <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3_ckpt_README.md" style="color:#c0392b;">model card</a> for download, decompression, and load instructions. The architecture origin is documented in the <a href="https://kangoxford.github.io/sigma0/" style="color:#c0392b;">sigma0 project page</a>.
@@ -563,11 +534,9 @@
         <div class="col-sm-4">
           <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Empirical Replication</strong></p>
           <div class="tech-chips">
-            <span class="chip">statsmodels OLS</span>
             <span class="chip">pandas + numpy</span>
             <span class="chip">SLURM HPC</span>
             <span class="chip">NVIDIA GH200 ARM</span>
-            <span class="chip">46M-order LOB</span>
             <span class="chip">Clustered SE / FE</span>
             <span class="chip">py7zr</span>
           </div>
@@ -575,9 +544,7 @@
         <div class="col-sm-4">
           <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Orchestration &amp; Publishing</strong></p>
           <div class="tech-chips">
-            <span class="chip">Claude Code CLI</span>
-            <span class="chip">Sonnet 4.6 (main)</span>
-            <span class="chip">Opus 4.7 (subagents)</span>
+            <span class="chip">Claude Code</span>
             <span class="chip">pymupdf</span>
             <span class="chip">Overleaf Git API</span>
             <span class="chip">Notion REST API</span>
@@ -596,24 +563,10 @@
         </p>
       </div>
 
-      <button class="collapsible">Q2 &mdash; How Many Subagents Are Optimal?</button>
+      <button class="collapsible">Q2 &mdash; When Does Disagreement With the Paper Mean &ldquo;Bug in Replication&rdquo; vs. &ldquo;Real Market Change&rdquo;?</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
-          We currently dispatch nine parallel subagents per paper, partitioned by responsibility (data, world model, teacher, student, etc.). With more subagents, communication overhead grows; with fewer, work serializes. Empirically nine is a sweet spot for our class of papers, but transformer / LLM bottlenecks may shift this number as model context windows grow.
-        </p>
-      </div>
-
-      <button class="collapsible">Q3 &mdash; Cross-Paper Generalization?</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          AutoResearch currently handles regression-style empirical papers (OLS with depth, delay, sign features). Can it generalize to event-study, instrumental-variables, difference-in-differences, panel-data fixed-effects, or structural model identification? Each requires a different replication template, and the agent must learn to pattern-match the paper&rsquo;s identification strategy onto the right template.
-        </p>
-      </div>
-
-      <button class="collapsible">Q4 &mdash; When Does Disagreement With the Paper Mean &ldquo;Bug in Replication&rdquo; vs. &ldquo;Real Market Change&rdquo;?</button>
-      <div class="contentx">
-        <p style="margin-top: 12px;">
-          Our Dugast 2026 replication produced &beta; = +0.214 vs. paper &beta; = 0.133&ndash;0.169. The agent flagged this as &ldquo;directionally consistent but larger,&rdquo; attributing the gap to faster Nasdaq matching engines and fragmentation. But the same gap could also indicate a bug in our depth feature construction. The agent currently does not have a principled way to distinguish replication noise from real market evolution. Should it run robustness checks on the original NYSE TAQ data first?
+          When our replication produces a coefficient that is directionally consistent with the paper but quantitatively different, the gap could reflect either a real change in the market regime since the paper was written, or a bug in our feature construction. The agent currently does not have a principled way to distinguish replication noise from real market evolution.
         </p>
       </div>
 
