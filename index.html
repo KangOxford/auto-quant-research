@@ -350,41 +350,95 @@
       <div style="margin: 22px 0 0;">
         <button class="collapsible" style="background-color: #eaf4ff; color: #1f3a5f; border-color: #c7dcef; font-weight: 600;">📚 How the Wiki Works (Notion-based) — click to expand</button>
         <div class="contentx" style="border-color: #c7dcef;">
-          <h4 style="margin-top: 12px; color: #1f3a5f; font-size: 15px;">Mechanism</h4>
+          <!-- (1) Mechanism — 4-step numbered list -->
+          <h4 style="margin-top: 12px; color: #1f3a5f; font-size: 15px;">⚙️ Mechanism &mdash; how an answer becomes a Wiki page</h4>
 
-          <p style="font-size: 14px; line-height: 1.7em;">
-            Every time the Decision Layer signs off on a specific answer (a robustness check, a stylized-fact estimate, a counterfactual rollout result), that answer is auto-pushed as a new <strong>sub-page</strong> under the parent Wiki page on Notion. The sub-page captures the original question, the supporting evidence, and the references back to the Notion revision and the code-repository commit that produced it. Over time, the Wiki accumulates one sub-page per substantive conclusion, cross-linked into a continually expanding knowledge graph.
+          <ol style="font-size: 13.5px; line-height: 1.6em; padding-left: 22px; margin-top: 6px;">
+            <li style="margin-bottom: 6px;">
+              <strong>Decision Layer signoff.</strong> The user approves a specific answer: a robustness check, a stylized-fact estimate, a counterfactual rollout result.
+            </li>
+            <li style="margin-bottom: 6px;">
+              <strong>Auto-push to Notion.</strong> The approved answer is published as a new <strong>sub-page</strong> under the parent Wiki page.
+            </li>
+            <li style="margin-bottom: 6px;">
+              <strong>Full provenance captured.</strong> Each sub-page records the original question, the supporting evidence, the Notion revision that produced it, and the Git commit hash.
+            </li>
+            <li>
+              <strong>Knowledge graph grows.</strong> Over many papers and answers, sub-pages accumulate and cross-link into a continually expanding knowledge graph.
+            </li>
+          </ol>
+
+          <!-- (2) Why a Wiki — short paragraphs + callout for punchline -->
+          <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">📖 Why a Wiki, not a chat log</h4>
+
+          <div style="border-left: 4px solid #1f3a5f; background: #eaf4ff; padding: 12px 16px; margin: 8px 0 14px; border-radius: 0 6px 6px 0;">
+            <p style="font-size: 14px; margin: 0; line-height: 1.55em;">
+              <strong>The Wiki is a comprehension scaffold, not a storage tool.</strong>
+            </p>
+          </div>
+
+          <p style="font-size: 13.5px; line-height: 1.65em; margin: 8px 0;">
+            Every replicated paper introduces <strong>new domain knowledge</strong>: a stylized fact, a regression spec, a counterfactual scenario, a microstructure assumption. For the user to make sensible Decision Layer judgements (which direction to back, which robustness checks to insist on, which conclusions to promote to the Overleaf draft), they have to <em>fully understand</em> what the Execution Layer found.
           </p>
 
-          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Why a Wiki, not a chat log: the Wiki is a comprehension scaffold, not a storage tool</h4>
-
-          <p style="font-size: 14px; line-height: 1.7em;">
-            Every replicated paper introduces <strong>new domain knowledge</strong>: a stylized fact, a regression specification, a counterfactual scenario, a market microstructure assumption. For the user to make sensible Decision Layer judgements, deciding which research direction to back, which robustness checks are necessary, which conclusions are worth promoting to the Overleaf draft, they have to <em>fully understand</em> what the Execution Layer found.
+          <p style="font-size: 13.5px; line-height: 1.65em; margin: 8px 0;">
+            That is the core purpose of building a Wiki. It integrates each replication's findings into a structured, readable page paired with cross-links to related concepts &mdash; a <em>reading and learning surface</em>, not just an information container.
           </p>
 
-          <p style="font-size: 14px; line-height: 1.7em;">
-            That is the core purpose of building a Wiki. The Wiki integrates each replication's findings into a structured, readable page, paired with cross-links to related concepts, so the user can read through, understand the content, and follow the logic of the conclusions. It is a <em>reading and learning surface</em>, not merely an information container. A chat log only records what was said; the Wiki precipitates the actionable understanding worth keeping.
+          <table class="data-table" style="font-size: 13px; margin: 10px 0;">
+            <thead><tr><th style="width: 50%;">📝 Chat log</th><th style="width: 50%;">📚 Wiki</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Records <em>what was said</em></td>
+                <td><strong>Precipitates the actionable understanding worth keeping</strong></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="border: 1.5px solid #1f3a5f; background: #f5f9ff; padding: 14px 18px; margin: 14px 0; border-radius: 8px;">
+            <p style="font-size: 14px; margin: 0 0 6px; color: #1f3a5f;"><strong>🤝 The Human-in-the-Loop principle</strong></p>
+            <p style="font-size: 13.5px; line-height: 1.6em; margin: 0;">
+              If the human cannot understand the result, the human cannot make an effective decision on it. Approval without deep understanding is just a formal stamp, with no real authority behind it.
+            </p>
+          </div>
+
+          <!-- (3) Wiki = Notion + sub-page — 3 cards for (i)(ii)(iii) -->
+          <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">🧩 Wiki = Notion + one sub-page per answer</h4>
+
+          <p style="font-size: 13.5px; line-height: 1.65em; margin: 8px 0;">
+            The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. The structure follows the <a href="https://github.com/karpathy" style="color:#1f3a5f;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026: <em>one concept per page</em>, with cross-links between pages.
           </p>
 
-          <p style="font-size: 14px; line-height: 1.7em;">
-            <strong>This is the core principle of Human-in-the-Loop collaboration: if the human cannot understand the result, the human cannot make an effective decision on it.</strong> Approval without deep understanding is just a formal stamp, with no real authority behind it.
+          <p style="font-size: 13.5px; line-height: 1.65em; margin: 6px 0 10px;">Notion was chosen for three reasons:</p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0 14px;">
+            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
+              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(i) RICH PAGES</div>
+              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Free-form pages with KaTeX equations and inline images.</p>
+            </div>
+            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
+              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(ii) HIERARCHY</div>
+              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Sub-page hierarchy maps cleanly onto a knowledge graph.</p>
+            </div>
+            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
+              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(iii) REST API</div>
+              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Public API for programmatic write access from agents.</p>
+            </div>
+          </div>
+
+          <!-- (4) Downstream — short with emoji -->
+          <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">🎧 Downstream consumption</h4>
+
+          <p style="font-size: 13.5px; line-height: 1.65em; margin: 8px 0;">
+            The Wiki is plain markdown under the hood, so content can be exported and fed into third-party tools directly. <strong>Practical example</strong>: export a set of sub-pages → upload to <a href="https://notebooklm.google.com" style="color:#1f3a5f;">NotebookLM</a> → generate a <strong>10&ndash;20 minute "Audio Overview" podcast</strong> for offline listening, or query the Wiki in source-grounded chat.
           </p>
 
-          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Wiki = Notion + one sub-page per answer</h4>
-
-          <p style="font-size: 14px; line-height: 1.7em;">
-            The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. Notion was chosen because it offers (i) free-form rich pages with KaTeX equations and inline images, (ii) a sub-page hierarchy that maps cleanly onto a knowledge graph, and (iii) a public REST API for programmatic write access. The Wiki is structured one concept per page with cross-links between pages, following the <a href="https://github.com/karpathy" style="color:#1f3a5f;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026.
-          </p>
-
-          <h4 style="margin-top: 18px; color: #1f3a5f; font-size: 15px;">Downstream consumption</h4>
-
-          <p style="font-size: 14px; line-height: 1.7em;">
-            Because the Wiki is plain markdown under the hood, content can be exported and fed into third-party tools directly. A practical example: export a set of sub-pages and upload them to <a href="https://notebooklm.google.com" style="color:#1f3a5f;">NotebookLM</a> to generate a 10&ndash;20 minute "Audio Overview" podcast that supports offline listening, or to query the Wiki in source-grounded chat.
-          </p>
-
-          <p style="font-size: 13px; color: #777; margin-top: 18px; font-style: italic;">
-            Internal hooks: any Edit or Write on a registered Wiki markdown file automatically triggers Claude Code's PostToolUse hook, which archives the previous Notion revision and writes the new one. The sync consumes no LLM compute &mdash; the hook is a shell script that calls the Notion REST API directly.
-          </p>
+          <!-- (5) Internal hooks — sidebar style -->
+          <div style="border: 1px dashed #c7dcef; background: #fafbfc; padding: 10px 14px; margin-top: 18px; border-radius: 6px;">
+            <p style="font-size: 12.5px; color: #555; margin: 0; line-height: 1.55em;">
+              <strong>🔧 Internal hooks.</strong> Any Edit or Write on a registered Wiki markdown file automatically triggers Claude Code's <code>PostToolUse</code> hook, which archives the previous Notion revision and writes the new one. <strong>The sync consumes no LLM compute</strong> &mdash; the hook is a shell script that calls the Notion REST API directly.
+            </p>
+          </div>
         </div>
       </div>
 
