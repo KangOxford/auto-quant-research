@@ -324,7 +324,75 @@
 
       </div>
 
-      <p style="margin-top: 20px;">
+      <!-- Wiki deep-dive (collapsible, default closed) -->
+      <div style="margin: 22px 0 0;">
+        <button class="collapsible" style="background-color: #f4ecff; color: #6b2db8; border-color: #d8c5f5; font-weight: 600;">📚 How the Wiki Works (Notion-based) — click to expand</button>
+        <div class="contentx" style="border-color: #d8c5f5;">
+          <h3 style="margin-top: 12px; color: #6b2db8;">Wiki = Notion + One Sub-page per Answer</h3>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. Notion was chosen because it offers (i) free-form rich pages with KaTeX equations and inline images, (ii) sub-page hierarchy that maps cleanly onto a knowledge graph, and (iii) public REST API for programmatic write access. The Wiki is structured one-concept-per-page with cross-links between pages, following the <a href="https://github.com/karpathy" style="color:#6b2db8;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026.
+          </p>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            <strong>Mechanism</strong>: every time the Decision Layer signs off on a specific answer (a robustness check, a stylized-fact estimate, a counterfactual rollout result), that answer is auto-pushed as a new <strong>sub-page</strong> under the parent Wiki page on Notion. The sub-page captures the question, the evidence, and the references back to the Notion revision and the Git commit that produced it. Over time, the Wiki accumulates one sub-page per substantive answer, cross-linked into a growing knowledge graph.
+          </p>
+
+          <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">Why this beats both a chat log and a regular Notion notebook</h4>
+
+          <table class="data-table" style="font-size: 13px;">
+            <thead><tr><th style="width: 28%;">Property</th><th style="width: 36%;">Chat log / RAG over transcript</th><th style="width: 36%;">Auto Quant Research Wiki</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Storage unit</strong></td>
+                <td>Linear transcript</td>
+                <td>One sub-page per concept / answer</td>
+              </tr>
+              <tr>
+                <td><strong>Repeated questions</strong></td>
+                <td>Re-derived from raw documents every time, paying full token cost</td>
+                <td>Read the existing sub-page directly (compounding: cheaper each time)</td>
+              </tr>
+              <tr>
+                <td><strong>Cross-references</strong></td>
+                <td>Manual or absent</td>
+                <td>Auto-generated wiki links between concept pages</td>
+              </tr>
+              <tr>
+                <td><strong>Schema</strong></td>
+                <td>None — drifts over time</td>
+                <td>Enforced by a CLAUDE.md schema; agent lints periodically</td>
+              </tr>
+              <tr>
+                <td><strong>Vendor lock-in</strong></td>
+                <td>Tied to whatever chat platform stored the transcript</td>
+                <td>Plain markdown + Notion export; portable to any agent or store</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">What sits on the Wiki today</h4>
+
+          <ul style="font-size: 13px; line-height: 1.7em;">
+            <li>One sub-page per <strong>replicated paper</strong> (Dugast 2026, Lillo &amp; Farmer 2004, Tóth 2011, Cont/Stoikov/Talreja 2009): paper finding, our replication, per-ticker breakdown, robustness checks, references to the exact Git commit that produced the result.</li>
+            <li>One sub-page per <strong>core concept</strong> (state-space models, generative models, information-theoretic metrics, multi-agent RL, LOB glossary, etc.) — each cross-linked to the papers and replications that use it.</li>
+            <li>One sub-page per <strong>system component</strong> (the World Model, the Automation Pipeline, the Decision/Execution Layer contract).</li>
+            <li>An auto-generated <strong>index page</strong> that lists all sub-pages with a one-line summary for fast LLM retrieval.</li>
+          </ul>
+
+          <h4 style="margin-top: 18px; color: #6b2db8; font-size: 15px;">Downstream consumption</h4>
+
+          <p style="font-size: 14px; line-height: 1.7em;">
+            Because the Wiki is plain markdown under the hood, it can be exported and fed into other tools without re-derivation. A practical example: export a set of sub-pages and upload to <a href="https://notebooklm.google.com" style="color:#6b2db8;">NotebookLM</a> to generate a 10–20 minute "Audio Overview" podcast for offline listening, or to query the Wiki in source-grounded chat. The Wiki produces the asset; downstream tools consume it.
+          </p>
+
+          <p style="font-size: 13px; color: #777; margin-top: 18px; font-style: italic;">
+            Internal hooks: each Edit/Write to a registered Wiki markdown file triggers a <code>PostToolUse</code> Claude Code hook that archives the previous Notion revision and writes the new revision. Zero LLM tokens are consumed per sync — the hook is a shell script that calls the Notion REST API directly.
+          </p>
+        </div>
+      </div>
+
+      <p style="margin-top: 24px;">
         The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3.
       </p>
 
