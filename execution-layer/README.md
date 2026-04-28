@@ -51,7 +51,7 @@ Three suggested entry points:
 
 Context engineering is a young craft. Most of the published material is either single tweets ("here is the one prompt that fixed my agent") or extremely abstract ("you should align your AI"). What is missing in the middle is concrete: a complete, working configuration that solves a real problem from end to end, with all of its rules, edge cases, and embarrassing scars.
 
-The configuration in this folder is the result of approximately 5 months of running Claude Code daily on real research code, accumulating rules every time something went wrong. It is far from polished. Many of the rules will not apply outside of HPC, or outside of finance microstructure research, or outside of one specific user's preferences. But the *shape* of it, the way rules and skills and hooks compose, is general; that is the part worth copying.
+The configuration in this folder is the result of approximately 5 months of running Claude Code daily on real research code, accumulating rules every time something went wrong. It is far from polished. Many of the rules will not apply outside of HPC, or outside of quantitative microstructure research, or outside of one specific user's preferences. But the *shape* of it, the way rules and skills and hooks compose, is general; that is the part worth copying.
 
 ## License
 

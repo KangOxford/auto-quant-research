@@ -5,12 +5,16 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Auto Quant Research: From Paper to Verified Replication in 24 Hours — an autonomous AI research agent for finance microstructure">
-  <meta name="keywords" content="auto research, autonomous research, finance microstructure, limit order book, paper replication, AI agent, Claude Code">
+  <meta name="description" content="Auto Quant Research: From Paper to Verified Replication in 24 Hours — an autonomous AI research agent for quantitative microstructure">
+  <meta name="keywords" content="auto research, autonomous research, quantitative microstructure, limit order book, paper replication, AI agent, Claude Code">
   <title>Auto Quant Research: From Paper to Verified Replication in 24 Hours</title>
 
-  <!-- Favicon: minimal 3-bar quant chart on navy, generated via Claude Artifacts -->
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Favicon: minimal 3-bar quant chart on navy, multi-format with cache-buster to defeat browser caching of old "no favicon" responses -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=3">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=3">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
+  <link rel="shortcut icon" href="favicon.ico?v=3">
 
   <!-- Bootstrap 3 + Font Awesome 4 (CDN, identical to sigma0) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -302,8 +306,8 @@
           <a href="https://github.com/KangOxford" style="color:#1772d0;">Kang Li</a><sup>*</sup> &middot;
           Yulin Wang<sup>*</sup> &middot;
           Aramis Marti-Shahandeh<sup>*</sup> &middot;
-          Mihai Cucuringu<sup>&dagger;</sup> &middot;
-          Jakob Foerster<sup>&dagger;</sup>
+          Jakob Foerster<sup>&dagger;</sup> &middot;
+          Mihai Cucuringu<sup>&dagger;</sup>
         </p>
       </div>
 
@@ -339,7 +343,7 @@
       <!-- ========== TL;DR ========== -->
       <blockquote>
         <p>
-          <strong>TL;DR</strong>: <strong>Auto Quant Research</strong> is a Human-in-the-Loop <strong>co-scientist</strong> for finance microstructure. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off. Two layers, with clear boundaries: an <strong>Execution Layer</strong> (the autonomous part, runs while you are offline) and a <strong>Decision Layer</strong> (the part that surfaces only the choices you actually care about). The simulator powering each replication is a learned LOB World Model from the <a href="https://kangoxford.github.io/sigma0/">sigma0</a> project.
+          <strong>TL;DR</strong>: <strong>Auto Quant Research</strong> is a Human-in-the-Loop <strong>co-scientist</strong> for quantitative microstructure. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off. Two layers, with clear boundaries: an <strong>Execution Layer</strong> (the autonomous part, runs while you are offline) and a <strong>Decision Layer</strong> (the part that surfaces only the choices you actually care about). The simulator powering each replication is a learned LOB World Model from the <a href="https://kangoxford.github.io/sigma0/">sigma0</a> project.
         </p>
       </blockquote>
 
@@ -350,12 +354,12 @@
       <div style="margin: 12px 0 30px;">
         <img src="imgs/automation_pipeline.png" alt="Auto Quant Research — Automation Pipeline (general)" style="width: 100%; max-width: 900px; border: 1px solid #d0d0d0; border-radius: 6px;">
         <p style="text-align: center; color: #777; font-size: 13px; margin-top: 8px; font-style: italic;">
-          Figure 1. Five-stage automation pipeline: Paper Ingestion → N Parallel Subagents (fan-out) → Code Generation → SLURM sbatch on HPC → Multi-Channel Publish (Overleaf, Notion, GitHub Pages). Captions are intentionally generic; this is a system designed to handle any finance microstructure paper, not a single task.
+          Figure 1. Five-stage automation pipeline: Paper Ingestion → N Parallel Subagents (fan-out) → Code Generation → SLURM sbatch on HPC → Multi-Channel Publish (Overleaf, Notion, GitHub Pages). Captions are intentionally generic; this is a system designed to handle any quantitative microstructure paper, not a single task.
         </p>
       </div>
 
       <p>
-        Auto Quant Research is a <strong>two-layer system</strong> for finance microstructure replication. The labor that does <em>not</em> need human judgement is fully automated and runs while the user sleeps. The decisions that do need human judgement are surfaced as a small, structured set of choices, never a wall of raw output. We call these the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong>; together they make up the Human-in-the-Loop contract.
+        Auto Quant Research is a <strong>two-layer system</strong> for quantitative microstructure replication. The labor that does <em>not</em> need human judgement is fully automated and runs while the user sleeps. The decisions that do need human judgement are surfaced as a small, structured set of choices, never a wall of raw output. We call these the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong>; together they make up the Human-in-the-Loop contract.
       </p>
 
       <!-- Two-layer cards: clickable, mutually-exclusive expansion -->
@@ -870,7 +874,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
 
       <!-- ========== FOOTER ========== -->
       <div class="footnotes">
-        <p><strong>Auto Quant Research</strong> &middot; Automated paper-to-replication pipeline for finance microstructure research.</p>
+        <p><strong>Auto Quant Research</strong> &middot; Automated paper-to-replication pipeline for quantitative microstructure research.</p>
         <p>
           <a href="https://github.com/KangOxford/auto-quant-research"><i class="fa fa-github"></i> GitHub</a> &middot;
           <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6440898"><i class="fa fa-file-text-o"></i> SSRN 6440898 (Dugast 2026)</a> &middot;
