@@ -1,6 +1,6 @@
 # MCPs Used by the Execution Layer
 
-The Execution Layer of AlphaZero can search the open web and several social platforms while it runs. This is implemented through Model Context Protocol (MCP) servers configured against Claude Code; each MCP exposes a small set of tools that any subagent can call from inside a replication task. The result is that the Execution Layer is not a closed-world reasoner: even after a paper has been ingested and a plan has been drawn up, the agent can pull in fresh information from the web and from social platforms and weave it into the analysis.
+The Execution Layer of Auto Quant Research can search the open web and several social platforms while it runs. This is implemented through Model Context Protocol (MCP) servers configured against Claude Code; each MCP exposes a small set of tools that any subagent can call from inside a replication task. The result is that the Execution Layer is not a closed-world reasoner: even after a paper has been ingested and a plan has been drawn up, the agent can pull in fresh information from the web and from social platforms and weave it into the analysis.
 
 ## Servers at a glance
 
@@ -117,7 +117,7 @@ As of 2026-04 there is no canonical packaged MCP for Zhihu. The shape would mirr
 
 ## Combined loadout used in production
 
-For AlphaZero, the project-local `.mcp.json` registers all five active servers, and the Claude Code allowlist in `~/.claude/settings.json` permits each individual tool name. A representative slice of `permissions.allow`:
+For Auto Quant Research, the project-local `.mcp.json` registers all five active servers, and the Claude Code allowlist in `~/.claude/settings.json` permits each individual tool name. A representative slice of `permissions.allow`:
 
 ```json
 "mcp__Grok__search_x",

@@ -1,12 +1,12 @@
-# AlphaZero
+# Auto Quant Research
 
 **From Paper to Verified Replication in 48 Hours**
 
-AlphaZero is a Human-in-the-Loop system for replicating finance microstructure papers. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off.
+Auto Quant Research is a Human-in-the-Loop system for replicating finance microstructure papers. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off.
 
 ## Live Demo
 
-[AlphaZero Landing Page](https://kangoxford.github.io/auto-quant-research/)
+[Auto Quant Research Landing Page](https://kangoxford.github.io/auto-quant-research/)
 
 ## Two Layers, Clear Boundaries
 
