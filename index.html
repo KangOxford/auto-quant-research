@@ -497,17 +497,6 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
             The published copy filters every secret and every transient artefact: <code>.credentials.json</code> and other token files (Claude Code auth, Notion integration token, GitHub PAT, HuggingFace token), the entire <code>~/.claude/projects/</code> directory of full chat transcripts, all <code>*.log</code> files, paste / file caches, session metadata, third-party plugin state, and MCP auth caches. A grep across the published files for common token formats (GitHub, HuggingFace, Anthropic, OpenAI, AWS, GCP, Notion, xAI) confirmed zero leakage.
           </p>
 
-          <h3 style="margin-top: 22px; color: #1f3a5f;">How to Contribute</h3>
-
-          <ul style="font-size: 14px; line-height: 1.7em;">
-            <li>To propose a new principle: write a one-sentence rule (the part everyone should remember), two to four sentences of motivation, and an optional command snippet. Open a pull request against <code>execution-layer/PRINCIPLES.md</code> on GitHub, or leave a comment on the Notion mirror.</li>
-            <li>To add or improve a skill: each skill is a self-contained folder with a SKILL.md. Follow the existing pattern (description, when to use, process, anti-patterns, related skills). Skills should be invocable by trigger phrases and produce a clear final state.</li>
-            <li>To add a hook: hooks are short shell or Python scripts that run on a specific event (PostToolUse, Stop, etc.). Keep them idempotent and side-effect-light; they run on every matching event and budget overruns block the next turn.</li>
-          </ul>
-
-          <p style="margin-top: 18px; font-size: 13px; color: #555; font-style: italic;">
-            Maintainers: Kang Li · Aramis Fereydoun · contributors welcome via GitHub PRs or Notion block-level comments.
-          </p>
         </div>
       </div>
 
@@ -636,23 +625,6 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
           <p style="font-size: 13.5px; line-height: 1.65em; margin: 8px 0;">
             The Wiki referenced in step (c) above lives on <strong>Notion</strong>, not on this static site. The structure follows the <a href="https://github.com/karpathy" style="color:#1f3a5f;"><strong>LLM-Wiki paradigm</strong></a> proposed by Andrej Karpathy in April 2026: <em>one concept per page</em>, with cross-links between pages.
           </p>
-
-          <p style="font-size: 13.5px; line-height: 1.65em; margin: 6px 0 10px;">Notion was chosen for three reasons:</p>
-
-          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 10px 0 14px;">
-            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
-              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(i) RICH PAGES</div>
-              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Free-form pages with KaTeX equations and inline images.</p>
-            </div>
-            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
-              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(ii) HIERARCHY</div>
-              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Sub-page hierarchy maps cleanly onto a knowledge graph.</p>
-            </div>
-            <div style="border: 1px solid #c7dcef; background: #f5f9ff; border-radius: 6px; padding: 10px 12px;">
-              <div style="font-size: 11px; color: #1f3a5f; font-weight: 700; letter-spacing: 0.5px;">(iii) REST API</div>
-              <p style="font-size: 12.5px; margin: 4px 0 0; line-height: 1.5em;">Public API for programmatic write access from agents.</p>
-            </div>
-          </div>
 
           <!-- (4) Downstream — short with emoji -->
           <h4 style="margin-top: 22px; color: #1f3a5f; font-size: 15px;">🎧 Downstream consumption</h4>
