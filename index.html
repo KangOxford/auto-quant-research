@@ -245,7 +245,7 @@
       <!-- ========== TL;DR ========== -->
       <blockquote>
         <p>
-          <strong>TL;DR</strong>: <strong>AutoResearch</strong> is an autonomous AI research agent. Given a finance microstructure paper as a PDF, it reads the paper, designs a three-layer verification pipeline, runs empirical replication on real limit-order-book data, and publishes the results to Overleaf, Notion, and GitHub Pages. <strong>Time from PDF to first &beta; estimate: 12 minutes.</strong> Time to full three-layer specification: 48 hours. Built on Claude Code with Sonnet 4.6 orchestrating Opus 4.7 subagents on a SLURM HPC cluster.
+          <strong>TL;DR</strong>: <strong>Auto Quant Research</strong> is a Human-in-the-Loop system for replicating finance microstructure papers. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off. Two layers, with clear boundaries: an <strong>Execution Layer</strong> (the autonomous part, runs while you are offline) and a <strong>Decision Layer</strong> (the part that surfaces only the choices you actually care about). The simulator powering each replication is a learned LOB World Model from the <a href="https://kangoxford.github.io/sigma0/">sigma0</a> project.
         </p>
       </blockquote>
 
@@ -281,14 +281,48 @@
         </div>
       </div>
 
-      <!-- Final processing flow -->
+      <!-- Final processing flow — 4 colored step boxes -->
       <h3 style="margin-top: 30px;">End-to-End Flow</h3>
-      <ol style="line-height: 1.9em; font-size: 15px;">
-        <li><strong>(a) Push raw results to Notion.</strong> The Execution Layer auto-publishes regression tables, plots, and reproduction code to a fresh Notion page tied to the paper.</li>
-        <li><strong>(b) Decision Layer review.</strong> The user opens the Notion page, picks the angle that best supports what they want to prove, edits the framing, and flags any robustness checks that are missing.</li>
-        <li><strong>(c) Build the Wiki on Notion.</strong> Approved findings are linked into a growing Notion Wiki, cross-referenced by paper, ticker, and stylized fact, so future work inherits an accumulating knowledge base.</li>
-        <li><strong>(d) Push to Overleaf after user review.</strong> Only after the user signs off do the polished tables, figures, and prose flow to the Overleaf LaTeX repo for paper-grade output, with each section tagged to the exact Git commit and Notion revision that produced it.</li>
-      </ol>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 14px; margin: 20px 0;">
+
+        <!-- Step (a) — green -->
+        <div style="border: 2px solid #2e8b57; border-radius: 10px; padding: 16px 18px; background: #effff5;">
+          <div style="display: inline-block; padding: 3px 10px; background: #2e8b57; color: white; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px;">(a) PUSH</div>
+          <h4 style="margin: 4px 0 8px; font-size: 15px; color: #2e8b57;">Raw Results → Notion</h4>
+          <p style="font-size: 13px; line-height: 1.55em; margin: 0;">
+            The Execution Layer auto-publishes regression tables, plots, and reproduction code to a fresh Notion page tied to the paper.
+          </p>
+        </div>
+
+        <!-- Step (b) — blue -->
+        <div style="border: 2px solid #1f6feb; border-radius: 10px; padding: 16px 18px; background: #eaf4ff;">
+          <div style="display: inline-block; padding: 3px 10px; background: #1f6feb; color: white; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px;">(b) REVIEW</div>
+          <h4 style="margin: 4px 0 8px; font-size: 15px; color: #1f6feb;">Decision Layer</h4>
+          <p style="font-size: 13px; line-height: 1.55em; margin: 0;">
+            The user opens the Notion page, picks the angle that best supports what they want to prove, edits the framing, and flags missing robustness checks.
+          </p>
+        </div>
+
+        <!-- Step (c) — purple -->
+        <div style="border: 2px solid #8b3dcf; border-radius: 10px; padding: 16px 18px; background: #f6ecff;">
+          <div style="display: inline-block; padding: 3px 10px; background: #8b3dcf; color: white; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px;">(c) WIKI</div>
+          <h4 style="margin: 4px 0 8px; font-size: 15px; color: #8b3dcf;">Knowledge Base on Notion</h4>
+          <p style="font-size: 13px; line-height: 1.55em; margin: 0;">
+            Approved findings link into a growing Notion Wiki, cross-referenced by paper, ticker, and stylized fact. Future work inherits this base.
+          </p>
+        </div>
+
+        <!-- Step (d) — orange -->
+        <div style="border: 2px solid #d97706; border-radius: 10px; padding: 16px 18px; background: #fff5e6;">
+          <div style="display: inline-block; padding: 3px 10px; background: #d97706; color: white; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 10px;">(d) PUBLISH</div>
+          <h4 style="margin: 4px 0 8px; font-size: 15px; color: #d97706;">Polished → Overleaf</h4>
+          <p style="font-size: 13px; line-height: 1.55em; margin: 0;">
+            Only after user signoff do polished tables, figures, and prose flow to Overleaf LaTeX, each section tagged to the Git commit and Notion revision that produced it.
+          </p>
+        </div>
+
+      </div>
 
       <p style="margin-top: 20px;">
         The data layer is real Nasdaq order flow at nanosecond resolution; the simulation layer is built on JAX and Mamba3.
@@ -386,27 +420,30 @@
         </p>
       </div>
 
-      <!-- ========== BACKEND SIMULATOR (RED-FRAMED, STANDALONE) ========== -->
-      <h2 style="margin-top: 2.5em;">The Engine Behind: Simulator (mamba3)</h2>
+      <!-- ========== WORLD MODEL (combined: engine + verification) ========== -->
+      <h2 id="world-model" style="margin-top: 2.5em;">The World Model</h2>
       <p>
-        All four paper-replication examples above run on top of <strong>the same simulator</strong>. The simulator is what makes Auto Quant Research more than a regression-running script: it is a learned market environment, calibrated against real Nasdaq order flow, that lets us synthesize counterfactual depth shocks, replay metaorders, and stress-test stylized facts beyond what any single dataset can probe. Highlighting it separately here, in its own red frame, because <em>this is the part most easily underestimated</em>.
+        Every replication runs on top of the same <strong>World Model</strong>: a learned synthetic-market environment, calibrated against real Nasdaq order flow, that lets us synthesize counterfactual depth shocks, replay metaorders, and stress-test stylized facts beyond what any single dataset can probe. The World Model is what turns Auto Quant Research from a regression-running script into a genuine experimental laboratory.
+      </p>
+      <p>
+        The World Model used here comes from the <a href="https://kangoxford.github.io/sigma0/"><strong>sigma0</strong></a> project. We deliberately treat the specific architecture (currently a token-level autoregressive state-space model) as an <em>implementation detail</em>: the World Model is the abstraction that matters, the architecture is one substitutable choice. Future Auto Quant Research releases may swap in different sigma0 World Models without changing the replication interface.
       </p>
 
       <div style="border: 2px solid #c0392b; border-left: 6px solid #c0392b; border-radius: 10px; padding: 22px 26px; margin: 25px 0; background: #fff5f5; box-shadow: 0 1px 4px rgba(192, 57, 43, 0.10);">
-        <div style="display: inline-block; padding: 4px 10px; background: #c0392b; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;">⚙ SIMULATOR &middot; mamba3</div>
+        <div style="display: inline-block; padding: 4px 10px; background: #c0392b; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px;">⚙ WORLD MODEL</div>
 
-        <h3 style="margin: 0 0 10px; font-size: 20px; color: #c0392b;">mamba3: The Internal SOTA That Powers Every Replication</h3>
+        <h3 style="margin: 0 0 12px; font-size: 20px; color: #c0392b;">How the World Model Powers Verification</h3>
 
         <p style="font-size: 15px; line-height: 1.7em; margin: 0 0 14px;">
-          <strong>mamba3</strong> is the current single-best checkpoint of our learned LOB simulator. It is a 78M-parameter <strong>Mamba3 SISO state-space</strong> architecture trained autoregressively on 26-token-encoded order messages, across 8 tickers (GOOG, AAPL, NVDA, AMZN, META, TSLA, MSFT, AMD) and 4 trading years (2022&ndash;2025). It learns the joint distribution of every limit order, every cancellation, every market order, and every level-2 quote update at nanosecond resolution, conditional on the full preceding order flow.
+          The World Model is a <strong>generative simulator of LOB order flow</strong>. Given the preceding order stream, it produces a probability distribution over the next event (limit order, cancellation, market order, quote update) at nanosecond resolution, calibrated on real Nasdaq data. Because every field, both categorical (event type, direction) and quantized numerical (price, size, time delta), is modeled as a discrete categorical with cross-entropy loss, the World Model is a <em>true general density model</em>: no Gaussian shortcut, no parametric distribution assumption. Counterfactual scenarios are generated by conditional rollout, not by hand-crafted Monte Carlo.
         </p>
 
         <p style="font-size: 15px; line-height: 1.7em; margin: 0 0 14px;">
-          <strong>How the simulator works</strong>: at inference time, the model rolls out one token at a time, with each token carrying either a categorical field (event type, direction) or a quantized numerical field (price, size, time delta). Because every field is treated as a discrete categorical with cross-entropy loss, the simulator is a <em>true general density model</em>, no Gaussian assumption, no parametric distribution shortcut. Counterfactual scenarios (what if depth at the touch were halved? what if a metaorder of size <em>Q</em> arrived now?) are generated by conditional rollout, not by hand-crafted Monte Carlo.
+          <strong>Verification mechanism</strong>: each replicated paper is verified inside a synthetic environment generated by the World Model. Synthetic depth shocks, metaorder injections, and counterfactual rollouts produce delay and price-impact distributions that can be measured the same way as on real data. If the World Model captures the stylized fact, the empirical claim from the paper transports to a controlled environment where the user can probe its boundary conditions, beyond what any single dataset can probe.
         </p>
 
         <p style="font-size: 15px; line-height: 1.7em; margin: 0 0 14px;">
-          <strong>Validation</strong>: pre-trained for 46,050 steps on 4 nodes &times; 4 GH200 GPUs with the Muon optimizer; achieves the following Information Coefficient on a held-out 2026-01 test set, where IC = Pearson correlation between predicted and realized log-return at horizon <em>g</em>:
+          <strong>Current implementation</strong> (subject to change in future releases): a 78M-parameter state-space architecture from the <a href="https://kangoxford.github.io/sigma0/" style="color:#c0392b;">sigma0</a> project, trained autoregressively on 26-token-encoded order messages, across 8 tickers (GOOG, AAPL, NVDA, AMZN, META, TSLA, MSFT, AMD) and 4 trading years (2022&ndash;2025). Validation Information Coefficient on held-out 2026-01:
         </p>
 
         <table class="data-table" style="max-width: 460px; margin: 12px auto 18px; background: white;">
@@ -420,7 +457,7 @@
         </table>
 
         <p style="font-size: 14px; line-height: 1.6em; margin: 14px 0 0; color: #555;">
-          <strong>Reproducibility</strong>: the checkpoint is published as a <a href="https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050" style="color:#c0392b;">GitHub Release</a> &mdash; 567 MB tar.zst, sha256-pinned. Full download / decompress / load instructions at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3_ckpt_README.md" style="color:#c0392b;">models/mamba3_ckpt_README.md</a>. To match the exact Flax module structure, check out LOBS5 commit <code style="background:#fadbd8;padding:1px 5px;border-radius:3px;">3f6d32a6</code> on branch <code style="background:#fadbd8;padding:1px 5px;border-radius:3px;">exp/R1-Mamba3</code>. Wandb run <a href="https://wandb.ai/oxford-lob/mamba3/runs/pw8u0edj" style="color:#c0392b;"><code>pw8u0edj</code></a>, SLURM job <code>j3417629</code>.
+          <strong>Reproducibility</strong>: the current World Model checkpoint is published as a <a href="https://github.com/KangOxford/auto-quant-research/releases/tag/ckpt-mamba3-pw8u0edj-step46050" style="color:#c0392b;">GitHub Release</a> &mdash; 567 MB tar.zst, sha256-pinned. See <a href="https://github.com/KangOxford/auto-quant-research/blob/main/models/mamba3_ckpt_README.md" style="color:#c0392b;">model card</a> for download, decompression, and load instructions. The architecture origin is documented in the <a href="https://kangoxford.github.io/sigma0/" style="color:#c0392b;">sigma0 project page</a>.
         </p>
       </div>
 
@@ -437,19 +474,6 @@
         </p>
       </div>
 
-      <!-- ========== WORLD MODEL VERIFICATION ========== -->
-      <h2>Verification: The World Model</h2>
-      <p>
-        Each replicated paper is verified inside a synthetic market environment generated by the simulator (mamba3, see above). Synthetic depth shocks, metaorder injections, and counterfactual rollouts produce delay and price-impact distributions that can be measured the same way as on real data. If the simulator captures the stylized fact, the empirical claim from the paper transports to a controlled environment where the user can probe its boundary conditions.
-      </p>
-
-      <div style="max-width: 600px; margin: 25px auto;">
-        <div class="layer-box" style="background: #fafafa;">
-          <div class="layer-num">VERIFICATION LAYER</div>
-          <h4>World Model</h4>
-          <p>LOB market simulator (mamba3). Synthetic depth shocks &rarr; measure delay distribution. Replays metaorders to validate the stylized fact in a controlled synthetic environment, beyond what any single dataset can probe.</p>
-        </div>
-      </div>
 
       <!-- ========== STACK ========== -->
       <h2>Technology Stack</h2>
