@@ -276,9 +276,14 @@
         <div class="example-card">
           <h4 style="color: #1f3a5f;">🌙 Execution Layer &mdash; <em>Auto Research in Sleep</em></h4>
           <p>
-            Human-out-of-the-loop. The agent parses the paper PDF, dispatches nine parallel subagents to design the data pipeline, world model, and empirical regression spec, generates approximately one thousand lines of code, commits to Git for full traceability, submits a SLURM batch job, monitors the job to completion, and pushes raw results to Notion. All of this happens autonomously while the user is offline.
+            Human-out-of-the-loop. The agent parses the paper PDF, dispatches a fan-out of parallel subagents to design the data pipeline, world model, and empirical regression spec, generates the replication code, commits to Git for full traceability, submits a SLURM batch job, monitors the job to completion, and pushes raw results to Notion. All of this happens autonomously while the user is offline.
           </p>
           <p style="margin-top: 10px; color: #555;"><strong>Bound by</strong>: data correctness, infrastructure plumbing, code generation. Not by judgement.</p>
+          <div style="margin-top: 14px; padding: 10px 12px; background: #eef2f8; border-left: 3px solid #1f3a5f; border-radius: 4px;">
+            <p style="font-size: 12.5px; line-height: 1.55em; margin: 0; color: #2a3a5a;">
+              <strong>📂 Execution logic published</strong>: the entire scaffold that drives this layer (the global <code>CLAUDE.md</code>, all <code>settings.json</code> + <code>settings.local.json</code>, 42 reusable skills, 21 hooks, agents, and slash commands) is mirrored at <a href="https://github.com/KangOxford/auto-quant-research/tree/main/execution-layer" style="color:#1f3a5f; font-weight:600;">github.com/KangOxford/auto-quant-research/execution-layer/</a>. This is the operational brain of <em>Auto Research in Sleep</em>: the rules, skills, hooks, and event handlers that let the agent run without a human watching.
+            </p>
+          </div>
         </div>
         <div class="example-card">
           <h4 style="color: #ee8033;">🤝 Decision Layer &mdash; <em>Human in the Loop</em></h4>
