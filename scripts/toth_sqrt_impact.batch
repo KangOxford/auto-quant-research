@@ -1,0 +1,35 @@
+#!/bin/bash
+#SBATCH --job-name=toth-sqrt-impact-goog2022
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=64
+#SBATCH --time=02:00:00
+#SBATCH --partition=workq
+#SBATCH --output=logs/toth_%j.out
+#SBATCH --error=logs/toth_%j.err
+
+set -euo pipefail
+
+source /projects/s5e/quant/miniforge3/etc/profile.d/conda.sh
+conda activate base
+
+cd /lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/tasks/auto_research/scripts
+mkdir -p logs
+
+TICKER="${TICKER:-GOOG}"
+YEAR="${YEAR:-2022}"
+MIN_Q="${MIN_Q:-50}"
+
+RESULTS_DIR="/lus/lfs1aip2/projects/s5e/quant/AlphaTrade/LOBS5/tasks/auto_research/results/toth_${TICKER}_${YEAR}_${SLURM_JOB_ID:-local}"
+mkdir -p "$RESULTS_DIR"
+
+echo "=== Tóth 2011 sqrt-impact replication ==="
+echo "ticker=$TICKER year=$YEAR min_q=$MIN_Q  results=$RESULTS_DIR"
+echo "Started: $(date)"
+
+python3 toth_sqrt_impact.py --ticker "$TICKER" --year "$YEAR" \
+                            --min_q "$MIN_Q" --results_dir "$RESULTS_DIR"
+
+echo "Finished: $(date)"
+echo "Results in: $RESULTS_DIR"
+ls -la "$RESULTS_DIR"
