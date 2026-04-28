@@ -707,18 +707,21 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <!-- Example 1: Dugast 2026 -->
       <button class="collapsible">Example 1 &mdash; Dugast, Marta, Riva (2026): Market Depth and Execution Delays</button>
       <div class="contentx">
-        <p style="margin-top: 12px;">
-          <span class="badge-status badge-completed">COMPLETED</span>
-          The flagship live demonstration: a full replication of <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6440898">Dugast, Marta, Riva (2026) &ldquo;Market Depth and Execution Delays&rdquo;</a> using Nasdaq LOB data.
-        </p>
+
+        <!-- Verdict-first banner: amber for partial replication -->
+        <div style="border: 2px solid #d39e00; border-left: 6px solid #d39e00; background: #fff8e1; border-radius: 8px; padding: 14px 18px; margin: 14px 0;">
+          <div style="display: inline-block; padding: 3px 10px; background: #d39e00; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">RESULT &middot; PARTIAL REPLICATION</div>
+          <p style="font-size: 14.5px; line-height: 1.55em; margin: 4px 0 6px; color: #5a4500;">
+            <strong>Direction reproduced; magnitude diverged.</strong> The paper's positive depth-delay link is recovered at high statistical confidence, but our estimate is ~30% larger than the paper's range. The sign holds; the size has drifted in twenty years.
+          </p>
+          <p style="font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0 0; color: #5a4500;">
+            Paper:&nbsp;&nbsp;&beta; = 0.133 &ndash; 0.169 (NYSE TAQ, 2000s)<br>
+            Ours:&nbsp;&nbsp;&nbsp;&beta; = +0.2140&nbsp; (SE 0.0106, t = 20.26, N = 46M, Nasdaq Q1 2025)
+          </p>
+        </div>
+
         <p>
-          <strong>Paper finding</strong>: &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE TAQ data (2000s).
-        </p>
-        <p>
-          <strong>Our replication</strong>: &beta; = +0.2140 (SE 0.0106, t = 20.26), N = 46,094,530 limit orders, 8 Nasdaq primaries &times; Q1 2025. SLURM job 4093982, 1 node &times; 64 CPU, wall-clock 12 minutes.
-        </p>
-        <p>
-          The result is directionally consistent with the paper but somewhat larger, expected because Nasdaq primaries in 2025 have faster matching engines and more extreme depth heterogeneity than the NYSE sample, and venue fragmentation plus the PFOF ecosystem shift the depth-delay relationship upward. Per-ticker heterogeneity ranges from &beta; = +0.289 (GOOG, strong depth-delay link) to &beta; = -0.073 (MSFT, venue fragmentation effect).
+          <strong>Detail</strong>: paper finding is &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE TAQ 2000s data. Our replication ran on 46,094,530 limit orders across 8 Nasdaq primaries in Q1 2025 (SLURM job 4093982, 1 node &times; 64 CPU, wall-clock 12 minutes). The magnitude divergence is expected: Nasdaq primaries in 2025 have faster matching engines and more extreme depth heterogeneity than the NYSE sample, and venue fragmentation plus the PFOF ecosystem shift the depth-delay relationship upward. Per-ticker heterogeneity ranges from &beta; = +0.289 (GOOG, strong depth-delay link) to &beta; = -0.073 (MSFT, venue fragmentation effect), so the pooled positive estimate masks substantial cross-stock variation that would not be visible in the original sample.
         </p>
         <table class="data-table" style="max-width: 600px; margin: 12px auto;">
           <thead><tr><th>Ticker</th><th>&beta;</th><th>SE</th><th>t</th><th>Interpretation</th></tr></thead>
@@ -738,18 +741,28 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <!-- Example 2: Lillo & Farmer 2004 -->
       <button class="collapsible">Example 2 &mdash; Lillo &amp; Farmer (2004): The Long Memory of the Efficient Market</button>
       <div class="contentx">
-        <p style="margin-top: 12px;">
-          <span class="badge-status badge-completed">COMPLETED</span>
-          A canonical microstructure stylized fact: trade-sign series exhibit long memory, with Hurst exponent <em>H</em> &asymp; 0.7 across liquid stocks and venues.
-        </p>
+
+        <!-- Verdict-first banner: green for full replication -->
+        <div style="border: 2px solid #2e8b57; border-left: 6px solid #2e8b57; background: #effff5; border-radius: 8px; padding: 14px 18px; margin: 14px 0;">
+          <div style="display: inline-block; padding: 3px 10px; background: #2e8b57; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">RESULT &middot; FULL REPLICATION &check;</div>
+          <p style="font-size: 14.5px; line-height: 1.55em; margin: 4px 0 6px; color: #1f5c3a;">
+            <strong>Within &plusmn;1&sigma; of the paper value.</strong> The long-memory stylized fact reproduces faithfully across venue (LSE &rarr; Nasdaq) and twenty years of market evolution.
+          </p>
+          <p style="font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0 0; color: #1f5c3a;">
+            Paper:&nbsp;&nbsp;<em>H</em> = 0.696 &plusmn; 0.032 (LSE 1999&ndash;2002, 20+ stocks)<br>
+            Ours:&nbsp;&nbsp;&nbsp;<em>H</em> = 0.7053&nbsp; (DFA, GOOG 2022, 10.87M trades, 251 days)
+          </p>
+        </div>
+
         <p>
-          <strong>Paper finding</strong>: <em>H</em> = 0.696 &plusmn; 0.032 on LSE 1999&ndash;2002, across 20+ stocks (Lillo &amp; Farmer 2004, <em>Studies in Nonlinear Dynamics &amp; Econometrics</em>).
+          <strong>Detail</strong>: this is a canonical microstructure stylized fact &mdash; trade-sign series exhibit long memory, with Hurst exponent <em>H</em> &asymp; 0.7 across liquid stocks and venues. The classical estimator is implemented in <a href="https://github.com/KangOxford/auto-quant-research/blob/main/scripts/hurst_lillo_farmer.py">scripts/hurst_lillo_farmer.py</a>: extract LOBSTER &middot;7z archives, filter event_type &isin; {4, 5} for executed trades, take the &plusmn;1 trade-direction series, and compute the Hurst exponent via both ACF tail-decay and Detrended Fluctuation Analysis. DFA is more robust on finite samples and is the canonical estimator used by the paper. SLURM job 4384364, 1 node &times; 64 CPU, wall-clock 8 minutes.
         </p>
-        <p>
-          <strong>Our replication</strong>: DFA <em>H</em> = <strong>0.7053</strong> on full-year GOOG 2022 LOBSTER data (251 trading days, 10,868,894 trade-sign events). <strong>Within &plusmn;1&sigma; of the paper value.</strong> SLURM job 4384364, 1 node &times; 64 CPU, wall-clock 8 minutes.
-        </p>
-        <p>
-          The classical estimator is implemented in <a href="https://github.com/KangOxford/auto-quant-research/blob/main/scripts/hurst_lillo_farmer.py">scripts/hurst_lillo_farmer.py</a>: extract LOBSTER &middot;7z archives, filter event_type &isin; {4, 5} for executed trades, take the &plusmn;1 trade-direction series, and compute the Hurst exponent via both ACF tail-decay and Detrended Fluctuation Analysis. DFA is more robust on finite samples and is the canonical estimator used by the paper.
+        <p style="font-family: 'Courier New', monospace; font-size: 13px; background: #f6f8fa; padding: 12px; border-radius: 4px; border: 1px solid #ddd;">
+          Paper:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; H = 0.696 &plusmn; 0.032 (LSE 1999&ndash;2002, 20+ stocks)<br>
+          Our (DFA):&nbsp;&nbsp; H = 0.7053&nbsp;&nbsp;&larr; within &plusmn;1&sigma; &check;<br>
+          Our (ACF):&nbsp;&nbsp; H = 0.8989 (&alpha; = 0.2022, tail-decay finite-sample bias)<br>
+          Data:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GOOG 2022, 251 days, 10,868,894 trades<br>
+          Sign balance: +1: 66.7%, &minus;1: 33.3% (buy-pressure asymmetry)
         </p>
         <p style="font-family: 'Courier New', monospace; font-size: 13px; background: #f6f8fa; padding: 12px; border-radius: 4px; border: 1px solid #ddd;">
           Paper:        H = 0.696 &plusmn; 0.032 (LSE 1999&ndash;2002, 20+ stocks)<br>
@@ -763,30 +776,42 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <!-- Example 3: T&oacute;th 2011 -->
       <button class="collapsible">Example 3 &mdash; T&oacute;th et al. (2011): Anomalous Price Impact &amp; Square-Root Law</button>
       <div class="contentx">
-        <p style="margin-top: 12px;">
-          <span class="badge-status badge-pending">REPLICATION PENDING</span>
-          The square-root impact law: meta-order permanent price impact scales as <em>I</em> &prop; <em>Q</em><sup>0.5</sup>, exponent <em>&delta;</em> &asymp; 0.5 universally across stocks, futures, and asset classes (T&oacute;th et al. 2011, <em>Phys. Rev. X</em>).
-        </p>
+
+        <!-- Verdict-first banner: grey for not-yet-run -->
+        <div style="border: 2px solid #888; border-left: 6px solid #888; background: #f5f5f5; border-radius: 8px; padding: 14px 18px; margin: 14px 0;">
+          <div style="display: inline-block; padding: 3px 10px; background: #888; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">RESULT &middot; NOT YET RUN</div>
+          <p style="font-size: 14.5px; line-height: 1.55em; margin: 4px 0 6px; color: #3a3a3a;">
+            <strong>Replication plan in place; pipeline ready; awaiting compute.</strong> Expected outcome on 8 tickers &times; 4 years: exponent &delta; &isin; [0.4, 0.6], consistent with the paper's universal &delta; &asymp; 0.5.
+          </p>
+          <p style="font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0 0; color: #3a3a3a;">
+            Paper:&nbsp;&nbsp;&delta; &asymp; 0.5 (universal, multi-asset, CFM proprietary)<br>
+            Ours:&nbsp;&nbsp;&nbsp;TBD (plan: heuristic meta-order clustering on LOBSTER 8 &times; 4yr)
+          </p>
+        </div>
+
         <p>
-          <strong>Paper finding</strong>: <em>I</em>(<em>Q</em>) = <em>Y</em> &middot; &sigma;<sub>daily</sub> &middot; &radic;(<em>Q</em>/<em>V</em><sub>daily</sub>), where <em>Y</em> &asymp; 0.5 is a universal constant. Reflects market self-organized criticality with V-shaped latent order book.
-        </p>
-        <p>
-          <strong>Replication plan</strong>: same .7z extraction pipeline, then heuristic meta-order clustering (same-side trades within 60-second gap) followed by log-log OLS on (<em>I</em>, <em>Q</em>). Expected exponent in [0.4, 0.6] across 8 tickers &times; 4 years. Spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/toth_2011_sqrt_impact.md">papers/toth_2011_sqrt_impact.md</a>.
+          <strong>Detail</strong>: the square-root impact law states that meta-order permanent price impact scales as <em>I</em> &prop; <em>Q</em><sup>0.5</sup>, with exponent <em>&delta;</em> &asymp; 0.5 universally across stocks, futures, and asset classes (T&oacute;th et al. 2011, <em>Phys. Rev. X</em>). The full functional form is <em>I</em>(<em>Q</em>) = <em>Y</em> &middot; &sigma;<sub>daily</sub> &middot; &radic;(<em>Q</em>/<em>V</em><sub>daily</sub>), where <em>Y</em> &asymp; 0.5 is a universal constant. The phenomenon reflects market self-organized criticality with a V-shaped latent order book. Our replication plan reuses the .7z extraction pipeline from Example 2, applies heuristic meta-order clustering (same-side trades within 60-second gap), and fits a log-log OLS on (<em>I</em>, <em>Q</em>). Full spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/toth_2011_sqrt_impact.md">papers/toth_2011_sqrt_impact.md</a>.
         </p>
       </div>
 
       <!-- Example 4: Cont/Stoikov/Talreja 2009 -->
       <button class="collapsible">Example 4 &mdash; Cont, Stoikov, Talreja (2009): Stochastic Model for Order Book Dynamics</button>
       <div class="contentx">
-        <p style="margin-top: 12px;">
-          <span class="badge-status badge-pending">REPLICATION PENDING</span>
-          Models the LOB at each price level as an independent birth-death queue: limit-order arrivals decay as power law <em>&lambda;</em>(<em>i</em>) = <em>k</em>/<em>i</em><sup>&alpha;</sup>, cancellations strictly proportional to queue size <em>&theta;</em>(<em>i</em>) &middot; <em>n</em>, market orders Poisson with rate <em>&mu;</em>.
-        </p>
+
+        <!-- Verdict-first banner: grey for not-yet-run -->
+        <div style="border: 2px solid #888; border-left: 6px solid #888; background: #f5f5f5; border-radius: 8px; padding: 14px 18px; margin: 14px 0;">
+          <div style="display: inline-block; padding: 3px 10px; background: #888; color: white; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px;">RESULT &middot; NOT YET RUN</div>
+          <p style="font-size: 14.5px; line-height: 1.55em; margin: 4px 0 6px; color: #3a3a3a;">
+            <strong>Replication plan in place; pipeline ready; awaiting compute.</strong> Expected outcome on 8 LOBSTER tickers: <em>&alpha;</em> &isin; [0.5, 2.5] (cross-market variation), <em>&mu;</em> &asymp; 1/min, <em>&theta;</em>(1) &isin; [0.4, 0.8].
+          </p>
+          <p style="font-family: 'Courier New', monospace; font-size: 13px; margin: 8px 0 0; color: #3a3a3a;">
+            Paper:&nbsp;&nbsp;&alpha; = 0.52, &mu; = 0.94/min, &theta;(1) = 0.71 (Sky Perfect, TSE Level II)<br>
+            Ours:&nbsp;&nbsp;&nbsp;TBD (plan: split LOBSTER events by type, fit 3 rates per level)
+          </p>
+        </div>
+
         <p>
-          <strong>Paper finding</strong> (Sky Perfect Communications, TSE Level II): <em>&alpha;</em> = 0.52, <em>&mu;</em> = 0.94/min, <em>&theta;</em>(1) = 0.71, all in units of limit-order-size blocks per minute.
-        </p>
-        <p>
-          <strong>Replication plan</strong>: extract LOBSTER message events, split by event_type into limit / cancel / market, fit three rates per level. Expected <em>&alpha;</em> &isin; [0.5, 2.5] (cross-market variation), <em>&mu;</em> &asymp; 1/min, <em>&theta;</em>(1) &isin; [0.4, 0.8]. Spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/cont_stoikov_talreja_2009.md">papers/cont_stoikov_talreja_2009.md</a>.
+          <strong>Detail</strong>: this paper models the LOB at each price level as an independent birth-death queue with three rates: limit-order arrivals decay as a power law <em>&lambda;</em>(<em>i</em>) = <em>k</em>/<em>i</em><sup>&alpha;</sup> with distance <em>i</em> from the touch, cancellations are strictly proportional to queue size <em>&theta;</em>(<em>i</em>) &middot; <em>n</em>, and market orders arrive as a Poisson process with rate <em>&mu;</em>. The reference numbers (<em>&alpha;</em> = 0.52, <em>&mu;</em> = 0.94/min, <em>&theta;</em>(1) = 0.71, all in limit-order-size blocks per minute) come from Sky Perfect Communications on the Tokyo Stock Exchange Level II feed. Our replication plan extracts LOBSTER message events, splits them by event_type into limit / cancel / market, and fits the three rates per price level. Full spec at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/papers/cont_stoikov_talreja_2009.md">papers/cont_stoikov_talreja_2009.md</a>.
         </p>
       </div>
 
