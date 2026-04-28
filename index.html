@@ -5,9 +5,12 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AutoResearch: From Paper to Verified Replication in 24 Hours — an autonomous AI research agent for finance microstructure">
+  <meta name="description" content="AlphaZero: From Paper to Verified Replication in 24 Hours — an autonomous AI research agent for finance microstructure">
   <meta name="keywords" content="auto research, autonomous research, finance microstructure, limit order book, paper replication, AI agent, Claude Code">
-  <title>Auto Quant Research: From Paper to Verified Replication in 24 Hours</title>
+  <title>AlphaZero: From Paper to Verified Replication in 24 Hours</title>
+
+  <!-- Favicon: minimal 3-bar quant chart on navy, generated via Claude Artifacts -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Bootstrap 3 + Font Awesome 4 (CDN, identical to sigma0) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -286,7 +289,7 @@
       <!-- ========== TITLE ========== -->
       <div class="text-center" style="margin-top: 40px;">
         <h1 style="font-size: 48px; font-weight: 700; font-family: 'Georgia', 'Times New Roman', serif;">
-          Auto Quant Research
+          AlphaZero
         </h1>
         <p style="font-size: 20px; color: #555; margin-top: 8px; font-style: italic;">
           From Paper to Verified Replication in 24 Hours
@@ -326,23 +329,23 @@
       <!-- ========== TL;DR ========== -->
       <blockquote>
         <p>
-          <strong>TL;DR</strong>: <strong>Auto Quant Research</strong> is a Human-in-the-Loop <strong>co-scientist</strong> for finance microstructure. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off. Two layers, with clear boundaries: an <strong>Execution Layer</strong> (the autonomous part, runs while you are offline) and a <strong>Decision Layer</strong> (the part that surfaces only the choices you actually care about). The simulator powering each replication is a learned LOB World Model from the <a href="https://kangoxford.github.io/sigma0/">sigma0</a> project.
+          <strong>TL;DR</strong>: <strong>AlphaZero</strong> is a Human-in-the-Loop <strong>co-scientist</strong> for finance microstructure. Hand it a paper; the system runs the replication while you sleep, publishes raw results to Notion, and pushes a polished version to Overleaf only after you have reviewed and signed off. Two layers, with clear boundaries: an <strong>Execution Layer</strong> (the autonomous part, runs while you are offline) and a <strong>Decision Layer</strong> (the part that surfaces only the choices you actually care about). The simulator powering each replication is a learned LOB World Model from the <a href="https://kangoxford.github.io/sigma0/">sigma0</a> project.
         </p>
       </blockquote>
 
       <!-- ========== WHAT IS AUTO QUANT RESEARCH ========== -->
-      <h2>What Is Auto Quant Research?</h2>
+      <h2>What Is AlphaZero?</h2>
 
       <!-- Pipeline figure promoted to the top of this section per user direction -->
       <div style="margin: 12px 0 30px;">
-        <img src="imgs/automation_pipeline.png" alt="Auto Quant Research — Automation Pipeline (general)" style="width: 100%; max-width: 900px; border: 1px solid #d0d0d0; border-radius: 6px;">
+        <img src="imgs/automation_pipeline.png" alt="AlphaZero — Automation Pipeline (general)" style="width: 100%; max-width: 900px; border: 1px solid #d0d0d0; border-radius: 6px;">
         <p style="text-align: center; color: #777; font-size: 13px; margin-top: 8px; font-style: italic;">
           Figure 1. Five-stage automation pipeline: Paper Ingestion → N Parallel Subagents (fan-out) → Code Generation → SLURM sbatch on HPC → Multi-Channel Publish (Overleaf, Notion, GitHub Pages). Captions are intentionally generic; this is a system designed to handle any finance microstructure paper, not a single task.
         </p>
       </div>
 
       <p>
-        Auto Quant Research is a <strong>two-layer system</strong> for finance microstructure replication. The labor that does <em>not</em> need human judgement is fully automated and runs while the user sleeps. The decisions that do need human judgement are surfaced as a small, structured set of choices, never a wall of raw output. We call these the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong>; together they make up the Human-in-the-Loop contract.
+        AlphaZero is a <strong>two-layer system</strong> for finance microstructure replication. The name borrows from DeepMind's AlphaZero with a deliberate twist on what the two halves of the word mean here: <em>alpha</em> is the unit of finance discovery, the moment a hidden microstructure pattern is identified and verified against data; <em>zero</em> refers to the human effort required in the Execution Layer, which runs entirely without supervision while the user sleeps. The labor that does <em>not</em> need human judgement is fully automated. The decisions that do need human judgement are surfaced as a small, structured set of choices in the Decision Layer, never a wall of raw output. Together, the <strong>Execution Layer</strong> and the <strong>Decision Layer</strong> make up the Human-in-the-Loop contract that defines AlphaZero.
       </p>
 
       <!-- Two-layer cards: clickable, mutually-exclusive expansion -->
@@ -379,6 +382,24 @@
         <div style="margin: 18px 0; padding: 12px 16px; background: #eef2f8; border-left: 3px solid #1f3a5f; border-radius: 4px;">
           <p style="font-size: 13px; line-height: 1.6em; margin: 0; color: #2a3a5a;">
             <strong>📂 Execution logic published.</strong> The entire scaffold that drives this layer (the global <code>CLAUDE.md</code>, all <code>settings.json</code> + <code>settings.local.json</code>, 42 reusable skills, 21 hooks, agents, and slash commands) is mirrored at <a href="https://github.com/KangOxford/auto-quant-research/tree/main/execution-layer" style="color:#1f3a5f; font-weight:600;">github.com/KangOxford/auto-quant-research/execution-layer/</a>. The full scaffold walk-through (folder structure, common principles, contribution guide) is in the collapsible below.
+          </p>
+        </div>
+
+        <!-- MCP search capability callout: makes the Execution Layer's outward-facing search ability visible -->
+        <div style="margin: 14px 0 18px; padding: 14px 18px; background: #f0f7ff; border-left: 3px solid #2c5282; border-radius: 4px;">
+          <p style="font-size: 13.5px; line-height: 1.6em; margin: 0 0 6px; color: #1f3a5f;">
+            <strong>🔍 Live search inside the loop.</strong> The Execution Layer is not a closed-world reasoner. Every subagent can call out to the open web and to a curated set of social platforms via <strong>Model Context Protocol (MCP)</strong> servers, then reason over the result inline. This is what lets the agent pull in fresh information that the original paper did not contain, the same way a human researcher would open a browser tab mid-replication.
+          </p>
+          <div class="tech-chips" style="margin-top: 8px;">
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">xai / Grok</span>
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">brave-search</span>
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">fetch</span>
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">rednote</span>
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">weixin</span>
+            <span class="chip" style="background: #fff; border: 1px solid #2c5282;">zhihu (planned)</span>
+          </div>
+          <p style="font-size: 12.5px; line-height: 1.5em; margin: 8px 0 0; color: #4a5a7a;">
+            Setup details, install snippets, and per-server smoke tests: <a href="https://github.com/KangOxford/auto-quant-research/blob/main/execution-layer/MCPS.md" style="color:#1f3a5f; font-weight:600;">execution-layer/MCPS.md</a>.
           </p>
         </div>
 
@@ -481,12 +502,6 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
 
           <p style="font-size: 13.5px; line-height: 1.7em;">
             Together: Principle 1 is breadth control (do not spread agents across unrelated topics). Principle 2 is depth navigation (when a single topic legitimately branches, fork rather than restart). Principle 3 is comprehension discipline (do not approve what you do not understand). At any given moment one topic is active; inside that topic, work fans out across subagents; if the topic itself splits, fork the session rather than open a parallel browser tab on a different problem; and at every Decision Layer signoff, take the time to understand before you sign.
-          </p>
-
-          <h3 style="margin-top: 22px; color: #1f3a5f;">What Is Filtered Out</h3>
-
-          <p style="font-size: 14px; line-height: 1.7em;">
-            The published copy filters every secret and every transient artefact: <code>.credentials.json</code> and other token files (Claude Code auth, Notion integration token, GitHub PAT, HuggingFace token), the entire <code>~/.claude/projects/</code> directory of full chat transcripts, all <code>*.log</code> files, paste / file caches, session metadata, third-party plugin state, and MCP auth caches. A grep across the published files for common token formats (GitHub, HuggingFace, Anthropic, OpenAI, AWS, GCP, Notion, xAI) confirmed zero leakage.
           </p>
 
         </div>
@@ -646,26 +661,26 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <!-- ========== CONTEXT: CO-SCIENTIST RESEARCH DIRECTION (moved INSIDE dec-panel) ========== -->
       <h3 id="context" style="margin-top: 28px;">Context: A Co-Scientist for Quantitative Microstructure</h3>
       <p>
-        Auto Quant Research is a domain-specific instance of a broader research direction in AI-for-science: the design of <strong>co-scientist agents</strong>. The "co-" matters. The system is not designed to replace the researcher; it is designed to operate as a junior colleague who can run experiments tirelessly while the senior researcher steers and signs off. The Decision Layer / Execution Layer split is precisely the contract that makes that partnership work: the human is the principal investigator, the agent is the postdoc that never sleeps, and both are bound by an explicit interface.
+        AlphaZero is a domain-specific instance of a broader research direction in AI-for-science: the design of <strong>co-scientist agents</strong>. The "co-" matters. The system is not designed to replace the researcher; it is designed to operate as a junior colleague who can run experiments tirelessly while the senior researcher steers and signs off. The Decision Layer / Execution Layer split is precisely the contract that makes that partnership work: the human is the principal investigator, the agent is the postdoc that never sleeps, and both are bound by an explicit interface.
       </p>
       <p>
-        The framing draws from several converging threads in the AI-for-science community. Andrej Karpathy's <a href="https://github.com/karpathy/autoresearch"><code>autoresearch</code></a> proposed the LLM-Wiki paradigm, where knowledge is compiled into structured pages so that human comprehension scales with the agent's output. Sakana AI's <a href="https://sakana.ai/dgm/"><strong>Darwin-Gödel Machine</strong></a> and the <a href="https://github.com/facebookresearch/HyperAgents"><strong>Hyperagents</strong></a> work explore self-improving scaffolds that rewrite their own code; Auto Quant Research uses the same pattern with humans in the loop, where each replication's lessons get distilled back into the agent's skills, hooks, and CLAUDE.md rules.
+        The framing draws from several converging threads in the AI-for-science community. Andrej Karpathy's <a href="https://github.com/karpathy/autoresearch"><code>autoresearch</code></a> proposed the LLM-Wiki paradigm, where knowledge is compiled into structured pages so that human comprehension scales with the agent's output. Sakana AI's <a href="https://sakana.ai/dgm/"><strong>Darwin-Gödel Machine</strong></a> and the <a href="https://github.com/facebookresearch/HyperAgents"><strong>Hyperagents</strong></a> work explore self-improving scaffolds that rewrite their own code; AlphaZero uses the same pattern with humans in the loop, where each replication's lessons get distilled back into the agent's skills, hooks, and CLAUDE.md rules.
       </p>
       <p>
         <strong>Why the Human-in-the-Loop contract is load-bearing rather than decorative</strong>: every insight returns to the question of where the human's judgement is irreplaceable and where the agent's tireless execution is most valuable.
       </p>
 
-      <!-- 3 insights as collapsibles, default closed; each insight uses a two-angle structure (HITL + AutoQuant Research) -->
+      <!-- 3 insights as collapsibles, default closed; each insight uses a two-angle structure (HITL + AlphaZero) -->
       <button class="collapsible" style="background-color: #eef2f8; color: #1f3a5f; border-color: #c5d3e8; font-weight: 600;">① The Darwin-Gödel pattern with humans in the loop</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
-          Sakana AI's <a href="https://sakana.ai/dgm/">Darwin-Gödel Machine</a> is an AI that improves itself by rewriting its own code: each iteration of the system proposes a code mutation, evaluates whether the mutation produces a more capable version of itself, and keeps the survivors. The Auto Quant Research analogue is the same loop with one critical safety addition: the human in the loop decides which mutations survive.
+          Sakana AI's <a href="https://sakana.ai/dgm/">Darwin-Gödel Machine</a> is an AI that improves itself by rewriting its own code: each iteration of the system proposes a code mutation, evaluates whether the mutation produces a more capable version of itself, and keeps the survivors. The AlphaZero analogue is the same loop with one critical safety addition: the human in the loop decides which mutations survive.
         </p>
         <p>
           <strong>HITL Angle.</strong> The human is the selection pressure on which scaffold mutations survive. Without the human acting as the safety filter, a self-rewriting agent can drift into clever-but-wrong configurations or accumulate skills that nobody understands well enough to maintain. The Decision Layer signoff is the checkpoint that turns reckless self-modification into supervised coevolution.
         </p>
         <p>
-          <strong>AutoQuant Research Angle.</strong> The system's own scaffold (the skills, the hooks, the CLAUDE.md rules) is not frozen. Each replication exposes patterns that get distilled back into new skills, hooks, or CLAUDE.md rules. The agent proposes a new rule or skill; the human approves it; the next replication runs with an enriched scaffold. Over many replications, the scaffold itself is a coevolving artifact. The skills published in the Execution Layer's <code>skills/</code> folder are not a fixed library; they are the survivors of many small Darwin-Gödel iterations.
+          <strong>AlphaZero Angle.</strong> The system's own scaffold (the skills, the hooks, the CLAUDE.md rules) is not frozen. Each replication exposes patterns that get distilled back into new skills, hooks, or CLAUDE.md rules. The agent proposes a new rule or skill; the human approves it; the next replication runs with an enriched scaffold. Over many replications, the scaffold itself is a coevolving artifact. The skills published in the Execution Layer's <code>skills/</code> folder are not a fixed library; they are the survivors of many small Darwin-Gödel iterations.
         </p>
       </div>
 
@@ -678,7 +693,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
           <strong>HITL Angle.</strong> The contract is symmetric. The human commits to actually evaluating (not skimming and approving); the agent commits to producing reading-friendly output that makes evaluation possible. Each side carries its half of the work, and neither can be replaced by the other. The Wiki section exists precisely so the human can do the evaluation half; the Execution Layer's documentation discipline exists precisely so the agent makes that work tractable.
         </p>
         <p>
-          <strong>AutoQuant Research Angle.</strong> This is the cleanest articulation of why the Decision Layer cannot be replaced by a smarter LLM. Replication of a quantitative microstructure paper is precisely a domain where evaluation is open-ended: was the agent's interpretation of the paper's claim faithful? Did the chosen ticker subset bias the result? Is the directional consistency with the paper's number a real validation or an artifact of the modern dataset? Each of these requires open-ended judgement, not pattern-matching, so each must remain in the Decision Layer.
+          <strong>AlphaZero Angle.</strong> This is the cleanest articulation of why the Decision Layer cannot be replaced by a smarter LLM. Replication of a quantitative microstructure paper is precisely a domain where evaluation is open-ended: was the agent's interpretation of the paper's claim faithful? Did the chosen ticker subset bias the result? Is the directional consistency with the paper's number a real validation or an artifact of the modern dataset? Each of these requires open-ended judgement, not pattern-matching, so each must remain in the Decision Layer.
         </p>
       </div>
 
@@ -691,7 +706,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
           <strong>HITL Angle.</strong> Under this view, the human is one node in a typed agent graph, not a separate species. The human is just the slowest, most expensive, most accurate node, and the orchestrator decides when to spend that node's time versus when to delegate to a faster, cheaper LLM. This is a more honest picture of the Decision Layer than "humans approve everything"; it makes routing of human attention an explicit, measurable design variable.
         </p>
         <p>
-          <strong>AutoQuant Research Angle.</strong> The current Pipeline diagram shows N parallel subagents, all large language models of similar capability. A more rigorous version would use heterogeneous agents: a fast-but-shallow agent for code generation, a slower-but-careful agent for spec extraction from the paper, a very slow but accurate agent (the human, or a slow proxy) for sensitive design decisions. Auto Quant Research could pilot this with two tiers (one model for routine work, another for sensitive design decisions, and the human for final signoff) and measure whether routing accuracy improves over the homogeneous baseline.
+          <strong>AlphaZero Angle.</strong> The current Pipeline diagram shows N parallel subagents, all large language models of similar capability. A more rigorous version would use heterogeneous agents: a fast-but-shallow agent for code generation, a slower-but-careful agent for spec extraction from the paper, a very slow but accurate agent (the human, or a slow proxy) for sensitive design decisions. AlphaZero could pilot this with two tiers (one model for routine work, another for sensitive design decisions, and the human for final signoff) and measure whether routing accuracy improves over the homogeneous baseline.
         </p>
       </div>
 
@@ -701,7 +716,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <!-- ========== EXAMPLES (the heart of the page) ========== -->
       <h2 id="examples">Examples</h2>
       <p>
-        Auto Quant Research has been validated on multiple quantitative microstructure papers. Each example pins a specific Git commit so that reproductions anchor to an exact code state, not a moving branch.
+        AlphaZero has been validated on multiple quantitative microstructure papers. Each example pins a specific Git commit so that reproductions anchor to an exact code state, not a moving branch.
       </p>
 
       <!-- Example 1: Dugast 2026 -->
@@ -721,7 +736,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
         </div>
 
         <p>
-          <strong>Detail</strong>: paper finding is &beta;(log depth &rarr; log delay) = 0.133 to 0.169 on NYSE TAQ 2000s data. Our replication ran on 46,094,530 limit orders across 8 Nasdaq primaries in Q1 2025 (SLURM job 4093982, 1 node &times; 64 CPU, wall-clock 12 minutes). The magnitude divergence is expected: Nasdaq primaries in 2025 have faster matching engines and more extreme depth heterogeneity than the NYSE sample, and venue fragmentation plus the PFOF ecosystem shift the depth-delay relationship upward. Per-ticker heterogeneity ranges from &beta; = +0.289 (GOOG, strong depth-delay link) to &beta; = -0.073 (MSFT, venue fragmentation effect), so the pooled positive estimate masks substantial cross-stock variation that would not be visible in the original sample.
+          <strong>Detail</strong>: The paper studies the relationship between two quantities for U.S. listed stocks. <em>Book depth</em> is the total volume of resting limit orders sitting on one side of the order book at the moment a new order arrives. <em>Execution delay</em> is the time elapsed between when a new limit order arrives and when it actually fills. Both quantities span several orders of magnitude across stocks and across times of day, so the natural specification is a log-log regression of execution delay on book depth. The slope <em>&beta;</em> in that regression has a clean interpretation as an elasticity: <em>&beta;</em> = 0.15 means a 10% deeper book is associated with a 1.5% longer expected wait before a typical limit order fills. The paper reports <em>&beta;</em> between 0.133 and 0.169 across stocks on NYSE TAQ data from the 2000s &mdash; a small but consistently positive coefficient, which is intuitive: under price-time priority, more resting volume means a new order sits further back in the queue. Our replication runs the same regression on 46,094,530 limit orders across 8 Nasdaq primaries in Q1 2025 (SLURM job 4093982, 1 node &times; 64 CPU, wall-clock 12 minutes). The pooled estimate <em>&beta;</em> = +0.2140 is directionally consistent with the paper but ~30% larger. The magnitude divergence is expected: Nasdaq primaries in 2025 have faster matching engines and more extreme depth heterogeneity than the NYSE sample, and venue fragmentation plus the PFOF ecosystem shift the depth-delay relationship upward. Per-ticker heterogeneity ranges from <em>&beta;</em> = +0.289 (GOOG, strong depth-delay link) to <em>&beta;</em> = -0.073 (MSFT, venue fragmentation effect), so the pooled positive estimate masks substantial cross-stock variation that would not be visible in the original sample.
         </p>
         <table class="data-table" style="max-width: 600px; margin: 12px auto;">
           <thead><tr><th>Ticker</th><th>&beta;</th><th>SE</th><th>t</th><th>Interpretation</th></tr></thead>
@@ -878,11 +893,30 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
           <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Orchestration &amp; Publishing</strong></p>
           <div class="tech-chips">
             <span class="chip">Claude Code</span>
+            <span class="chip">codex CLI</span>
             <span class="chip">pymupdf</span>
             <span class="chip">Overleaf Git API</span>
             <span class="chip">Notion REST API</span>
             <span class="chip">GitHub Actions</span>
           </div>
+        </div>
+      </div>
+
+      <!-- 4th row: Search & Data Acquisition (MCPs) — full-width because it groups outward-facing capabilities, not internal substrate -->
+      <div class="row" style="margin-top: 22px;">
+        <div class="col-sm-12">
+          <p style="font-size: 14px; color: #555; margin-bottom: 6px;"><strong>Search &amp; Data Acquisition (MCPs)</strong></p>
+          <div class="tech-chips">
+            <span class="chip">xai / Grok</span>
+            <span class="chip">brave-search</span>
+            <span class="chip">fetch</span>
+            <span class="chip">rednote</span>
+            <span class="chip">weixin</span>
+            <span class="chip">zhihu (planned)</span>
+          </div>
+          <p style="font-size: 12.5px; color: #777; margin: 6px 0 0;">
+            Setup snippets, auth notes, and per-server smoke tests at <a href="https://github.com/KangOxford/auto-quant-research/blob/main/execution-layer/MCPS.md" style="color:#1f3a5f;">execution-layer/MCPS.md</a>.
+          </p>
         </div>
       </div>
 
@@ -892,7 +926,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
       <button class="collapsible">Q1 &mdash; What Is the Right Granularity for &ldquo;Reading&rdquo; a Paper?</button>
       <div class="contentx">
         <p style="margin-top: 12px;">
-          AutoResearch currently extracts a regression spec from the abstract, methods, and results sections. Should it also parse appendices, supplementary tables, robustness checks, and footnotes? More extraction means more faithful replication but larger context windows for the orchestrator. The optimal trade-off is open.
+          AlphaZero currently extracts a regression spec from the abstract, methods, and results sections. Should it also parse appendices, supplementary tables, robustness checks, and footnotes? More extraction means more faithful replication but larger context windows for the orchestrator. The optimal trade-off is open.
         </p>
       </div>
 
@@ -905,7 +939,7 @@ claude --resume &lt;parent-session-id&gt; --fork-session</pre>
 
       <!-- ========== FOOTER ========== -->
       <div class="footnotes">
-        <p><strong>AutoResearch</strong> &middot; Automated paper-to-replication pipeline for finance microstructure research.</p>
+        <p><strong>AlphaZero</strong> &middot; Automated paper-to-replication pipeline for finance microstructure research.</p>
         <p>
           <a href="https://github.com/KangOxford/auto-quant-research"><i class="fa fa-github"></i> GitHub</a> &middot;
           <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6440898"><i class="fa fa-file-text-o"></i> SSRN 6440898 (Dugast 2026)</a> &middot;

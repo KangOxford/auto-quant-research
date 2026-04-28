@@ -1,6 +1,6 @@
 # Claude Code Context Engineering
 
-This folder contains the Claude Code (the AI coding-assistant CLI from Anthropic) configuration that powers Auto Quant Research's Execution Layer. It is published here as a complete, reproducible reference: anyone wanting to stand up a similar autonomous-research system can clone this folder, drop it into their `~/.claude/`, adapt the paths and project-specific rules, and have a working starting point.
+This folder contains the Claude Code (the AI coding-assistant CLI from Anthropic) configuration that powers AlphaZero's Execution Layer. It is published here as a complete, reproducible reference: anyone wanting to stand up a similar autonomous-research system can clone this folder, drop it into their `~/.claude/`, adapt the paths and project-specific rules, and have a working starting point.
 
 The unifying theme across all of these files is **context engineering**: the deliberate practice of shaping what the LLM sees on every turn so that it acts predictably, safely, and effectively across a long-horizon multi-step task. Where a single chat with Claude is a one-shot, autonomous research replication is a marathon, and the marathon needs scaffolding.
 

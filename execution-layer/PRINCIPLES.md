@@ -2,13 +2,13 @@
 
 A living document. The goal is to capture the small set of operational rules that, in our experience, separate a chaotic AI-assisted workflow from a productive one. Anyone is welcome to add a principle, refine an existing one, or leave a comment in the Notion mirror of this page.
 
-## Principle 1 — Multi-agent dispatch: parallelize within a problem, never across problems
+## Principle 1 — Multi-agent dispatch: parallelize within a problem, less so across problems
 
 **(a) When researching a single problem, dispatch parallel subagents to handle the multiple tasks inside that problem at the same time.** A research replication has many independent sub-questions: data ingestion, world-model interface, regression specification, figure generation, robustness checks. Each is a self-contained piece of work that does not depend on the others' final output. Running them concurrently is a near-free speedup, because the wall-clock cost of N parallel subagents is bounded by the slowest one, not by their sum.
 
-**(b) Avoid running multiple parallel agents on unrelated topics simultaneously.** This is the more important half of the principle, because the failure mode is non-obvious. When two or three unrelated investigations run at once, the human in the loop cannot keep all of them in working memory at the same depth. The result is a degraded version of harness engineering: you start approving things you do not really understand, or you context-switch between topics every 30 seconds and lose the thread on every one of them. The real bottleneck is human comprehension, not compute. One topic at a time, parallelized inside; many topics at once, never.
+**(b) Running many parallel agents on unrelated topics at once is not really recommended.** A small handful is workable; the failure mode shows up as the count grows, and it is non-obvious. When several unrelated investigations run at once, the human in the loop cannot keep all of them in working memory at the same depth. The result is a degraded version of harness engineering: you start approving things you do not really understand, or you context-switch between topics every 30 seconds and lose the thread on every one of them. The real bottleneck is human comprehension, not compute. One topic at a time, parallelized inside, is the safest cadence; a handful of unrelated agents in parallel is workable; many at once tends to break down because nobody can keep track of what is happening inside each thread.
 
-A short way to state the rule: **fan out within a problem, queue up across problems**.
+A short way to state the rule: **fan out within a problem, queue up across problems whenever you can**.
 
 ## Principle 2 — Session management: depth over breadth, with explicit sub-sessions
 
