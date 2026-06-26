@@ -1,0 +1,13 @@
+{
+  "candidate_id": "duplicate-guard.fingerprint-intent-checkpoint",
+  "hypothesis": "A normalized experiment fingerprint, launch intent, and checkpoint-chain check prevents duplicate jobs without blocking legitimate ablations.",
+  "implementation": {
+    "kind": "duplicate_job_guard",
+    "strategy": "fingerprint_intent_checkpoint"
+  },
+  "parent_id": "submit-job-skill.current-public-rule",
+  "rollback": {
+    "target": "submit-job-skill.current-public-rule"
+  },
+  "target": "execution-layer/skills/submit-job/SKILL.md"
+}

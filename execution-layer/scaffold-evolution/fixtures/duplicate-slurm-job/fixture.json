@@ -1,0 +1,667 @@
+{
+  "fixture_id": "incident.duplicate-slurm-job.public-demo",
+  "origin_evidence": {
+    "redaction": "Synthetic current-shape records preserve the decision structure without live job IDs, paths, users, or private data.",
+    "source": "execution-layer/skills/submit-job/SKILL.md",
+    "summary": "Duplicate fresh-start and resume jobs for the same experiment ran in parallel for 13h, wasting 208 node-hours."
+  },
+  "scenario_suite": {
+    "meta_harness_notes": [
+      "This public suite intentionally includes incident, negative-control, adversarial, and distribution-shift scenarios only.",
+      "Future suites should add stale-rule checks before treating this as broad cluster policy evidence."
+    ],
+    "purpose": "Challenge duplicate-job guards with current normalized Mamba3/LOBS5 experiment metadata. This is not a scalar objective.",
+    "scenarios": [
+      {
+        "acceptable_decisions": [
+          "block"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "AMD",
+                    "MSFT",
+                    "TSLA",
+                    "META",
+                    "AMZN",
+                    "NVDA",
+                    "AAPL",
+                    "GOOG"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "0.0005",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "Muon + AdamW",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "token_mode=26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "resume",
+              "job_id": "synthetic-3260152",
+              "job_name": "neurips-mamba3-resume",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": "GOOG,AAPL,NVDA,AMZN,META,TSLA,MSFT,AMD",
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "neurips-mamba3-retry"
+          }
+        },
+        "failure_if": "allow",
+        "role": "incident_regression",
+        "scenario_id": "renamed_duplicate_running",
+        "why": "The originating failure was equivalent jobs running under different launch contexts and names."
+      },
+      {
+        "acceptable_decisions": [
+          "allow"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 768,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 4,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "fresh_start",
+              "job_id": "synthetic-100",
+              "job_name": "ctx-test",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "ctx-test"
+          }
+        },
+        "failure_if": "block",
+        "role": "negative_control",
+        "scenario_id": "same_name_different_config",
+        "why": "Name collisions must not block materially different experiments."
+      },
+      {
+        "acceptable_decisions": [
+          "allow"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "fresh_start",
+              "job_id": "synthetic-101",
+              "job_name": "neurips-mamba3-lr5e4",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "7e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "ablation",
+            "job_name": "neurips-mamba3-lr7e4"
+          }
+        },
+        "failure_if": "block",
+        "role": "negative_control",
+        "scenario_id": "learning_rate_ablation",
+        "why": "A good guard should preserve explicit ablations."
+      },
+      {
+        "acceptable_decisions": [
+          "redirect_to_resume"
+        ],
+        "case": {
+          "checkpoint_chains": [
+            {
+              "chain_id": "synthetic-chain-mamba3-s42",
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "state": "available"
+            }
+          ],
+          "live_jobs": [],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "neurips-mamba3-fresh"
+          }
+        },
+        "failure_if": "allow",
+        "role": "incident_prevention",
+        "scenario_id": "fresh_start_with_checkpoint_chain",
+        "why": "Fresh start should not silently ignore an available resume chain."
+      },
+      {
+        "acceptable_decisions": [
+          "escalate"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "fresh_start",
+              "job_id": "synthetic-102",
+              "job_name": "neurips-mamba3",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "neurips-mamba3-unknown"
+          }
+        },
+        "failure_if": "allow",
+        "role": "adversarial_control",
+        "scenario_id": "missing_critical_metadata",
+        "why": "Missing metadata should trigger human review rather than a silent pass."
+      },
+      {
+        "acceptable_decisions": [
+          "block"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "AMD",
+                    "MSFT",
+                    "TSLA",
+                    "META",
+                    "AMZN",
+                    "NVDA",
+                    "AAPL",
+                    "GOOG"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "0.0005",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "Muon + AdamW",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "token_mode=26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "resume",
+              "job_id": "synthetic-mamba3-001",
+              "job_name": "neurips-mamba3-full-d-s42",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": "GOOG,AAPL,NVDA,AMZN,META,TSLA,MSFT,AMD",
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 42,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "neurips-mamba3-retry-2"
+          }
+        },
+        "failure_if": "allow",
+        "role": "distribution_shift",
+        "scenario_id": "mamba3_same_seed_duplicate",
+        "why": "The suite should cover current Mamba3/LOBS5 metadata aliases, not only exact JSON equality."
+      },
+      {
+        "acceptable_decisions": [
+          "allow"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "fresh_start",
+              "job_id": "synthetic-mamba3-002",
+              "job_name": "neurips-mamba3-s42",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 43,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "seed_sweep",
+            "job_name": "neurips-mamba3-s43"
+          }
+        },
+        "failure_if": "block",
+        "role": "negative_control",
+        "scenario_id": "mamba3_seed_sweep",
+        "why": "A different seed is legitimate when the launch intent explicitly declares a seed sweep or replica."
+      },
+      {
+        "acceptable_decisions": [
+          "escalate"
+        ],
+        "case": {
+          "checkpoint_chains": [],
+          "live_jobs": [
+            {
+              "config": {
+                "batch_size": 256,
+                "blocks": 16,
+                "d_model": 1024,
+                "dataset": {
+                  "test_range": "2026-01-01:2026-01-31",
+                  "tickers": [
+                    "GOOG",
+                    "AAPL",
+                    "NVDA",
+                    "AMZN",
+                    "META",
+                    "TSLA",
+                    "MSFT",
+                    "AMD"
+                  ],
+                  "train_range": "2022-01-01:2025-12-31"
+                },
+                "learning_rate": "5e-4",
+                "model_family": "LOBS5",
+                "msg_seq_len": 500,
+                "n_layers": 6,
+                "optimizer": "muon+adamw",
+                "seed": 42,
+                "ssm_size_base": 1024,
+                "ssm_type": "mamba3",
+                "token_mode": "26tok",
+                "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+              },
+              "intent": "fresh_start",
+              "job_id": "synthetic-mamba3-003",
+              "job_name": "neurips-mamba3-s42",
+              "state": "RUNNING"
+            }
+          ],
+          "pending_submission": {
+            "config": {
+              "batch_size": 256,
+              "blocks": 16,
+              "d_model": 1024,
+              "dataset": {
+                "test_range": "2026-01-01:2026-01-31",
+                "tickers": [
+                  "GOOG",
+                  "AAPL",
+                  "NVDA",
+                  "AMZN",
+                  "META",
+                  "TSLA",
+                  "MSFT",
+                  "AMD"
+                ],
+                "train_range": "2022-01-01:2025-12-31"
+              },
+              "learning_rate": "5e-4",
+              "model_family": "LOBS5",
+              "msg_seq_len": 500,
+              "n_layers": 6,
+              "optimizer": "muon+adamw",
+              "seed": 43,
+              "ssm_size_base": 1024,
+              "ssm_type": "mamba3",
+              "token_mode": "26tok",
+              "wandb_project": "oxford-lob/neurips-mamba3-full-d"
+            },
+            "intent": "fresh_start",
+            "job_name": "neurips-mamba3-s43"
+          }
+        },
+        "failure_if": "allow",
+        "role": "adversarial_control",
+        "scenario_id": "mamba3_seed_change_without_intent",
+        "why": "A seed change should be explicit; otherwise the guard should escalate instead of silently allowing another full run."
+      }
+    ],
+    "suite_id": "duplicate-slurm-job.scenario-suite"
+  },
+  "validity_scope": {
+    "applies_to": [
+      "job submission guards",
+      "experiment launch skills",
+      "checkpoint resume decisions"
+    ],
+    "assumptions": [
+      "Each submission can expose current normalized experiment metadata before launch."
+    ],
+    "does_not_apply_to": [
+      "job cancellation",
+      "cluster policy",
+      "training-quality claims"
+    ]
+  }
+}

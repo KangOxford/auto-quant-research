@@ -278,6 +278,11 @@
           },
           {
             "type": "command",
+            "command": "bash ${HOME}/.claude/hooks/scaffold-evolution-stop.sh",
+            "timeout": 30
+          },
+          {
+            "type": "command",
             "command": "bash ${HOME}/.claude/hooks/btw-main-stop.sh",
             "timeout": 10,
             "async": true
