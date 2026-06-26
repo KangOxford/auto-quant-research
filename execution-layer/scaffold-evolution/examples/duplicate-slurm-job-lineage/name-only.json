@@ -1,0 +1,13 @@
+{
+  "candidate_id": "duplicate-guard.name-only",
+  "hypothesis": "Blocking duplicate job names is a cheap guard against accidental duplicate submissions.",
+  "implementation": {
+    "kind": "duplicate_job_guard",
+    "strategy": "name_only"
+  },
+  "parent_id": "submit-job-skill.current-public-rule",
+  "rollback": {
+    "target": "submit-job-skill.current-public-rule"
+  },
+  "target": "execution-layer/skills/submit-job/SKILL.md"
+}

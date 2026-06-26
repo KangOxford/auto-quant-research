@@ -87,6 +87,18 @@ After creating/updating a skill, report:
 - What triggered the extraction
 - Which quality gates it passed and why
 
+### Step 5a: Attach a selection packet for durable scaffold changes
+
+When the new or updated skill changes future agent behavior, classify it before treating it as retained scaffold knowledge:
+
+| Mutation type | Required evidence |
+|---|---|
+| Mechanically testable | Attach a scaffold-evolution evaluation packet or state why no local replay is possible. |
+| Incident-prevention | Attach the originating incident fixture, regression result, and rollback target. |
+| Human policy/preference | Attach rationale and explicit human verdict. Do not fake an automatic pass/fail test. |
+
+Use `execution-layer/scaffold-evolution/` for local, network-free evaluation packets when the mutation can be replayed against public or private scenario suites. A candidate may be useful even if it is not accepted; preserve rejected stepping stones when they reveal a distinct trade-off.
+
 ## Skill Lifecycle
 
 ```

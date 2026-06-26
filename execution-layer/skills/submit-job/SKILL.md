@@ -64,6 +64,16 @@ or:
 
 **Resume chain awareness:** Before submitting a fresh-start job, check if there's an existing checkpoint chain for the same experiment. If yes, resume from checkpoint instead of starting fresh.
 
+**Optional local verifier:** If normalized metadata is already available, run the scaffold-evolution duplicate guard before `sbatch` and follow its decision:
+
+```bash
+python3 execution-layer/scaffold-evolution/verifiers/duplicate_slurm_job_guard.py \
+  --input <normalized-job-case.json> \
+  --strategy fingerprint_intent_checkpoint
+```
+
+The input should contain `pending_submission`, `live_jobs`, and `checkpoint_chains` either at the top level or under `case`. This helper supplements the mandatory `squeue` check; it does not replace human review when metadata is missing.
+
 ### 1. Commit Check
 ```bash
 cd <worktree>

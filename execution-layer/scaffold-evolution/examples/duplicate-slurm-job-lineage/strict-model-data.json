@@ -1,0 +1,13 @@
+{
+  "candidate_id": "duplicate-guard.strict-model-data",
+  "hypothesis": "Blocking any concurrent job with the same model/data fingerprint prevents duplicate compute waste.",
+  "implementation": {
+    "kind": "duplicate_job_guard",
+    "strategy": "strict_model_data"
+  },
+  "parent_id": "submit-job-skill.current-public-rule",
+  "rollback": {
+    "target": "submit-job-skill.current-public-rule"
+  },
+  "target": "execution-layer/skills/submit-job/SKILL.md"
+}

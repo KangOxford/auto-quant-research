@@ -1,0 +1,26 @@
+{
+  "suites": [
+    {
+      "candidates": "execution-layer/scaffold-evolution/examples/duplicate-slurm-job-lineage/*.json",
+      "fixture": "execution-layer/scaffold-evolution/fixtures/duplicate-slurm-job/fixture.json",
+      "out_md": "execution-layer/scaffold-evolution/reports/duplicate-slurm-job-decision.md",
+      "suite_id": "duplicate-slurm-job.scenario-suite",
+      "targets": [
+        "execution-layer/skills/submit-job/SKILL.md"
+      ],
+      "trigger_paths": [
+        "execution-layer/skills/submit-job/",
+        "execution-layer/skills/reuse-checkpoint-for-ablation/",
+        "execution-layer/skills/training-chain/"
+      ],
+      "verifier": [
+        "python3",
+        "execution-layer/scaffold-evolution/verifiers/duplicate_slurm_job_guard.py",
+        "--candidate",
+        "{candidate}",
+        "--scenario",
+        "{scenario}"
+      ]
+    }
+  ]
+}
